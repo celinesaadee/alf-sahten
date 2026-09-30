@@ -1,0 +1,448 @@
+.cook-requests-page {
+  min-height: 100vh;
+  padding: 32px 20px 80px;
+  background: #f7f5ef;
+}
+
+.cook-requests-shell {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.cook-requests-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 34px;
+  margin-bottom: 24px;
+}
+
+.cook-requests-header h1 {
+  margin: 5px 0 8px;
+  color: #17241e;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.08;
+}
+
+.cook-requests-header > div > p:last-child {
+  max-width: 620px;
+  margin: 0;
+  color: #6d746f;
+  line-height: 1.6;
+}
+
+.cook-requests-pending-count {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(33, 79, 61, 0.12);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #214f3d;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.cook-request-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.cook-request-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid rgba(33, 79, 61, 0.1);
+  border-radius: 20px;
+  background: #fffdf8;
+  box-shadow: 0 8px 24px rgba(36, 46, 40, 0.035);
+}
+
+.cook-request-stat-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 14px;
+  background: #edf1ec;
+  color: #214f3d;
+}
+
+.cook-request-stat-card > div:last-child {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cook-request-stat-card span {
+  overflow: hidden;
+  color: #7d867f;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cook-request-stat-card strong {
+  color: #17241e;
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.cook-requests-filters {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 26px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.cook-requests-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.cook-requests-filters button {
+  flex: 0 0 auto;
+  border: 1px solid rgba(33, 79, 61, 0.14);
+  border-radius: 999px;
+  padding: 9px 15px;
+  background: #fffdf8;
+  color: #536059;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.cook-requests-filters button:hover {
+  border-color: rgba(33, 79, 61, 0.32);
+}
+
+.cook-requests-filters button.active {
+  border-color: #214f3d;
+  background: #214f3d;
+  color: #ffffff;
+}
+
+.cook-requests-list {
+  display: grid;
+  gap: 18px;
+}
+
+.cook-request-card {
+  padding: 24px;
+  border: 1px solid rgba(33, 79, 61, 0.11);
+  border-radius: 24px;
+  background: #fffdf8;
+  box-shadow: 0 10px 32px rgba(36, 46, 40, 0.045);
+}
+
+.cook-request-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.cook-request-card-top h2 {
+  margin: 5px 0 4px;
+  color: #17241e;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.cook-request-received {
+  color: #858c87;
+  font-size: 0.8rem;
+}
+
+.cook-request-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 90px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.cook-request-status-pending {
+  background: #fff3d7;
+  color: #8b6515;
+}
+
+.cook-request-status-accepted {
+  background: #e4f2e9;
+  color: #256340;
+}
+
+.cook-request-status-declined {
+  background: #f7e5e3;
+  color: #98514b;
+}
+
+.cook-request-status-completed {
+  background: #e5ece9;
+  color: #3f5c4d;
+}
+
+.cook-request-status-cancelled {
+  background: #eeeeeb;
+  color: #6b716d;
+}
+
+.cook-request-details-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.cook-request-details-grid > div {
+  display: grid;
+  grid-template-columns:
+    22px minmax(90px, auto) 1fr;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f5f3ed;
+}
+
+.cook-request-details-grid svg,
+.cook-request-detail-symbol {
+  color: #607269;
+}
+
+.cook-request-detail-symbol {
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.cook-request-details-grid span {
+  color: #838b86;
+  font-size: 0.78rem;
+}
+
+.cook-request-details-grid strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #26342d;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.cook-request-message {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-left: 3px solid #214f3d;
+  border-radius: 4px 14px 14px 4px;
+  background: #f5f3ed;
+}
+
+.cook-request-message span {
+  color: #7c857f;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.cook-request-message p {
+  margin: 7px 0 0;
+  color: #39483f;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.cook-request-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(33, 79, 61, 0.1);
+}
+
+.cook-request-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 10px 17px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.87rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    opacity 150ms ease;
+}
+
+.cook-request-actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.cook-request-actions button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.cook-request-decline {
+  border: 1px solid rgba(152, 81, 75, 0.22);
+  background: transparent;
+  color: #98514b;
+}
+
+.cook-request-accept,
+.cook-request-complete {
+  border: 1px solid #214f3d;
+  background: #214f3d;
+  color: #ffffff;
+}
+
+.cook-requests-empty {
+  display: grid;
+  place-items: center;
+  padding: 70px 24px;
+  border: 1px dashed rgba(33, 79, 61, 0.18);
+  border-radius: 24px;
+  background: #fffdf8;
+  text-align: center;
+}
+
+.cook-requests-empty svg {
+  margin-bottom: 14px;
+  color: #839087;
+}
+
+.cook-requests-empty h2 {
+  margin: 0;
+  color: #17241e;
+  font-size: 1.35rem;
+}
+
+.cook-requests-empty p {
+  max-width: 460px;
+  margin: 8px 0 0;
+  color: #788079;
+  line-height: 1.6;
+}
+
+html[dir="rtl"] .cook-request-details-grid strong {
+  text-align: left;
+}
+
+html[dir="rtl"] .cook-request-message {
+  border-left: 0;
+  border-right: 3px solid #214f3d;
+  border-radius: 14px 4px 4px 14px;
+}
+
+@media (max-width: 900px) {
+  .cook-request-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .cook-requests-page {
+    padding: 22px 15px 70px;
+  }
+
+  .cook-requests-header {
+    display: block;
+    margin-top: 28px;
+  }
+
+  .cook-requests-pending-count {
+    margin-top: 17px;
+  }
+
+  .cook-request-card {
+    padding: 19px;
+    border-radius: 20px;
+  }
+
+  .cook-request-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .cook-request-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .cook-request-stat-card {
+    gap: 10px;
+    padding: 14px;
+    border-radius: 17px;
+  }
+
+  .cook-request-stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .cook-request-stat-card span {
+    font-size: 0.7rem;
+  }
+
+  .cook-request-stat-card strong {
+    font-size: 1.4rem;
+  }
+
+  .cook-request-card-top {
+    display: block;
+  }
+
+  .cook-request-status {
+    margin-top: 12px;
+  }
+
+  .cook-request-details-grid > div {
+    grid-template-columns:
+      20px 90px 1fr;
+  }
+
+  .cook-request-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cook-request-actions button {
+    width: 100%;
+  }
+
+  .cook-request-actions button:only-child {
+    grid-column: 1 / -1;
+  }
+}

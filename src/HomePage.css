@@ -1,0 +1,74 @@
+.home-page .home-add { display:flex; align-items:center; gap:6px; border:0; background:transparent; color:var(--green); white-space:nowrap; }
+.home-page button:disabled { opacity:.55; cursor:wait; }
+.home-page .ingredient-tags p { margin:0; color:var(--muted); font-size:14px; }
+.home-page .home-recipe-link { display:block; height:100%; }
+.home-page .hand-note { white-space:pre-line; }
+.home-page .home-creator-art { min-height:270px; display:flex; flex-direction:column; gap:25px; align-items:center; justify-content:center; color:var(--green); background:var(--cream-deep); border-radius:50% 50% 12px 12px; }
+.home-page .home-creator-art span { font-size:38px; }
+.home-page .primary-round-button { display:inline-flex; }
+.home-page .footer-top { grid-template-columns: 1fr 1fr; }
+.home-page a:focus-visible, .home-page button:focus-visible, .home-page input:focus-visible { outline:2px solid var(--green); outline-offset:4px; }
+[dir="rtl"] .home-page .text-button svg, [dir="rtl"] .home-page .find-button svg, [dir="rtl"] .home-page .primary-round-button svg, [dir="rtl"] .home-page .category-content svg { transform:scaleX(-1); }
+@media(max-width:600px) { .home-page .footer-top { grid-template-columns:1fr; } .home-page .ingredient-search { gap:8px; } .home-page .ingredient-search input { min-width:0; } }
+
+.home-recipe-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(36, 60, 50, 0.06);
+  color: rgba(36, 60, 50, 0.45);
+}
+
+.home-recipes-loading,
+.home-recipes-empty {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #73776f;
+}
+
+.home-recipe-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(36, 60, 50, 0.06);
+  color: rgba(36, 60, 50, 0.45);
+}
+
+.home-recipes-loading,
+.home-recipes-empty {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #73776f;
+}
+
+.home-category-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(36, 60, 50, 0.08);
+  color: rgba(36, 60, 50, 0.42);
+}
+
+.home-recipe-cook-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-recipe-cook-link:hover {
+  text-decoration: underline;
+}

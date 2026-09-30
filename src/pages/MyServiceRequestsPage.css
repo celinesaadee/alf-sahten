@@ -1,0 +1,338 @@
+.my-service-requests-page {
+  min-height: 100vh;
+  padding: 32px 20px 80px;
+  background: #f7f5ef;
+}
+
+.my-service-requests-shell {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+}
+
+.my-service-requests-header {
+  margin-bottom: 26px;
+}
+
+.my-service-requests-header h1 {
+  margin: 5px 0 8px;
+  color: #17241e;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.08;
+}
+
+.my-service-requests-header p:last-child {
+  max-width: 650px;
+  margin: 0;
+  color: #6d746f;
+  line-height: 1.6;
+}
+
+.my-service-requests-filters {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 26px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.my-service-requests-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.my-service-requests-filters button {
+  flex: 0 0 auto;
+  border: 1px solid rgba(33, 79, 61, 0.14);
+  border-radius: 999px;
+  padding: 9px 15px;
+  background: #fffdf8;
+  color: #536059;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.my-service-requests-filters button.active {
+  border-color: #214f3d;
+  background: #214f3d;
+  color: #ffffff;
+}
+
+.my-service-requests-list {
+  display: grid;
+  gap: 18px;
+}
+
+.my-service-request-card {
+  padding: 24px;
+  border: 1px solid rgba(33, 79, 61, 0.11);
+  border-radius: 24px;
+  background: #fffdf8;
+  box-shadow: 0 10px 32px rgba(36, 46, 40, 0.045);
+}
+
+.my-service-request-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.my-service-request-top h2 {
+  margin: 5px 0 4px;
+  color: #17241e;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.my-service-request-created {
+  color: #858c87;
+  font-size: 0.8rem;
+}
+
+.my-service-request-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 90px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.my-service-request-status-pending {
+  background: #fff3d7;
+  color: #8b6515;
+}
+
+.my-service-request-status-accepted {
+  background: #e4f2e9;
+  color: #256340;
+}
+
+.my-service-request-status-declined {
+  background: #f7e5e3;
+  color: #98514b;
+}
+
+.my-service-request-status-completed {
+  background: #e5ece9;
+  color: #3f5c4d;
+}
+
+.my-service-request-status-cancelled {
+  background: #eeeeeb;
+  color: #6b716d;
+}
+
+.my-service-request-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.my-service-request-details > div {
+  display: grid;
+  grid-template-columns: 22px minmax(90px, auto) 1fr;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f5f3ed;
+}
+
+.my-service-request-details svg,
+.my-service-request-symbol {
+  color: #607269;
+}
+
+.my-service-request-symbol {
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.my-service-request-details span {
+  color: #838b86;
+  font-size: 0.78rem;
+}
+
+.my-service-request-details strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #26342d;
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+.my-service-request-message {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-left: 3px solid #214f3d;
+  border-radius: 4px 14px 14px 4px;
+  background: #f5f3ed;
+}
+
+.my-service-request-message span {
+  color: #7c857f;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.my-service-request-message p {
+  margin: 7px 0 0;
+  color: #39483f;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.my-service-request-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 18px;
+  padding: 13px 15px;
+  border-radius: 14px;
+  background: #fff3d7;
+  color: #775817;
+}
+
+.my-service-request-note p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.my-service-request-note.accepted {
+  background: #e4f2e9;
+  color: #256340;
+}
+
+.my-service-request-note.declined {
+  background: #f7e5e3;
+  color: #98514b;
+}
+
+.my-service-request-note.completed {
+  background: #e5ece9;
+  color: #3f5c4d;
+}
+
+.my-service-request-note.cancelled {
+  background: #eeeeeb;
+  color: #6b716d;
+}
+
+.my-service-request-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(33, 79, 61, 0.1);
+}
+
+.my-service-request-cancel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 10px 17px;
+  border: 1px solid rgba(152, 81, 75, 0.22);
+  border-radius: 999px;
+  background: transparent;
+  color: #98514b;
+  font: inherit;
+  font-size: 0.87rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.my-service-request-cancel:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.my-service-requests-empty {
+  display: grid;
+  place-items: center;
+  padding: 70px 24px;
+  border: 1px dashed rgba(33, 79, 61, 0.18);
+  border-radius: 24px;
+  background: #fffdf8;
+  text-align: center;
+}
+
+.my-service-requests-empty svg {
+  margin-bottom: 14px;
+  color: #839087;
+}
+
+.my-service-requests-empty h2 {
+  margin: 0;
+  color: #17241e;
+  font-size: 1.35rem;
+}
+
+.my-service-requests-empty p {
+  max-width: 470px;
+  margin: 8px 0 18px;
+  color: #788079;
+  line-height: 1.6;
+}
+
+html[dir="rtl"] .my-service-request-details strong {
+  text-align: left;
+}
+
+html[dir="rtl"] .my-service-request-message {
+  border-left: 0;
+  border-right: 3px solid #214f3d;
+  border-radius: 14px 4px 4px 14px;
+}
+
+@media (max-width: 760px) {
+  .my-service-requests-page {
+    padding: 22px 15px 70px;
+  }
+
+  .my-service-request-card {
+    padding: 19px;
+    border-radius: 20px;
+  }
+
+  .my-service-request-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .my-service-request-top {
+    display: block;
+  }
+
+  .my-service-request-status {
+    margin-top: 12px;
+  }
+
+  .my-service-request-details > div {
+    grid-template-columns: 20px 90px 1fr;
+  }
+
+  .my-service-request-actions {
+    justify-content: stretch;
+  }
+
+  .my-service-request-cancel {
+    width: 100%;
+    justify-content: center;
+  }
+}
