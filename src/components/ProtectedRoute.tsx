@@ -6,6 +6,8 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import { useTranslation } from "react-i18next";
+
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 
@@ -25,6 +27,7 @@ function PermissionCheck({
   access: RoleAccess;
   userId: string;
 }) {
+  const { t } = useTranslation();
   const [status, setStatus] =
     useState<PermissionStatus>("loading");
 
@@ -151,39 +154,38 @@ function PermissionCheck({
   }, [access, userId, attempt]);
 
   if (status === "loading") {
-    return (
-      <main role="status">
-        Checking your access…
-      </main>
-    );
-  }
+  return (
+    <main role="status">
+      {t("protectedRoute.checkingAccess")}
+    </main>
+  );
+}
 
   if (status === "error") {
-    return (
-      <main>
-        <p role="alert">
-          We couldn't check your access. Please try
-          again.
-        </p>
+  return (
+    <main>
+      <p role="alert">
+        {t("protectedRoute.accessError")}
+      </p>
 
-        <button
-          type="button"
-          onClick={() => {
-            setStatus("loading");
-            setAttempt((value) => value + 1);
-          }}
-        >
-          Try again
-        </button>
+      <button
+        type="button"
+        onClick={() => {
+          setStatus("loading");
+          setAttempt((value) => value + 1);
+        }}
+      >
+        {t("protectedRoute.tryAgain")}
+      </button>
 
-        <p>
-          <Link to="/profile">
-            Back to your profile
-          </Link>
-        </p>
-      </main>
-    );
-  }
+      <p>
+        <Link to="/profile">
+          {t("protectedRoute.backToProfile")}
+        </Link>
+      </p>
+        </main>
+  );
+}
 
   if (status === "denied") {
     return (
@@ -206,16 +208,17 @@ export default function ProtectedRoute({
 }: {
   access?: Access;
 }) {
-  const { user, loading } = useAuth();
-  const location = useLocation();
+const { user, loading } = useAuth();
+const { t } = useTranslation();
+const location = useLocation();
 
-  if (loading) {
-    return (
-      <main role="status">
-        Checking your session…
-      </main>
-    );
-  }
+if (loading) {
+  return (
+    <main role="status">
+      {t("protectedRoute.checkingSession")}
+    </main>
+  );
+}
 
   if (!user) {
     return (

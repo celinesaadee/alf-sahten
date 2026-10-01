@@ -171,6 +171,7 @@ removeSaved: "Retirer des recettes enregistrées",
   regularUser: "Membre",
   creator: "Créateur",
   admin: "Administrateur",
+  adminDashboard: "Tableau de bord admin",
   saveChanges: "Enregistrer",
   saving: "Enregistrement...",
   saved: "Modifications enregistrées",
@@ -182,7 +183,16 @@ removeSaved: "Retirer des recettes enregistrées",
   becomeCook: "Devenir cuisinier",
 },
 
-    recipe: {
+protectedRoute: {
+  checkingAccess: "Vérification de votre accès…",
+  accessError:
+    "Nous n’avons pas pu vérifier votre accès. Veuillez réessayer.",
+  tryAgain: "Réessayer",
+  backToProfile: "Retour à votre profil",
+  checkingSession: "Vérification de votre session…",
+},
+
+recipe: {
       totalTime: "Temps total",
       serves: "Portions",
       cook: "Cuisson",

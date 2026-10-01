@@ -171,6 +171,7 @@ forRecipes: "recipes",
   regularUser: "Member",
   creator: "Creator",
   admin: "Admin",
+  adminDashboard: "Admin Dashboard",
   saveChanges: "Save changes",
   saving: "Saving...",
   saved: "Changes saved",
@@ -182,7 +183,16 @@ forRecipes: "recipes",
   becomeCook: "Become a Cook",
 },
 
-    recipe: {
+protectedRoute: {
+  checkingAccess: "Checking your access…",
+  accessError:
+    "We couldn't check your access. Please try again.",
+  tryAgain: "Try again",
+  backToProfile: "Back to your profile",
+  checkingSession: "Checking your session…",
+},
+
+recipe: {
       totalTime: "Total time",
       serves: "Serves",
       cook: "Cook",

@@ -262,6 +262,19 @@ function ProfilePage() {
   <ArrowRight size={16} />
 </Link>
 
+{profile?.role === "admin" && (
+  <Link
+    to="/admin/recipes"
+    className="profile-cook-link"
+  >
+    <ShieldCheck size={17} />
+
+    <span>{t("profile.adminDashboard")}</span>
+
+    <ArrowRight size={16} />
+  </Link>
+)}
+
 {profile?.role === "creator" ||
 profile?.role === "admin" ? (
   <>

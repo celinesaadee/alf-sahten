@@ -170,7 +170,8 @@ removeSaved: "إزالة من الوصفات المحفوظة",
   accountType: "نوع الحساب",
   regularUser: "عضو",
   creator: "صانع محتوى",
-  admin: "مسؤول",
+  admin: "المشرف",
+  adminDashboard: "لوحة تحكم المشرف",
   saveChanges: "حفظ التغييرات",
   saving: "جاري الحفظ...",
   saved: "تم حفظ التغييرات",
@@ -182,7 +183,16 @@ removeSaved: "إزالة من الوصفات المحفوظة",
   becomeCook: "انضم كطاهٍ",
 },
 
-    recipe: {
+protectedRoute: {
+  checkingAccess: "جارٍ التحقق من صلاحية الوصول…",
+  accessError:
+    "تعذر التحقق من صلاحية الوصول. يرجى المحاولة مرة أخرى.",
+  tryAgain: "حاول مرة أخرى",
+  backToProfile: "العودة إلى ملفك الشخصي",
+  checkingSession: "جارٍ التحقق من جلستك…",
+},
+
+recipe: {
       totalTime: "الوقت الكامل",
       serves: "الحصص",
       cook: "الطبخ",
