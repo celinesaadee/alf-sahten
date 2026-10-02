@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useRef,
   useState,
   type FormEvent,
 } from "react";
@@ -84,6 +85,8 @@ const backToCook =
 
   const [sentRequest, setSentRequest] =
     useState<ServiceRequest | null>(null);
+
+  const sendingRef = useRef(false);
 
   useEffect(() => {
     async function loadPage() {
@@ -184,13 +187,71 @@ function getRequestErrorMessage(
   err: unknown,
 ) {
   if (!(err instanceof Error)) {
-    return t(
-      "serviceRequest.errors.send",
-    );
+    return t("serviceRequest.errors.send");
   }
 
   const message =
     err.message.toLowerCase();
+
+  if (
+    message.includes(
+      "a service is required",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.serviceRequired",
+    );
+  }
+
+  if (
+    message.includes(
+      "enter a valid name",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.invalidName",
+    );
+  }
+
+  if (
+    message.includes(
+      "enter a valid email address",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.invalidEmail",
+    );
+  }
+
+  if (
+    message.includes(
+      "phone number is too long",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.phoneTooLong",
+    );
+  }
+
+  if (
+    message.includes(
+      "choose a requested date",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.dateRequired",
+    );
+  }
+
+  if (
+    message.includes(
+      "choose a valid requested date",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.invalidDate",
+    );
+  }
 
   if (
     message.includes(
@@ -199,6 +260,56 @@ function getRequestErrorMessage(
   ) {
     return t(
       "serviceRequest.errors.pastDate",
+    );
+  }
+
+  if (
+    message.includes(
+      "enter a valid location",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.invalidLocation",
+    );
+  }
+
+  if (
+    message.includes(
+      "enter a valid budget",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.invalidBudget",
+    );
+  }
+
+  if (
+    message.includes(
+      "choose a currency",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.currencyRequired",
+    );
+  }
+
+  if (
+    message.includes(
+      "choose a valid currency",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.invalidCurrency",
+    );
+  }
+
+  if (
+    message.includes(
+      "message cannot exceed 1500 characters",
+    )
+  ) {
+    return t(
+      "serviceRequest.errors.messageTooLong",
     );
   }
 
@@ -228,9 +339,7 @@ function getRequestErrorMessage(
     );
   }
 
-  return t(
-    "serviceRequest.errors.send",
-  );
+  return t("serviceRequest.errors.send");
 }
 
   async function handleSubmit(
@@ -238,9 +347,11 @@ function getRequestErrorMessage(
   ) {
     event.preventDefault();
 
-    if (!service) {
+    if (!service || sendingRef.current) {
       return;
     }
+
+    sendingRef.current = true;
 
     try {
       setSending(true);
@@ -278,6 +389,7 @@ function getRequestErrorMessage(
   getRequestErrorMessage(err),
 );
     } finally {
+      sendingRef.current = false;
       setSending(false);
     }
   }

@@ -69,7 +69,7 @@ function MyRecipesPage() {
     }
 
     loadRecipes();
-  }, []);
+ }, [t]);
 
   function getStatusLabel(status: Recipe["status"]) {
   return t(`myRecipes.statuses.${status}`);
@@ -192,11 +192,7 @@ async function handleDeleteRecipe(recipe: Recipe) {
       <p>{recipe.description}</p>
     )}
 
-    {(
-  recipe.status === "changes_requested" ||
-  recipe.status === "declined"
-) &&
-  recipe.admin_note && (
+    {recipe.admin_note && (
     <div className="my-recipe-admin-note">
       <strong>
   {recipe.status === "changes_requested"

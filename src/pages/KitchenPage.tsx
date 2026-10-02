@@ -180,20 +180,25 @@ function KitchenPage() {
             (recipe.cook_minutes ?? 0);
 
           return {
-            id: recipe.id,
-            title: recipe.title,
-            image: recipe.image_url,
-            time:
-              totalMinutes > 0
-                ? `${totalMinutes} min`
-                : "",
-            missingIngredients,
-            availableIngredients,
-            matchCount:
-              availableIngredients.length,
-          };
-        })
-        .sort((a, b) => {
+  id: recipe.id,
+  title: recipe.title,
+  image: recipe.image_url,
+  time:
+    totalMinutes > 0
+      ? `${totalMinutes} ${t("publicCookProfile.minuteShort")}`
+      : "",
+  missingIngredients,
+  availableIngredients,
+  matchCount:
+    availableIngredients.length,
+};
+})
+.filter(
+  (recipe) =>
+    recipe.matchCount > 0 ||
+    recipe.missingIngredients.length === 0,
+)
+.sort((a, b) => {
           if (
             a.missingIngredients.length !==
             b.missingIngredients.length
@@ -212,6 +217,7 @@ function KitchenPage() {
     }, [
       recipes,
       normalizedIngredients,
+      t,
     ]);
 
   const readyRecipes =
@@ -464,7 +470,15 @@ function KitchenPage() {
                             ingredient,
                           );
                         }}
-                        aria-label={`Remove ${displayedIngredient}`}
+                        aria-label={t(
+  "kitchen.removeIngredient",
+  {
+    ingredient:
+      displayedIngredient,
+    defaultValue:
+      `Remove ${displayedIngredient}`,
+  },
+)}
                       >
                         <X
                           size={14}
@@ -606,13 +620,19 @@ function KitchenPage() {
               strokeWidth={1.4}
             />
 
-            <h3>
-              We couldn't load recipes.
-            </h3>
+           <h3>
+  {t("kitchen.loadErrorTitle", {
+    defaultValue:
+      "We couldn't load recipes.",
+  })}
+</h3>
 
-            <p>
-              Please refresh and try again.
-            </p>
+<p>
+  {t("kitchen.loadErrorText", {
+    defaultValue:
+      "Please refresh and try again.",
+  })}
+</p>
           </div>
         ) : ingredients.length === 0 ? (
           <div className="recipe-results-empty">
@@ -640,13 +660,20 @@ function KitchenPage() {
               strokeWidth={1.4}
             />
 
-            <h3>
-              No matching recipes yet
-            </h3>
+<h3>
+  {t("kitchen.noMatchesTitle", {
+    defaultValue:
+      "No matching recipes yet",
+  })}
+</h3>
 
-            <p>
-              Try adding more ingredients or check back as cooks add new recipes.
-            </p>
+<p>
+  {t("kitchen.noMatchesText", {
+    defaultValue:
+      "Try adding more ingredients or check back as cooks add new recipes.",
+  })}
+</p>
+
           </div>
         ) : (
           <div className="kitchen-recipe-grid">

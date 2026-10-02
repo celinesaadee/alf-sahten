@@ -201,10 +201,18 @@ function DiscoverPage() {
       <section className="discover-hero">
         <div className="discover-hero-copy">
           <p className="section-kicker">
-            {t(
-              "discover.kicker",
-            )}
-          </p>
+  {activeCategory === "All"
+    ? t(
+        "discover.discoverNew",
+      )
+    : t(
+        `categories.${activeCategory}`,
+        {
+          defaultValue:
+            activeCategory,
+        },
+      )}
+</p>
 
           <h1>
             {t(
@@ -260,30 +268,34 @@ function DiscoverPage() {
           </button>
 
           {categories.map(
-            (category) => (
-              <button
-                type="button"
-                key={
-                  category.id
-                }
-                className={
-                  activeCategory ===
-                  category.name
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setActiveCategory(
-                    category.name,
-                  )
-                }
-              >
-                {
-                  category.name
-                }
-              </button>
-            ),
-          )}
+  (category) => (
+    <button
+      type="button"
+      key={
+        category.id
+      }
+      className={
+        activeCategory ===
+        category.name
+          ? "active"
+          : ""
+      }
+      onClick={() =>
+        setActiveCategory(
+          category.name,
+        )
+      }
+    >
+      {t(
+        `categories.${category.name}`,
+        {
+          defaultValue:
+            category.name,
+        },
+      )}
+    </button>
+  ),
+)}
         </div>
       </section>
 
@@ -347,9 +359,15 @@ function DiscoverPage() {
                   ? t(
                       "discover.recipesWorthTrying",
                     )
-                  : `${activeCategory} ${t(
-                      "discover.categoryRecipes",
-                    )}`}
+                  : `${t(
+    `categories.${activeCategory}`,
+    {
+      defaultValue:
+        activeCategory,
+    },
+  )} ${t(
+    "discover.categoryRecipes",
+  )}`}
             </h2>
           </div>
 
@@ -378,8 +396,14 @@ function DiscoverPage() {
             />
 
             <h3>
-              Loading recipes...
-            </h3>
+  {t(
+    "discover.loadingRecipes",
+    {
+      defaultValue:
+        "Loading recipes...",
+    },
+  )}
+</h3>
           </div>
         ) : error ? (
           <div className="discover-empty">
@@ -389,12 +413,24 @@ function DiscoverPage() {
             />
 
             <h3>
-              We couldn't load the recipes.
-            </h3>
+  {t(
+    "discover.loadError",
+    {
+      defaultValue:
+        "We couldn't load the recipes.",
+    },
+  )}
+</h3>
 
-            <p>
-              Please refresh and try again.
-            </p>
+<p>
+  {t(
+    "discover.loadErrorText",
+    {
+      defaultValue:
+        "Please refresh and try again.",
+    },
+  )}
+</p>
           </div>
         ) : filteredRecipes.length >
           0 ? (
@@ -417,7 +453,7 @@ function DiscoverPage() {
                     ?.display_name ??
                   recipe.cook
                     ?.username ??
-                  "Cook";
+                  t("common.cook");
 
                 return (
                   <article
@@ -489,11 +525,16 @@ function DiscoverPage() {
                     <div className="discover-recipe-content">
                       <div className="discover-card-topline">
                         <span>
-                          {
-                            recipe.category ??
-                            ""
-                          }
-                        </span>
+  {recipe.category
+    ? t(
+        `categories.${recipe.category}`,
+        {
+          defaultValue:
+            recipe.category,
+        },
+      )
+    : ""}
+</span>
 
                         {totalMinutes >
                           0 && (
@@ -505,7 +546,7 @@ function DiscoverPage() {
                             {
                               totalMinutes
                             }{" "}
-                            min
+                            {t("publicCookProfile.minuteShort")}
                           </span>
                         )}
                       </div>
@@ -564,43 +605,68 @@ function DiscoverPage() {
               },
             )}
           </div>
-        ) : (
-          <div className="discover-empty">
-            <Search
-              size={32}
-              strokeWidth={1.5}
-            />
+        ) : recipes.length === 0 ? (
+  <div className="discover-empty">
+    <ChefHat
+      size={32}
+      strokeWidth={1.5}
+    />
 
-            <h3>
-              {t(
-                "discover.noRecipes",
-              )}
-            </h3>
+    <h3>
+      {t(
+        "discover.noRecipesYet",
+        {
+          defaultValue:
+            "Recipes are coming soon.",
+        },
+      )}
+    </h3>
 
-            <p>
-              {t(
-                "discover.noRecipesText",
-              )}
-            </p>
+    <p>
+      {t(
+        "discover.noRecipesYetText",
+        {
+          defaultValue:
+            "There aren't any published recipes to show yet.",
+        },
+      )}
+    </p>
+  </div>
+) : (
+  <div className="discover-empty">
+    <Search
+      size={32}
+      strokeWidth={1.5}
+    />
 
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery(
-                  "",
-                );
+    <h3>
+      {t(
+        "discover.noRecipes",
+      )}
+    </h3>
 
-                setActiveCategory(
-                  "All",
-                );
-              }}
-            >
-              {t(
-                "discover.showAll",
-              )}
-            </button>
-          </div>
-        )}
+    <p>
+      {t(
+        "discover.noRecipesText",
+      )}
+    </p>
+
+    <button
+      type="button"
+      onClick={() => {
+        setSearchQuery("");
+
+        setActiveCategory(
+          "All",
+        );
+      }}
+    >
+      {t(
+        "discover.showAll",
+      )}
+    </button>
+  </div>
+)}
       </section>
     </main>
   );

@@ -1,6 +1,13 @@
 const ar = {
   translation: {
+stats: {
+  completed: "مكتملة",
+  accepted: "مقبولة",
+  pending: "قيد الانتظار","total":"الإجمالي"},
     home: {
+  noPublishedRecipes: "لا توجد وصفات منشورة بعد.",
+  recipeLoadError: "تعذّر تحميل الوصفات. يرجى المحاولة مجددًا.",
+  loadingRecipes: "جارٍ تحميل الوصفات…",
       "eyebrow": "اطبخوا بالمكوّنات الموجودة عندكم",
       "title": "شو في بمطبخكم؟",
       "subtitle": "هدر أقل. نكهة أكثر. وأفكار ألذّ للطبخ كل يوم.",
@@ -44,16 +51,217 @@ const ar = {
       french: "Français",
     },
 
+    categories: {
+  "Breakfast": "فطور",
+  "Main Dishes": "أطباق رئيسية",
+  "Salads": "سلطات",
+  "Desserts": "حلويات",
+  "Soups": "شوربات",
+  "Appetizers": "مقبلات",
+},
+
     nav: {
-      discover: "اكتشف",
-      kitchen: "مطبخي",
-      creators: "الطهاة",
-      cookbooks: "كتب الوصفات",
-      saved: "الوصفات المحفوظة",
-      profile: "حسابي",
-    },
+  discover: "اكتشف",
+  kitchen: "مطبخي",
+  creators: "الطهاة",
+  cookbooks: "كتب الوصفات",
+  saved: "الوصفات المحفوظة",
+  profile: "حسابي",
+  settings: "الإعدادات",
+myRequests: "طلباتي",
+signOut: "تسجيل الخروج",
+signIn: "تسجيل الدخول",
+menu: "القائمة",
+selectLanguage: "اختيار اللغة",
+},
+
+auth: {
+  brandKicker: "أهلاً فيكم عالسفرة",
+  brandTitleLine1: "اطبخوا أكثر.",
+  brandTitleLine2: "واهدروا أقل.",
+  brandText:
+    "احفظوا الوصفات ورتّبوا مطبخكم واكتشفوا شو فيكم تطبخوا بالمكونات الموجودة عندكم.",
+
+  welcomeBack: "أهلاً برجعتكم",
+  join: "انضموا إلى ألف صحتين",
+  signIn: "تسجيل الدخول",
+  createAccountTitle: "إنشاء حساب",
+  loginIntro:
+    "وصفاتكم المحفوظة ومطبخكم ناطرينكم.",
+  signupIntro:
+    "ابدأوا ببناء مطبخكم الخاص على ألف صحتين.",
+
+  name: "الاسم",
+  namePlaceholder: "اسمكم",
+  email: "البريد الإلكتروني",
+  emailPlaceholder: "you@example.com",
+  password: "كلمة المرور",
+  passwordPlaceholder: "6 أحرف على الأقل",
+
+  showPassword: "إظهار كلمة المرور",
+  hidePassword: "إخفاء كلمة المرور",
+  forgotPassword: "نسيت كلمة المرور؟",
+
+  pleaseWait: "لحظة من فضلكم…",
+  createAccount: "إنشاء حساب",
+
+  newHere: "جديد على ألف صحتين؟",
+  alreadyHaveAccount: "عندكم حساب؟",
+
+  enterEmailFirst:
+    "أدخلوا البريد الإلكتروني أولاً.",
+  resetEmailSent:
+    "إذا كان هناك حساب مرتبط بهذا البريد الإلكتروني أرسلنا رابطاً لإعادة تعيين كلمة المرور.",
+  resetEmailError:
+    "ما قدرنا نرسل رسالة إعادة تعيين كلمة المرور. حاولوا مرة أخرى.",
+
+  signupConfirmation:
+    "تم إنشاء الحساب. راجعوا بريدكم الإلكتروني لتأكيد الحساب.",
+  signupError:
+    "ما قدرنا ننشئ الحساب. حاولوا مرة أخرى.",
+  loginError:
+    "ما قدرنا نسجّل الدخول. تأكدوا من البريد الإلكتروني وكلمة المرور.",
+},
+
+resetPassword: {
+  brandKicker: "استعادة الحساب",
+  brandTitleLine1: "اختاروا كلمة مرور",
+  brandTitleLine2: "جديدة.",
+  brandText:
+    "أنشئوا كلمة مرور جديدة لحسابكم على ألف صحتين.",
+
+  kicker: "إعادة تعيين كلمة المرور",
+  title: "أنشئوا كلمة مرور جديدة",
+
+  invalidLink:
+    "افتحوا هذه الصفحة من رابط إعادة تعيين كلمة المرور المرسل إلى بريدكم الإلكتروني.",
+  backToSignIn: "العودة إلى تسجيل الدخول",
+
+  newPassword: "كلمة المرور الجديدة",
+  newPasswordPlaceholder:
+    "8 أحرف على الأقل",
+
+  confirmPassword:
+    "تأكيد كلمة المرور",
+  confirmPasswordPlaceholder:
+    "أعيدوا إدخال كلمة المرور",
+
+  showPassword: "إظهار كلمة المرور",
+  hidePassword: "إخفاء كلمة المرور",
+
+  tooShort:
+    "يجب أن تتكوّن كلمة المرور من 8 أحرف على الأقل.",
+  mismatch:
+    "كلمتا المرور غير متطابقتين.",
+  updated:
+    "تم تغيير كلمة المرور.",
+  updateError:
+    "ما قدرنا نغيّر كلمة المرور. حاولوا مرة أخرى.",
+
+  updating: "جارٍ التحديث…",
+  updatePassword: "تغيير كلمة المرور",
+},
+
+creatorApplication: {
+  enterCookName:
+    "أدخلوا اسم الطاهي.",
+  usernameLength:
+    "يجب أن يتكوّن اسم المستخدم من 3 إلى 30 حرفاً.",
+  usernameTaken:
+    "اسم المستخدم مستخدم بالفعل. جرّبوا اسماً آخر.",
+  saveError:
+    "ما قدرنا نحفظ ملف الطاهي. حاولوا مرة أخرى.",
+  approvalRequestError:
+    "تم حفظ ملف الطاهي ولكن ما قدرنا نرسل طلب الموافقة.",
+  profileUpdated:
+    "تم تحديث ملف الطاهي.",
+  profileCreated:
+    "تم إنشاء ملف الطاهي.",
+
+  signInTitle:
+    "انضموا كطهاة إلى ألف صحتين",
+  signInText:
+    "سجّلوا الدخول أولاً لإنشاء ملف الطاهي.",
+  signIn: "تسجيل الدخول",
+
+  backToProfile: "العودة إلى الحساب",
+  heroKicker: "مطبخكم، حكايتكم",
+  yourCookProfile: "ملف الطاهي",
+  becomeCook: "انضم كطاهٍ",
+  heroText:
+    "أنشئوا هويتكم العامة كطهاة على ألف صحتين. يمكنكم أن تكونوا طهاة منزليين أو صنّاع محتوى طبخ أو طهاة محترفين.",
+
+  approvedCook: "طاهٍ معتمد",
+  approvedText:
+    "يمكن عرض ملف الطاهي الخاص بكم للعامة.",
+
+  approvalPending:
+    "بانتظار الموافقة",
+  pendingText:
+    "يمكنكم متابعة تعديل ملفكم أثناء مراجعته.",
+
+  changesRequested:
+    "مطلوب بعض التعديلات",
+  changesFallback:
+    "راجعوا ملف الطاهي وعدّلوه ثم أرسلوه من جديد.",
+
+  declinedTitle:
+    "لم تتم الموافقة على الطلب",
+  declinedFallback:
+    "يمكنكم تعديل ملفكم وإرساله من جديد.",
+
+  cookName: "اسم الطاهي",
+  cookNamePlaceholder:
+    "الاسم الذي سيظهر للناس",
+
+  username: "اسم المستخدم",
+  usernamePlaceholder: "your-kitchen",
+  usernameHelp:
+    "سيُستخدم هذا الاسم لرابط ملف الطاهي العام.",
+
+  cookType: "نوع الطاهي",
+  homeCook: "طاهٍ منزلي",
+  foodCreator: "صانع محتوى طبخ",
+  professionalChef: "طاهٍ محترف",
+
+  aboutYou: "عنكم",
+  aboutPlaceholder:
+    "خبرونا شو بتحبوا تطبخوا وشو بيميز مطبخكم.",
+
+  location: "الموقع",
+  locationPlaceholder: "بيروت، لبنان",
+
+  specialties: "التخصصات",
+  specialtiesPlaceholder:
+    "مطبخ لبناني، حلويات، طبخ صحي",
+  specialtiesHelp:
+    "افصلوا التخصصات بفواصل.",
+
+  instagram: "إنستغرام",
+  website: "الموقع الإلكتروني",
+  whatsapp: "واتساب أو وسيلة تواصل",
+
+  shareQuestion:
+    "شو بتحبوا تشاركوا على ألف صحتين؟",
+  sharePlaceholder:
+    "خبرونا شوي عن الوصفات أو نوع الطبخ اللي بتحبوا تشاركوه.",
+
+  saving: "جارٍ الحفظ…",
+  saveProfile: "حفظ ملف الطاهي",
+  createProfile: "إنشاء ملف الطاهي",
+
+  sideKicker: "طهاة ألف صحتين",
+  sideTitle:
+    "وراء كل أكلة طيبة شخص وحكاية.",
+  sideText:
+    "ابنوا هويتكم كطهاة من الآن. وصفاتكم ومتابعوكم ونشاطكم في المجتمع سيظهرون هنا مع نمو ألف صحتين.",
+
+  recipes: "الوصفات",
+  followers: "المتابعون",
+},
 
     common: {
+  cook: "طاهٍ",
       home: "الرئيسية",
       search: "بحث",
       saved: "المحفوظات",
@@ -63,41 +271,58 @@ const ar = {
       recipe: "وصفة",
     },
 
-    discover: {
-      kicker: "اكتشف شيئاً شهياً",
-      title: "شو عبالك تاكل اليوم؟",
-      subtitle:
-        "ابحث عن وصفات واكتشف أطباقاً لبنانية وأفكاراً جديدة لما يمكنك تحضيره اليوم.",
+discover: {
+  noRecipesYetText: "عودوا قريبًا لاكتشاف وصفات طهاتنا.",
+  noRecipesYet: "لا توجد وصفات بعد",
+  kicker: "اكتشف شيئاً شهياً",
+  title: "شو عبالك تاكل اليوم؟",
+  subtitle:
+    "ابحث عن وصفات واكتشف أطباقاً لبنانية وأفكاراً جديدة لما يمكنك تحضيره اليوم.",
 
-      searchPlaceholder:
-        "ابحث عن طبق أو مكوّن أو طاهٍ...",
+  searchPlaceholder:
+    "ابحث عن طبق أو مكوّن أو طاهٍ...",
 
-      all: "الكل",
-      lebanese: "لبناني",
-      breakfast: "فطور",
-      quick: "سريع",
-      vegetarian: "نباتي",
-      desserts: "حلويات",
+  all: "الكل",
+  lebanese: "لبناني",
+  breakfast: "فطور",
+  quick: "سريع",
+  vegetarian: "نباتي",
+  desserts: "حلويات",
 
-      kitchenQuestion: "بتعرف شو موجود عندك بالبيت؟",
-      kitchenTitle: "اطبخ من الموجود عندك",
-      kitchenText:
-        "أضف المكونات الموجودة في البيت وسنقترح عليك ما يمكنك تحضيره.",
-      openKitchen: "افتح مطبخي",
+  kitchenQuestion: "بتعرف شو موجود عندك بالبيت؟",
+  kitchenTitle: "اطبخ من الموجود عندك",
+  kitchenText:
+    "أضف المكونات الموجودة في البيت وسنقترح عليك ما يمكنك تحضيره.",
+  openKitchen: "افتح مطبخي",
 
-      discoverNew: "اكتشف شيئاً جديداً",
-      recipesWorthTrying: "وصفات تستحق التجربة",
+  discoverNew: "اكتشف شيئاً جديداً",
+  recipesWorthTrying: "وصفات تستحق التجربة",
+  resultsFor: "نتائج البحث عن",
+  categoryRecipes: "وصفات",
 
-      noRecipes: "لم نجد وصفات",
-      noRecipesText:
-        "جرّب بحثاً مختلفاً أو اختر فئة أخرى.",
-      showAll: "عرض كل الوصفات",
+  saveRecipe: "حفظ الوصفة",
+  removeSaved: "إزالة من الوصفات المحفوظة",
 
-      alfSahtenPick: "اختيار ألف صحتين",
-      by: "من",
-    },
+  loadingRecipes: "جارٍ تحميل الوصفات…",
+  loadError: "ما قدرنا نحمّل الوصفات.",
+  loadErrorText:
+    "حدّث الصفحة وحاول مرة ثانية.",
+
+  noRecipes: "لم نجد وصفات",
+  noRecipesText:
+    "جرّب بحثاً مختلفاً أو اختر فئة أخرى.",
+  showAll: "عرض كل الوصفات",
+
+  alfSahtenPick: "اختيار ألف صحتين",
+  by: "من",
+},
 
     kitchen: {
+  noMatchesText: "جرّب إضافة المزيد من المكونات أو عد لاحقًا عندما يضيف الطهاة وصفات جديدة.",
+  noMatchesTitle: "لا توجد وصفات مطابقة بعد",
+  loadErrorText: "يرجى تحديث الصفحة والمحاولة مجددًا.",
+  loadErrorTitle: "تعذّر تحميل الوصفات.",
+  removeIngredient: "إزالة {{ingredient}}",
       kicker: "اطبخ قبل ما تتسوّق",
       title: "شو موجود بمطبخك؟",
       subtitle:
@@ -142,6 +367,8 @@ forRecipes: "وصفات",
     },
 
     saved: {
+  loadErrorText: "يرجى تحديث الصفحة والمحاولة مجددًا.",
+  loadErrorTitle: "تعذّر تحميل وصفاتك المحفوظة.",
       kicker: "خلّي الوصفات الحلوة عندك",
       title: "الوصفات المحفوظة",
       subtitle:
@@ -160,27 +387,117 @@ saveRecipe: "حفظ الوصفة",
 removeSaved: "إزالة من الوصفات المحفوظة",
     },
 
-    profile: {
-  kicker: "ألف صحتين الخاص فيك",
+profile: {
+  saveError: "تعذّر حفظ تغييراتك.",
+  tryAgain: "حاول مجددًا",
+  loadErrorText: "يرجى المحاولة مجددًا.",
+  loadErrorTitle: "تعذّر تحميل ملفك الشخصي",
+  kicker: "حسابك",
   title: "حسابي",
-  subtitle: "عدّل حسابك وتفضيلاتك.",
+  subtitle:
+    "وصفاتك وطلباتك وأدوات الطبخ بمكان واحد.",
+
   name: "الاسم",
   email: "البريد الإلكتروني",
   language: "اللغة",
   accountType: "نوع الحساب",
+
   regularUser: "عضو",
   creator: "صانع محتوى",
   admin: "المشرف",
+
   adminDashboard: "لوحة تحكم المشرف",
+  cookApplications: "طلبات الطهاة",
+recipeReviews: "مراجعة الوصفات",
+viewPublicProfile: "عرض الملف العام",
+follower: "متابع",
+followers: "متابعون",
+
   saveChanges: "حفظ التغييرات",
   saving: "جاري الحفظ...",
   saved: "تم حفظ التغييرات",
+
   signOut: "تسجيل الخروج",
+
   signInTitle: "مطبخك ناطرك",
   signInText:
     "سجّل الدخول لتحفظ وصفاتك ومطبخك وتفضيلاتك على كل أجهزتك.",
   signIn: "تسجيل الدخول أو إنشاء حساب",
+
   becomeCook: "انضم كطاهٍ",
+
+  accountKicker: "حسابك",
+
+  settingsTitle: "الإعدادات",
+  settingsText:
+    "تحكّم بحسابك وإعدادات الأمان",
+
+  requestsText:
+    "تابع طلبات الخدمات الخاصة بك",
+
+  cookSpace: "مساحة الطاهي",
+  kitchenTitle: "مطبخك",
+  kitchenText:
+    "أدر وصفاتك وخدماتك وطلباتك.",
+},
+
+settings: {
+  kicker: "ألف صحتين الخاص فيك",
+  title: "الإعدادات",
+  subtitle:
+    "تحكّم بحسابك وإعدادات الأمان.",
+
+  account: "الحساب",
+  security: "الأمان",
+
+  accountTitle: "إعدادات الحساب",
+  accountText:
+    "عدّل معلومات حسابك الشخصية.",
+
+  loadingAccount: "جارٍ تحميل حسابك…",
+  loadAccountError:
+    "ما قدرنا نحمّل معلومات حسابك.",
+  tryAgain: "حاول مرة أخرى",
+
+  securityTitle: "أمان الحساب",
+  securityText:
+    "غيّر كلمة المرور التي تستخدمها لتسجيل الدخول إلى ألف صحتين.",
+
+  signedInAs: "مسجّل الدخول عبر",
+
+  currentPassword: "كلمة المرور الحالية",
+  currentPasswordPlaceholder:
+    "أدخل كلمة المرور الحالية",
+
+  newPassword: "كلمة المرور الجديدة",
+  newPasswordPlaceholder:
+    "8 أحرف على الأقل",
+
+  confirmNewPassword:
+    "تأكيد كلمة المرور الجديدة",
+  confirmNewPasswordPlaceholder:
+    "أعد إدخال كلمة المرور الجديدة",
+
+  changePassword: "تغيير كلمة المرور",
+  updatingPassword:
+    "جارٍ تغيير كلمة المرور…",
+
+  emailMissing:
+    "ما قدرنا نلاقي البريد الإلكتروني لهذا الحساب.",
+  currentPasswordRequired:
+    "أدخل كلمة المرور الحالية.",
+  passwordTooShort:
+    "يجب أن تتكوّن كلمة المرور الجديدة من 8 أحرف على الأقل.",
+  passwordsDoNotMatch:
+    "كلمتا المرور الجديدتان غير متطابقتين.",
+  passwordMustBeDifferent:
+    "يجب أن تكون كلمة المرور الجديدة مختلفة عن الحالية.",
+  currentPasswordIncorrect:
+    "كلمة المرور الحالية غير صحيحة.",
+  passwordUpdated:
+    "تم تغيير كلمة المرور بنجاح.",
+  passwordUpdateError:
+    "ما قدرنا نغيّر كلمة المرور. حاول مرة أخرى.",
 },
 
 protectedRoute: {
@@ -192,10 +509,240 @@ protectedRoute: {
   checkingSession: "جارٍ التحقق من جلستك…",
 },
 
+adminDashboard: {
+  kicker: "الإدارة",
+  title: "لوحة تحكم الإدارة",
+  intro:
+    "إدارة طلبات الطهاة ومراجعة الوصفات قبل نشرها.",
+  cookApplicationsTitle: "طلبات الطهاة",
+  cookApplicationsText:
+    "راجع الأشخاص الذين يريدون الانضمام كطهاة على ألف صحتين.",
+  recipeReviewsTitle: "مراجعة الوصفات",
+  recipeReviewsText:
+    "راجع الوصفات التي يرسلها الطهاة قبل ظهورها للعامة.",
+},
+
+
+adminRecipeReview: {
+  loadError:
+    "ما قدرنا نحمّل الوصفات بانتظار المراجعة.",
+
+  changesNoteRequired:
+    "اكتبوا ملاحظة توضّح للطاهي شو لازم يعدّل.",
+
+  declineReasonRequired:
+    "اكتبوا سبب رفض الوصفة قبل المتابعة.",
+
+  updateError:
+    "ما قدرنا نحدّث هذه الوصفة. حاولوا مرة ثانية.",
+
+  loading: "جارٍ تحميل الوصفات…",
+
+  dashboard: "لوحة تحكم المشرف",
+  title: "مراجعة الوصفات",
+  intro:
+    "راجعوا الوصفات التي يرسلها الطهاة قبل نشرها على ألف صحتين.",
+
+  refresh: "تحديث",
+
+  emptyTitle: "تمت مراجعة كل الوصفات",
+  emptyText:
+    "لا توجد وصفات بانتظار الموافقة حالياً.",
+
+  pending: "قيد الانتظار",
+  pendingApproval: "بانتظار الموافقة",
+
+  submittedBy: "مقدّمة من",
+  cookFallback: "طاهٍ",
+
+  prepTime: "{{count}} د تحضير",
+  cookTime: "{{count}} د طبخ",
+  servings: "{{count}} حصص",
+
+  ingredients: "المكوّنات",
+  instructions: "طريقة التحضير",
+
+  adminNote: "ملاحظة المشرف",
+  notePlaceholder:
+    "اختيارية عند الموافقة ومطلوبة عند طلب تعديلات أو رفض الوصفة.",
+
+  decline: "رفض",
+  requestChanges: "طلب تعديلات",
+  saving: "جارٍ الحفظ…",
+  approve: "موافقة",
+},
+
+adminCookApplications: {
+  loadError: "تعذّر تحميل طلبات الطهاة.",
+  updateError: "تعذّر تحديث هذا الطلب.",
+
+  approved: "مقبول",
+  declined: "مرفوض",
+  pending: "قيد الانتظار",
+  loading: "جارٍ تحميل طلبات الطهاة...",
+
+  dashboard: "لوحة تحكم الإدارة",
+  title: "طلبات الطهاة",
+  intro:
+    "راجع الأشخاص الذين يريدون نشر وصفات وتقديم خدمات كطهاة على ألف صحتين.",
+
+  recipeReviews: "مراجعة الوصفات",
+  refresh: "تحديث",
+
+  emptyTitle: "لا يوجد شيء للمراجعة",
+  emptyPending:
+    "لا توجد طلبات طهاة قيد الانتظار.",
+  emptyStatus:
+    "لا توجد طلبات في هذا القسم بعد.",
+
+  cookType: "نوع الطاهي",
+  location: "الموقع",
+  whatsappPhone: "واتساب / الهاتف",
+  notProvided: "غير متوفر",
+
+  bio: "نبذة عن الطاهي",
+  reason: "سبب الانضمام",
+  specialties: "التخصصات",
+
+  instagram: "إنستغرام",
+  website: "الموقع الإلكتروني",
+
+  adminNote: "ملاحظة المشرف",
+  notePlaceholder:
+    "ملاحظة اختيارية للمتقدم...",
+
+  decline: "رفض",
+  saving: "جارٍ الحفظ...",
+  approve: "قبول الطاهي",
+},
+
+
+recipeEditor: {
+  mustSignInEdit:
+    "يجب تسجيل الدخول لتعديل الوصفة.",
+
+  pendingBlocked:
+    "هذه الوصفة بانتظار المراجعة ولا يمكن تعديلها حالياً.",
+  approvedBlocked:
+    "هذه الوصفة منشورة ولم تعد متاحة للتعديل.",
+  unavailableBlocked:
+    "هذه الوصفة غير متاحة للتعديل.",
+  loadError:
+    "ما قدرنا نحمّل هذه الوصفة. تأكدوا إنها تابعة لحسابكم.",
+
+  imageFileOnly:
+    "اختاروا ملف صورة.",
+  imageTooLarge:
+    "الصورة الأصلية كبيرة جداً. اختاروا صورة أصغر من 15 ميغابايت.",
+
+  enterRecipeName:
+    "أدخلوا اسم الوصفة.",
+
+  ingredientPublishRequired:
+    "أضيفوا مكوّناً واحداً على الأقل قبل نشر الوصفة.",
+  ingredientSubmitRequired:
+    "أضيفوا مكوّناً واحداً على الأقل قبل إرسال الوصفة للمراجعة.",
+
+  instructionPublishRequired:
+    "أضيفوا خطوة واحدة على الأقل قبل نشر الوصفة.",
+  instructionSubmitRequired:
+    "أضيفوا خطوة واحدة على الأقل قبل إرسال الوصفة للمراجعة.",
+
+  updateError:
+    "ما قدرنا نحدّث الوصفة. حاولوا مرة ثانية.",
+  saveError:
+    "ما قدرنا نحفظ الوصفة. حاولوا مرة ثانية.",
+
+  loading: "جارٍ تحميل الوصفة…",
+
+  myRecipes: "وصفاتي",
+  unavailableTitle:
+    "الوصفة غير متاحة للتعديل",
+
+  dashboard: "مساحة الطاهي",
+
+  editTitle: "تعديل الوصفة",
+  createTitle: "إنشاء وصفة",
+
+  adminEditIntro:
+    "عدّلوا تفاصيل الوصفة أو انشروها عندما تصبح جاهزة.",
+  adminCreateIntro:
+    "أضيفوا تفاصيل الوصفة. فيكم تحفظوها كمسودة أو تنشروها عندما تصبح جاهزة.",
+
+  cookEditIntro:
+    "عدّلوا تفاصيل الوصفة أو أرسلوها للمراجعة عندما تصبح جاهزة.",
+  cookCreateIntro:
+    "أضيفوا تفاصيل الوصفة. فيكم تحفظوها كمسودة أو ترسلوها للمراجعة عندما تصبح جاهزة.",
+
+  detailsTitle: "تفاصيل الوصفة",
+  detailsText:
+    "ابدأوا بالمعلومات الأساسية.",
+
+  recipeName: "اسم الوصفة *",
+  recipeNamePlaceholder:
+    "مثال: شوربة عدس لبنانية",
+
+  description: "الوصف",
+  descriptionPlaceholder:
+    "خبروا الناس شوي عن هذه الوصفة...",
+
+  photo: "صورة الوصفة",
+  browsePhoto: "اختيار صورة",
+  photoHelp:
+    "JPG أو PNG أو WebP. يتم ضغط الصور الكبيرة تلقائياً قبل رفعها.",
+  previewAlt: "معاينة صورة الوصفة",
+  changePhoto: "تغيير الصورة",
+  removePhoto: "حذف",
+
+  category: "الفئة",
+  chooseCategory: "اختيار الفئة",
+  otherCategory: "أخرى",
+  customCategoryPlaceholder:
+    "اكتبوا فئة أخرى",
+
+  recipeLanguage: "لغة الوصفة",
+
+  timeTitle: "الوقت والحصص",
+  timeText:
+    "ساعدوا الناس يعرفوا الوقت والكمية المتوقعة.",
+  prepTime: "وقت التحضير",
+  cookTime: "وقت الطبخ",
+  servings: "الحصص",
+  minutesShort: "د",
+
+  ingredientsTitle: "المكوّنات",
+  ingredientsText:
+    "أضيفوا المكوّنات واحداً واحداً حتى يصبح البحث عنها أسهل لاحقاً.",
+
+  quantity: "الكمية",
+  unit: "الوحدة",
+  ingredient: "المكوّن",
+  unitPlaceholder: "أكواب",
+  ingredientPlaceholder: "طحين",
+  removeIngredient: "حذف المكوّن",
+  addIngredient: "إضافة مكوّن",
+
+  instructionsTitle: "طريقة التحضير",
+  instructionsText:
+    "اكتبوا طريقة التحضير خطوة بخطوة.",
+  stepPlaceholder:
+    "اكتبوا تفاصيل الخطوة {{number}}...",
+  removeInstruction:
+    "حذف الخطوة",
+  addStep: "إضافة خطوة",
+
+  saving: "جارٍ الحفظ…",
+  saveDraft: "حفظ كمسودة",
+  publish: "نشر الوصفة",
+  submitApproval:
+    "إرسال للمراجعة",
+},
+
 recipe: {
-      totalTime: "الوقت الكامل",
-      serves: "الحصص",
-      cook: "الطبخ",
+  loading: "جارٍ تحميل الوصفة…",
+  totalTime: "الوقت الكامل",
+  serves: "الحصص",
+  cook: "الطبخ",
 
       saveRecipe: "حفظ الوصفة",
       saved: "محفوظة",
@@ -225,6 +772,11 @@ removeSaved: "إزالة من الوصفات المحفوظة",
       notFoundText:
         "يمكن تغير مكانها أو بعد ما انضافت إلى وصفات ألف صحتين.",
       backToDiscover: "العودة إلى الوصفات",
+      cookFallback: "طاهٍ",
+minutesShort: "د",
+decreaseServings: "تقليل عدد الحصص",
+increaseServings: "زيادة عدد الحصص",
+      
     },
 
         cookServices: {
@@ -302,6 +854,29 @@ removeSaved: "إزالة من الوصفات المحفوظة",
         other: "أخرى",
       },
 
+      validation: {
+  invalidServiceType:
+    "اختر نوع خدمة صالحًا.",
+  invalidStatus:
+    "اختر حالة توفر صالحة.",
+  invalidTitle:
+    "أدخل عنوانًا للخدمة لا يتجاوز 100 حرف.",
+  descriptionTooLong:
+    "اجعل الوصف 1000 حرف أو أقل.",
+  availabilityTooLong:
+    "اجعل ملاحظة التوفر 250 حرفًا أو أقل.",
+  invalidPrice:
+    "أدخل سعر بداية صالحًا وغير سالب.",
+  currencyRequired:
+    "اختر عملة لسعر البداية.",
+  priceRequired:
+    "أدخل سعر بداية أو امسح العملة.",
+  invalidPhotoUrl:
+    "استخدم رابط صورة HTTPS صالحًا.",
+  signInRequired:
+    "سجّل الدخول لإدارة خدماتك.",
+},
+
       messages: {
         loading: "جارٍ تحميل خدماتك...",
         photoUploaded: "تم رفع الصورة.",
@@ -327,6 +902,8 @@ cookDashboard: {
 },
 
 cookRequests: {
+  cancelled: "ملغى",
+  retry: "المحاولة مجددًا",
   eyebrow: "طلبات الخدمات",
 
   title: "الطلبات",
@@ -392,23 +969,17 @@ cookRequests: {
       "لا توجد طلبات بهذه الحالة.",
   },
 
-  errors: {
-  notFound:
-    "لم نتمكن من العثور على هذه الخدمة.",
-  unavailable:
-    "هذه الخدمة غير متاحة حالياً.",
+errors: {
   load:
-    "تعذر تحميل هذه الخدمة.",
-  send:
-    "تعذر إرسال طلبك.",
-  pastDate:
-    "يرجى اختيار تاريخ اليوم أو تاريخ لاحق.",
-  authentication:
-    "يجب تسجيل الدخول لإرسال طلب خدمة.",
+    "ما قدرنا نحمّل طلبات الخدمات.",
+  update:
+    "ما قدرنا نحدّث هذا الطلب.",
 },
 },
 
 myServiceRequests: {
+  viewMyRequests: "عرض طلباتي",
+  retry: "المحاولة مجددًا",
   eyebrow: "طلباتي",
   title: "طلباتي",
   subtitle:
@@ -489,6 +1060,13 @@ myServiceRequests: {
 },
 
 publicCookProfile: {
+  retry: "المحاولة مجددًا",
+  unfollow: "إلغاء المتابعة",
+  followStateError: "تعذر التحقق مما إذا كنت تتابع هذا الطاهي. يرجى المحاولة مجددًا.",
+  loadErrorTitle: "تعذر تحميل ملف الطاهي",
+  loadErrorText: "يرجى المحاولة مجددًا بعد قليل.",
+  recipesError: "تعذر تحميل وصفات هذا الطاهي.",
+  servicesError: "تعذر تحميل خدمات هذا الطاهي.",
   badge: "طاهي ألف صحتين",
   follower: "متابع",
   followers: "متابعون",
@@ -569,6 +1147,8 @@ serviceRequest: {
   continueExploring: "متابعة الاستكشاف",
 
   errors: {
+  authentication: "يجب تسجيل الدخول لإرسال طلب خدمة.",
+  pastDate: "يرجى اختيار تاريخ اليوم أو تاريخ لاحق.",
     notFound:
       "لم نتمكن من العثور على هذه الخدمة.",
     unavailable:
@@ -577,6 +1157,28 @@ serviceRequest: {
       "تعذر تحميل هذه الخدمة.",
     send:
       "تعذر إرسال طلبك.",
+      serviceRequired:
+  "يرجى اختيار خدمة.",
+invalidName:
+  "أدخل اسمًا صالحًا.",
+invalidEmail:
+  "أدخل عنوان بريد إلكتروني صالحًا.",
+phoneTooLong:
+  "رقم الهاتف طويل جدًا.",
+dateRequired:
+  "اختر التاريخ المطلوب.",
+invalidDate:
+  "اختر تاريخًا صالحًا.",
+invalidLocation:
+  "أدخل موقعًا صالحًا.",
+invalidBudget:
+  "أدخل ميزانية صالحة.",
+currencyRequired:
+  "اختر العملة.",
+invalidCurrency:
+  "اختر عملة صالحة.",
+messageTooLong:
+  "اجعل رسالتك 1500 حرف أو أقل.",
   },
 },
 

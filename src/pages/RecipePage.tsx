@@ -319,11 +319,11 @@ function RecipePage() {
           cookMinutes;
 
         const creator =
-          publicRecipe.cook
-            ?.display_name ??
-          publicRecipe.cook
-            ?.username ??
-          "Cook";
+  publicRecipe.cook
+    ?.display_name ??
+  publicRecipe.cook
+    ?.username ??
+  t("recipe.cookFallback");
 
           const cookUsername =
   publicRecipe.cook?.username ??
@@ -351,13 +351,19 @@ function RecipePage() {
           cookUsername,
 
           prepTime:
-            `${prepMinutes} min`,
+  `${prepMinutes} ${t(
+    "recipe.minutesShort",
+  )}`,
 
-          cookTime:
-            `${cookMinutes} min`,
+cookTime:
+  `${cookMinutes} ${t(
+    "recipe.minutesShort",
+  )}`,
 
-          time:
-            `${totalMinutes} min`,
+time:
+  `${totalMinutes} ${t(
+    "recipe.minutesShort",
+  )}`,
 
           servings:
             publicRecipe.servings ??
@@ -396,7 +402,7 @@ function RecipePage() {
               .filter(Boolean),
         };
       },
-      [publicRecipe],
+      [publicRecipe, t],
     );
 
   const [
@@ -480,8 +486,11 @@ function RecipePage() {
         />
 
         <h1>
-          Loading recipe...
-        </h1>
+  {t("recipe.loading", {
+    defaultValue:
+      "Loading recipe...",
+  })}
+</h1>
       </main>
     );
   }
@@ -556,12 +565,16 @@ function RecipePage() {
           )}
 
           {recipe.category && (
-            <span className="recipe-category-badge">
-              {
-                recipe.category
-              }
-            </span>
-          )}
+  <span className="recipe-category-badge">
+    {t(
+      `categories.${recipe.category}`,
+      {
+        defaultValue:
+          recipe.category,
+      },
+    )}
+  </span>
+)}
         </div>
 
         <div className="recipe-hero-content">
@@ -720,7 +733,9 @@ function RecipePage() {
             <div className="servings-control">
               <button
                 type="button"
-                aria-label="Decrease servings"
+                aria-label={t(
+  "recipe.decreaseServings",
+)}
                 disabled={
                   servings <= 1
                 }
@@ -752,7 +767,9 @@ function RecipePage() {
 
               <button
                 type="button"
-                aria-label="Increase servings"
+                aria-label={t(
+  "recipe.increaseServings",
+)}
                 onClick={() =>
                   setServings(
                     (current) =>

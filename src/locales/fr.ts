@@ -1,6 +1,13 @@
 const fr = {
   translation: {
+stats: {
+  completed: "Terminées",
+  accepted: "Acceptées",
+  pending: "En attente","total":"Total"},
     home: {
+  noPublishedRecipes: "Aucune recette publiée pour le moment.",
+  recipeLoadError: "Impossible de charger les recettes. Veuillez réessayer.",
+  loadingRecipes: "Chargement des recettes…",
       "eyebrow": "Cuisinez avec ce que vous avez déjà",
       "title": "Qu’y a-t-il dans votre cuisine ?",
       "subtitle": "Moins de gaspillage. Plus de saveurs. Des idées pour cuisiner au quotidien.",
@@ -44,16 +51,221 @@ const fr = {
       french: "Français",
     },
 
+    categories: {
+  "Breakfast": "Petit-déjeuner",
+  "Main Dishes": "Plats principaux",
+  "Salads": "Salades",
+  "Desserts": "Desserts",
+  "Soups": "Soupes",
+  "Appetizers": "Entrées",
+},
+
     nav: {
-      discover: "Découvrir",
-      kitchen: "Ma cuisine",
-      creators: "Créateurs",
-      cookbooks: "Livres de recettes",
-      saved: "Recettes enregistrées",
-      profile: "Profil",
-    },
+  discover: "Découvrir",
+  kitchen: "Ma cuisine",
+  creators: "Créateurs",
+  cookbooks: "Livres de recettes",
+  saved: "Recettes enregistrées",
+  profile: "Profil",
+  settings: "Paramètres",
+myRequests: "Mes demandes",
+signOut: "Se déconnecter",
+signIn: "Se connecter",
+menu: "Menu",
+selectLanguage: "Choisir la langue",
+},
+
+auth: {
+  brandKicker: "Bienvenue à table",
+  brandTitleLine1: "Cuisinez plus.",
+  brandTitleLine2: "Gaspillez moins.",
+  brandText:
+    "Enregistrez des recettes, remplissez votre cuisine et découvrez quoi préparer avec ce que vous avez déjà.",
+
+  welcomeBack: "Bon retour",
+  join: "Rejoignez Alf Sahten",
+  signIn: "Se connecter",
+  createAccountTitle: "Créez votre compte",
+  loginIntro:
+    "Vos recettes enregistrées et votre cuisine vous attendent.",
+  signupIntro:
+    "Commencez à créer votre cuisine personnelle Alf Sahten.",
+
+  name: "Nom",
+  namePlaceholder: "Votre nom",
+  email: "E-mail",
+  emailPlaceholder: "vous@exemple.com",
+  password: "Mot de passe",
+  passwordPlaceholder: "Au moins 6 caractères",
+
+  showPassword: "Afficher le mot de passe",
+  hidePassword: "Masquer le mot de passe",
+  forgotPassword: "Mot de passe oublié ?",
+
+  pleaseWait: "Veuillez patienter…",
+  createAccount: "Créer un compte",
+
+  newHere: "Nouveau sur Alf Sahten ?",
+  alreadyHaveAccount: "Vous avez déjà un compte ?",
+
+  enterEmailFirst:
+    "Entrez d’abord votre adresse e-mail.",
+  resetEmailSent:
+    "Si un compte existe pour cette adresse e-mail, nous avons envoyé un lien de réinitialisation.",
+  resetEmailError:
+    "Nous n’avons pas pu envoyer l’e-mail de réinitialisation. Veuillez réessayer.",
+
+  signupConfirmation:
+    "Compte créé. Consultez votre e-mail pour confirmer votre compte.",
+  signupError:
+    "Nous n’avons pas pu créer votre compte. Veuillez réessayer.",
+  loginError:
+    "Connexion impossible. Vérifiez votre e-mail et votre mot de passe.",
+},
+
+resetPassword: {
+  brandKicker: "Récupération du compte",
+  brandTitleLine1: "Choisissez un nouveau",
+  brandTitleLine2: "mot de passe.",
+  brandText:
+    "Créez un nouveau mot de passe pour votre compte Alf Sahten.",
+
+  kicker: "Réinitialiser le mot de passe",
+  title: "Créez un nouveau mot de passe",
+
+  invalidLink:
+    "Ouvrez cette page depuis le lien de réinitialisation envoyé par e-mail.",
+  backToSignIn: "Retour à la connexion",
+
+  newPassword: "Nouveau mot de passe",
+  newPasswordPlaceholder:
+    "Au moins 8 caractères",
+
+  confirmPassword:
+    "Confirmer le mot de passe",
+  confirmPasswordPlaceholder:
+    "Répétez votre mot de passe",
+
+  showPassword: "Afficher le mot de passe",
+  hidePassword: "Masquer le mot de passe",
+
+  tooShort:
+    "Le mot de passe doit contenir au moins 8 caractères.",
+  mismatch:
+    "Les mots de passe ne correspondent pas.",
+  updated:
+    "Votre mot de passe a été modifié.",
+  updateError:
+    "Nous n’avons pas pu modifier votre mot de passe. Veuillez réessayer.",
+
+  updating: "Modification…",
+  updatePassword: "Modifier le mot de passe",
+},
+
+creatorApplication: {
+  enterCookName:
+    "Veuillez saisir votre nom de Cook.",
+  usernameLength:
+    "Le nom d’utilisateur doit contenir entre 3 et 30 caractères.",
+  usernameTaken:
+    "Ce nom d’utilisateur est déjà utilisé. Essayez-en un autre.",
+  saveError:
+    "Nous n’avons pas pu enregistrer votre profil Cook. Veuillez réessayer.",
+  approvalRequestError:
+    "Votre profil Cook a été enregistré mais nous n’avons pas pu envoyer la demande d’approbation.",
+  profileUpdated:
+    "Votre profil Cook a été mis à jour.",
+  profileCreated:
+    "Votre profil Cook a été créé.",
+
+  signInTitle:
+    "Devenez Cook sur Alf Sahten",
+  signInText:
+    "Connectez-vous d’abord pour créer votre profil Cook.",
+  signIn: "Se connecter",
+
+  backToProfile: "Retour au profil",
+  heroKicker:
+    "Votre cuisine, votre histoire",
+  yourCookProfile: "Votre profil Cook",
+  becomeCook: "Devenir Cook",
+  heroText:
+    "Créez votre identité publique de Cook sur Alf Sahten. Vous pouvez être cuisinier à domicile, créateur culinaire ou chef professionnel.",
+
+  approvedCook: "Cook approuvé",
+  approvedText:
+    "Votre profil Cook peut être affiché publiquement.",
+
+  approvalPending:
+    "Approbation en attente",
+  pendingText:
+    "Vous pouvez continuer à modifier votre profil pendant son examen.",
+
+  changesRequested:
+    "Modifications demandées",
+  changesFallback:
+    "Vérifiez votre profil Cook puis soumettez-le à nouveau.",
+
+  declinedTitle:
+    "Candidature non approuvée",
+  declinedFallback:
+    "Vous pouvez modifier votre profil puis le soumettre à nouveau.",
+
+  cookName: "Nom de Cook",
+  cookNamePlaceholder:
+    "Le nom que les autres verront",
+
+  username: "Nom d’utilisateur",
+  usernamePlaceholder: "votre-cuisine",
+  usernameHelp:
+    "Il sera utilisé pour votre profil Cook public.",
+
+  cookType: "Type de Cook",
+  homeCook: "Cuisinier à domicile",
+  foodCreator: "Créateur culinaire",
+  professionalChef:
+    "Chef professionnel",
+
+  aboutYou: "À propos de vous",
+  aboutPlaceholder:
+    "Expliquez ce que vous aimez cuisiner et ce qui rend votre cuisine unique.",
+
+  location: "Localisation",
+  locationPlaceholder: "Beyrouth, Liban",
+
+  specialties: "Spécialités",
+  specialtiesPlaceholder:
+    "Libanaise, desserts, cuisine saine",
+  specialtiesHelp:
+    "Séparez les spécialités par des virgules.",
+
+  instagram: "Instagram",
+  website: "Site web",
+  whatsapp: "WhatsApp ou contact",
+
+  shareQuestion:
+    "Que souhaitez-vous partager sur Alf Sahten ?",
+  sharePlaceholder:
+    "Parlez-nous un peu des recettes ou de la cuisine que vous souhaitez partager.",
+
+  saving: "Enregistrement…",
+  saveProfile:
+    "Enregistrer le profil Cook",
+  createProfile:
+    "Créer le profil Cook",
+
+  sideKicker: "Cooks Alf Sahten",
+  sideTitle:
+    "Derrière chaque bon plat, il y a une personne.",
+  sideText:
+    "Créez votre identité de Cook dès maintenant. Vos recettes, abonnés et activités apparaîtront ici au fur et à mesure qu’Alf Sahten grandit.",
+
+  recipes: "Recettes",
+  followers: "Abonnés",
+},
 
     common: {
+  cook: "Cuisinier",
       home: "Accueil",
       search: "Rechercher",
       saved: "Enregistrées",
@@ -63,41 +275,58 @@ const fr = {
       recipe: "recette",
     },
 
-    discover: {
-      kicker: "Trouvez quelque chose de bon",
-      title: "De quoi avez-vous envie ?",
-      subtitle:
-        "Recherchez des recettes, découvrez les classiques libanais et trouvez quoi cuisiner aujourd’hui.",
+discover: {
+  noRecipesYetText: "Revenez bientôt découvrir les recettes de nos cuisiniers.",
+  noRecipesYet: "Aucune recette pour le moment",
+  kicker: "Trouvez quelque chose de bon",
+  title: "De quoi avez-vous envie ?",
+  subtitle:
+    "Recherchez des recettes, découvrez les classiques libanais et trouvez quoi cuisiner aujourd’hui.",
 
-      searchPlaceholder:
-        "Rechercher un plat, un ingrédient ou un créateur...",
+  searchPlaceholder:
+    "Rechercher un plat, un ingrédient ou un créateur...",
 
-      all: "Tout",
-      lebanese: "Libanais",
-      breakfast: "Petit-déjeuner",
-      quick: "Rapide",
-      vegetarian: "Végétarien",
-      desserts: "Desserts",
+  all: "Tout",
+  lebanese: "Libanais",
+  breakfast: "Petit-déjeuner",
+  quick: "Rapide",
+  vegetarian: "Végétarien",
+  desserts: "Desserts",
 
-      kitchenQuestion: "Vous savez déjà ce que vous avez ?",
-      kitchenTitle: "Cuisinez avec ce que vous avez",
-      kitchenText:
-        "Ajoutez les ingrédients disponibles chez vous et nous vous montrerons ce que vous pouvez préparer.",
-      openKitchen: "Ouvrir Ma cuisine",
+  kitchenQuestion: "Vous savez déjà ce que vous avez ?",
+  kitchenTitle: "Cuisinez avec ce que vous avez",
+  kitchenText:
+    "Ajoutez les ingrédients disponibles chez vous et nous vous montrerons ce que vous pouvez préparer.",
+  openKitchen: "Ouvrir Ma cuisine",
 
-      discoverNew: "Découvrez quelque chose de nouveau",
-      recipesWorthTrying: "Des recettes à essayer",
+  discoverNew: "Découvrez quelque chose de nouveau",
+  recipesWorthTrying: "Des recettes à essayer",
+  resultsFor: "Résultats pour",
+  categoryRecipes: "recettes",
 
-      noRecipes: "Aucune recette trouvée",
-      noRecipesText:
-        "Essayez une autre recherche ou choisissez une autre catégorie.",
-      showAll: "Voir toutes les recettes",
+  saveRecipe: "Enregistrer la recette",
+  removeSaved: "Retirer des recettes enregistrées",
 
-      alfSahtenPick: "Le choix Alf Sahten",
-      by: "Par",
-    },
+  loadingRecipes: "Chargement des recettes…",
+  loadError: "Impossible de charger les recettes.",
+  loadErrorText:
+    "Actualisez la page puis réessayez.",
+
+  noRecipes: "Aucune recette trouvée",
+  noRecipesText:
+    "Essayez une autre recherche ou choisissez une autre catégorie.",
+  showAll: "Voir toutes les recettes",
+
+  alfSahtenPick: "Le choix Alf Sahten",
+  by: "Par",
+},
 
     kitchen: {
+  noMatchesText: "Ajoutez davantage d’ingrédients ou revenez lorsque de nouvelles recettes seront disponibles.",
+  noMatchesTitle: "Aucune recette correspondante pour le moment",
+  loadErrorText: "Actualisez la page et réessayez.",
+  loadErrorTitle: "Impossible de charger les recettes.",
+  removeIngredient: "Retirer {{ingredient}}",
       kicker: "Cuisinez avant de faire les courses",
       title: "Qu’avez-vous dans votre cuisine ?",
       subtitle:
@@ -142,6 +371,8 @@ forRecipes: "recettes",
     },
 
     saved: {
+  loadErrorText: "Actualisez la page et réessayez.",
+  loadErrorTitle: "Impossible de charger vos recettes enregistrées.",
       kicker: "Gardez vos préférées",
       title: "Recettes enregistrées",
       subtitle:
@@ -160,27 +391,117 @@ saveRecipe: "Enregistrer la recette",
 removeSaved: "Retirer des recettes enregistrées",
     },
 
-    profile: {
-  kicker: "Votre Alf Sahten",
+profile: {
+  saveError: "Impossible d’enregistrer vos modifications.",
+  tryAgain: "Réessayer",
+  loadErrorText: "Veuillez réessayer.",
+  loadErrorTitle: "Impossible de charger votre profil",
+  kicker: "Votre compte",
   title: "Mon profil",
-  subtitle: "Gérez votre compte et vos préférences.",
+  subtitle:
+    "Vos recettes, vos demandes et vos outils de cuisinier au même endroit.",
+
   name: "Nom",
   email: "E-mail",
   language: "Langue",
   accountType: "Type de compte",
+
   regularUser: "Membre",
   creator: "Créateur",
   admin: "Administrateur",
+
   adminDashboard: "Tableau de bord admin",
+cookApplications: "Candidatures Cook",
+recipeReviews: "Validation des recettes",
+viewPublicProfile: "Voir le profil public",
+follower: "Abonné",
+followers: "Abonnés",
+
   saveChanges: "Enregistrer",
   saving: "Enregistrement...",
   saved: "Modifications enregistrées",
+
   signOut: "Se déconnecter",
+
   signInTitle: "Votre cuisine vous attend",
   signInText:
     "Connectez-vous pour retrouver vos recettes, votre cuisine et vos préférences sur tous vos appareils.",
   signIn: "Se connecter ou créer un compte",
+
   becomeCook: "Devenir cuisinier",
+
+  accountKicker: "Votre compte",
+
+  settingsTitle: "Paramètres",
+  settingsText:
+    "Gérez votre compte et sa sécurité",
+
+  requestsText:
+    "Consultez vos demandes de services",
+
+  cookSpace: "Espace cuisinier",
+  kitchenTitle: "Votre cuisine",
+  kitchenText:
+    "Gérez vos recettes, vos services et vos demandes.",
+},
+
+settings: {
+  kicker: "Votre Alf Sahten",
+  title: "Paramètres",
+  subtitle:
+    "Gérez votre compte et vos préférences de sécurité.",
+
+  account: "Compte",
+  security: "Sécurité",
+
+  accountTitle: "Paramètres du compte",
+  accountText:
+    "Gérez les informations de votre compte.",
+
+  loadingAccount: "Chargement de votre compte…",
+  loadAccountError:
+    "Nous n’avons pas pu charger les informations de votre compte.",
+  tryAgain: "Réessayer",
+
+  securityTitle: "Sécurité du compte",
+  securityText:
+    "Modifiez le mot de passe utilisé pour vous connecter à Alf Sahten.",
+
+  signedInAs: "Connecté avec",
+
+  currentPassword: "Mot de passe actuel",
+  currentPasswordPlaceholder:
+    "Entrez votre mot de passe actuel",
+
+  newPassword: "Nouveau mot de passe",
+  newPasswordPlaceholder:
+    "Au moins 8 caractères",
+
+  confirmNewPassword:
+    "Confirmer le nouveau mot de passe",
+  confirmNewPasswordPlaceholder:
+    "Répétez votre nouveau mot de passe",
+
+  changePassword: "Modifier le mot de passe",
+  updatingPassword:
+    "Modification du mot de passe…",
+
+  emailMissing:
+    "Nous n’avons pas trouvé l’adresse e-mail de ce compte.",
+  currentPasswordRequired:
+    "Entrez votre mot de passe actuel.",
+  passwordTooShort:
+    "Votre nouveau mot de passe doit contenir au moins 8 caractères.",
+  passwordsDoNotMatch:
+    "Les nouveaux mots de passe ne correspondent pas.",
+  passwordMustBeDifferent:
+    "Votre nouveau mot de passe doit être différent de votre mot de passe actuel.",
+  currentPasswordIncorrect:
+    "Votre mot de passe actuel est incorrect.",
+  passwordUpdated:
+    "Votre mot de passe a été modifié avec succès.",
+  passwordUpdateError:
+    "Nous n’avons pas pu modifier votre mot de passe. Veuillez réessayer.",
 },
 
 protectedRoute: {
@@ -192,8 +513,242 @@ protectedRoute: {
   checkingSession: "Vérification de votre session…",
 },
 
+adminDashboard: {
+  kicker: "Administration",
+  title: "Tableau de bord admin",
+  intro:
+    "Gérez les candidatures Cook et validez les recettes avant leur publication.",
+  cookApplicationsTitle: "Candidatures Cook",
+  cookApplicationsText:
+    "Examinez les demandes des personnes qui souhaitent devenir Cooks sur Alf Sahten.",
+  recipeReviewsTitle: "Validation des recettes",
+  recipeReviewsText:
+    "Examinez les recettes soumises par les Cooks avant leur publication.",
+},
+
+
+adminRecipeReview: {
+  loadError:
+    "Nous n’avons pas pu charger les recettes en attente de validation.",
+
+  changesNoteRequired:
+    "Écrivez une note pour expliquer au cuisinier ce qu’il doit modifier.",
+
+  declineReasonRequired:
+    "Indiquez une raison avant de refuser la recette.",
+
+  updateError:
+    "Nous n’avons pas pu mettre à jour cette recette. Veuillez réessayer.",
+
+  loading: "Chargement des recettes…",
+
+  dashboard: "Tableau de bord admin",
+  title: "Validation des recettes",
+  intro:
+    "Examinez les recettes soumises par les cuisiniers avant leur publication sur Alf Sahten.",
+
+  refresh: "Actualiser",
+
+  emptyTitle: "Tout est à jour",
+  emptyText:
+    "Aucune recette n’attend actuellement une approbation.",
+
+  pending: "En attente",
+  pendingApproval:
+    "En attente d’approbation",
+
+  submittedBy: "Soumise par",
+  cookFallback: "Cuisinier",
+
+  prepTime: "{{count}} min de préparation",
+  cookTime: "{{count}} min de cuisson",
+  servings: "{{count}} portions",
+
+  ingredients: "Ingrédients",
+  instructions: "Préparation",
+
+  adminNote: "Note de l’administrateur",
+  notePlaceholder:
+    "Facultative lors de l’approbation. Obligatoire pour demander des modifications ou refuser la recette.",
+
+  decline: "Refuser",
+  requestChanges:
+    "Demander des modifications",
+  saving: "Enregistrement…",
+  approve: "Approuver",
+},
+
+adminCookApplications: {
+  loadError:
+    "Impossible de charger les candidatures Cook.",
+  updateError:
+    "Impossible de mettre à jour cette candidature.",
+
+  approved: "Approuvée",
+  declined: "Refusée",
+  pending: "En attente",
+  loading: "Chargement des candidatures Cook...",
+
+  dashboard: "Tableau de bord admin",
+  title: "Candidatures Cook",
+  intro:
+    "Examinez les personnes qui souhaitent publier des recettes et proposer des services Cook sur Alf Sahten.",
+
+  recipeReviews: "Validation des recettes",
+  refresh: "Actualiser",
+
+  emptyTitle: "Rien à examiner ici",
+  emptyPending:
+    "Aucune candidature Cook n’est en attente.",
+  emptyStatus:
+    "Aucune candidature dans cette section pour le moment.",
+
+  cookType: "Type de Cook",
+  location: "Localisation",
+  whatsappPhone: "WhatsApp / téléphone",
+  notProvided: "Non renseigné",
+
+  bio: "Bio du Cook",
+  reason: "Pourquoi cette personne souhaite nous rejoindre",
+  specialties: "Spécialités",
+
+  instagram: "Instagram",
+  website: "Site web",
+
+  adminNote: "Note admin",
+  notePlaceholder:
+    "Note facultative pour la candidature...",
+
+  decline: "Refuser",
+  saving: "Enregistrement...",
+  approve: "Approuver le Cook",
+},
+
+
+recipeEditor: {
+  mustSignInEdit:
+    "Vous devez être connecté pour modifier une recette.",
+
+  pendingBlocked:
+    "Cette recette est en attente de validation et ne peut pas être modifiée pour le moment.",
+  approvedBlocked:
+    "Cette recette est publiée et ne peut plus être modifiée.",
+  unavailableBlocked:
+    "Cette recette ne peut pas être modifiée.",
+  loadError:
+    "Nous n’avons pas pu charger cette recette. Vérifiez qu’elle appartient bien à votre compte.",
+
+  imageFileOnly:
+    "Choisissez un fichier image.",
+  imageTooLarge:
+    "La photo originale est trop volumineuse. Choisissez une image de moins de 15 Mo.",
+
+  enterRecipeName:
+    "Entrez le nom de la recette.",
+
+  ingredientPublishRequired:
+    "Ajoutez au moins un ingrédient avant de publier la recette.",
+  ingredientSubmitRequired:
+    "Ajoutez au moins un ingrédient avant de soumettre la recette.",
+
+  instructionPublishRequired:
+    "Ajoutez au moins une étape avant de publier la recette.",
+  instructionSubmitRequired:
+    "Ajoutez au moins une étape avant de soumettre la recette.",
+
+  updateError:
+    "Nous n’avons pas pu modifier votre recette. Veuillez réessayer.",
+  saveError:
+    "Nous n’avons pas pu enregistrer votre recette. Veuillez réessayer.",
+
+  loading: "Chargement de la recette…",
+
+  myRecipes: "Mes recettes",
+  unavailableTitle:
+    "Recette indisponible pour modification",
+
+  dashboard: "Espace Cook",
+
+  editTitle: "Modifier la recette",
+  createTitle: "Créer une recette",
+
+  adminEditIntro:
+    "Modifiez les détails de votre recette ou publiez-la lorsqu’elle est prête.",
+  adminCreateIntro:
+    "Ajoutez les détails de votre recette. Vous pouvez l’enregistrer comme brouillon ou la publier lorsqu’elle est prête.",
+
+  cookEditIntro:
+    "Modifiez les détails de votre recette ou soumettez-la pour approbation lorsqu’elle est prête.",
+  cookCreateIntro:
+    "Ajoutez les détails de votre recette. Vous pouvez l’enregistrer comme brouillon ou la soumettre pour approbation lorsqu’elle est prête.",
+
+  detailsTitle: "Détails de la recette",
+  detailsText:
+    "Commencez par les informations principales.",
+
+  recipeName: "Nom de la recette *",
+  recipeNamePlaceholder:
+    "Exemple : soupe libanaise aux lentilles",
+
+  description: "Description",
+  descriptionPlaceholder:
+    "Présentez cette recette en quelques mots...",
+
+  photo: "Photo de la recette",
+  browsePhoto: "Choisir une photo",
+  photoHelp:
+    "JPG, PNG ou WebP. Les grandes photos sont automatiquement compressées avant l’envoi.",
+  previewAlt: "Aperçu de la recette",
+  changePhoto: "Changer la photo",
+  removePhoto: "Supprimer",
+
+  category: "Catégorie",
+  chooseCategory: "Choisir une catégorie",
+  otherCategory: "Autre",
+  customCategoryPlaceholder:
+    "Saisissez une autre catégorie",
+
+  recipeLanguage: "Langue de la recette",
+
+  timeTitle: "Temps et portions",
+  timeText:
+    "Aidez les autres à savoir à quoi s’attendre.",
+  prepTime: "Temps de préparation",
+  cookTime: "Temps de cuisson",
+  servings: "Portions",
+  minutesShort: "min",
+
+  ingredientsTitle: "Ingrédients",
+  ingredientsText:
+    "Ajoutez les ingrédients un par un afin de pouvoir les rechercher plus tard.",
+
+  quantity: "Quantité",
+  unit: "Unité",
+  ingredient: "Ingrédient",
+  unitPlaceholder: "tasses",
+  ingredientPlaceholder: "Farine",
+  removeIngredient: "Supprimer l’ingrédient",
+  addIngredient: "Ajouter un ingrédient",
+
+  instructionsTitle: "Préparation",
+  instructionsText:
+    "Expliquez la préparation étape par étape.",
+  stepPlaceholder:
+    "Décrivez l’étape {{number}}...",
+  removeInstruction:
+    "Supprimer l’étape",
+  addStep: "Ajouter une étape",
+
+  saving: "Enregistrement…",
+  saveDraft: "Enregistrer comme brouillon",
+  publish: "Publier la recette",
+  submitApproval:
+    "Soumettre pour approbation",
+},
+
 recipe: {
-      totalTime: "Temps total",
+  loading: "Chargement de la recette…",
+  totalTime: "Temps total",
       serves: "Portions",
       cook: "Cuisson",
 
@@ -225,6 +780,10 @@ removeSaved: "Retirer des recettes enregistrées",
       notFoundText:
         "Elle a peut-être été déplacée ou n’est pas encore disponible sur Alf Sahten.",
       backToDiscover: "Retour à Découvrir",
+      cookFallback: "Cuisinier",
+minutesShort: "min",
+decreaseServings: "Réduire le nombre de portions",
+increaseServings: "Augmenter le nombre de portions",
     },
 
         cookServices: {
@@ -302,6 +861,29 @@ removeSaved: "Retirer des recettes enregistrées",
         other: "Autre",
       },
 
+      validation: {
+  invalidServiceType:
+    "Choisissez un type de service valide.",
+  invalidStatus:
+    "Choisissez un statut de disponibilité valide.",
+  invalidTitle:
+    "Saisissez un titre de service de 100 caractères maximum.",
+  descriptionTooLong:
+    "Limitez la description à 1 000 caractères.",
+  availabilityTooLong:
+    "Limitez la note de disponibilité à 250 caractères.",
+  invalidPrice:
+    "Saisissez un prix de départ valide et positif ou nul.",
+  currencyRequired:
+    "Choisissez une devise pour le prix de départ.",
+  priceRequired:
+    "Saisissez un prix de départ ou supprimez la devise.",
+  invalidPhotoUrl:
+    "Utilisez une URL de photo HTTPS valide.",
+  signInRequired:
+    "Connectez-vous pour gérer vos services.",
+},
+
       messages: {
         loading: "Chargement de vos services...",
         photoUploaded: "Photo ajoutée.",
@@ -327,6 +909,8 @@ cookDashboard: {
 },
 
 cookRequests: {
+  cancelled: "Annulée",
+  retry: "Réessayer",
   eyebrow: "Demandes de services",
 
   title: "Demandes",
@@ -392,23 +976,17 @@ cookRequests: {
       "Aucune demande ne correspond à ce statut.",
   },
 
-  errors: {
-  notFound:
-    "Nous n’avons pas trouvé ce service.",
-  unavailable:
-    "Ce service n’est actuellement pas disponible.",
+errors: {
   load:
-    "Impossible de charger ce service.",
-  send:
-    "Impossible d’envoyer votre demande.",
-  pastDate:
-    "Veuillez choisir la date d’aujourd’hui ou une date future.",
-  authentication:
-    "Vous devez être connecté pour envoyer une demande de service.",
+    "Nous n’avons pas pu charger vos demandes.",
+  update:
+    "Nous n’avons pas pu mettre à jour cette demande.",
 },
 },
 
 myServiceRequests: {
+  viewMyRequests: "Voir mes demandes",
+  retry: "Réessayer",
   eyebrow: "Mes demandes",
   title: "Mes demandes",
   subtitle:
@@ -489,6 +1067,13 @@ myServiceRequests: {
 },
 
 publicCookProfile: {
+  retry: "Réessayer",
+  unfollow: "Ne plus suivre",
+  followStateError: "Impossible de vérifier si vous suivez ce cuisinier. Veuillez réessayer.",
+  loadErrorTitle: "Impossible de charger ce profil",
+  loadErrorText: "Veuillez réessayer dans un instant.",
+  recipesError: "Impossible de charger les recettes de ce cuisinier.",
+  servicesError: "Impossible de charger les services de ce cuisinier.",
   badge: "Cuisinier Alf Sahten",
   follower: "abonné",
   followers: "abonnés",
@@ -569,6 +1154,8 @@ serviceRequest: {
   continueExploring: "Continuer à explorer",
 
   errors: {
+  authentication: "Connectez-vous pour envoyer une demande de service.",
+  pastDate: "Choisissez la date d’aujourd’hui ou une date ultérieure.",
     notFound:
       "Nous n’avons pas trouvé ce service.",
     unavailable:
@@ -577,6 +1164,28 @@ serviceRequest: {
       "Impossible de charger ce service.",
     send:
       "Impossible d’envoyer votre demande.",
+      serviceRequired:
+  "Veuillez choisir un service.",
+invalidName:
+  "Saisissez un nom valide.",
+invalidEmail:
+  "Saisissez une adresse e-mail valide.",
+phoneTooLong:
+  "Le numéro de téléphone est trop long.",
+dateRequired:
+  "Choisissez une date souhaitée.",
+invalidDate:
+  "Choisissez une date valide.",
+invalidLocation:
+  "Saisissez un lieu valide.",
+invalidBudget:
+  "Saisissez un budget valide.",
+currencyRequired:
+  "Choisissez une devise.",
+invalidCurrency:
+  "Choisissez une devise valide.",
+messageTooLong:
+  "Limitez votre message à 1 500 caractères.",
   },
 },
 

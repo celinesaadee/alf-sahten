@@ -7,6 +7,7 @@ import {
 import ProtectedRoute from "./components/ProtectedRoute";
 import MobileBottomNav from "./components/MobileBottomNav";
 import AppHeader from "./components/AppHeader";
+import ScrollToTop from "./components/ScrollToTop";
 
 import HomePage from "./HomePage";
 import DiscoverPage from "./pages/DiscoverPage";
@@ -17,21 +18,24 @@ import RecipePage from "./pages/RecipePage";
 import AuthPage from "./pages/AuthPage";
 import CreatorApplicationPage from "./pages/CreatorApplicationPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-
+import SettingsPage from "./pages/SettingsPage";
 import MyRecipesPage from "./pages/MyRecipesPage";
 import CreateRecipePage from "./pages/CreateRecipePage";
 import CookServicesPage from "./pages/CookServicesPage";
 import CookRequestsPage from "./pages/CookRequestsPage";
-
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminRecipeReviewPage from "./pages/AdminRecipeReviewPage";
-
+import AdminCookApplicationsPage from "./pages/AdminCookApplicationsPage";
 import PublicCookPage from "./pages/PublicCookPage";
 import ServiceRequestPage from "./pages/ServiceRequestPage";
 import MyServiceRequestsPage from "./pages/MyServiceRequestsPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsPage from "./pages/TermsPage";
 
 function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop />
       <div className="app-shell">
         <AppHeader />
 
@@ -40,6 +44,16 @@ function App() {
             path="/"
             element={<HomePage />}
           />
+
+          <Route
+  path="/privacy"
+  element={<PrivacyPolicyPage />}
+/>
+
+<Route
+  path="/terms"
+  element={<TermsPage />}
+/>
 
           <Route
             path="/discover"
@@ -126,18 +140,32 @@ function App() {
             />
           </Route>
 
-          <Route
-            element={
-              <ProtectedRoute access="admin" />
-            }
-          >
-            <Route
-              path="/admin/recipes"
-              element={
-                <AdminRecipeReviewPage />
-              }
-            />
-          </Route>
+        <Route
+  element={
+    <ProtectedRoute access="admin" />
+  }
+>
+  <Route
+    path="/admin"
+    element={
+      <AdminDashboardPage />
+    }
+  />
+
+  <Route
+    path="/admin/recipes"
+    element={
+      <AdminRecipeReviewPage />
+    }
+  />
+
+  <Route
+    path="/admin/cook-applications"
+    element={
+      <AdminCookApplicationsPage />
+    }
+  />
+</Route>
 
           <Route
             path="/cooks/:username"
@@ -147,6 +175,11 @@ function App() {
           />
 
           <Route element={<ProtectedRoute />}>
+  <Route
+    path="/settings"
+    element={<SettingsPage />}
+  />
+
   <Route
     path="/services/:serviceId/request"
     element={<ServiceRequestPage />}
@@ -158,11 +191,13 @@ function App() {
   />
 </Route>
 
+
         </Routes>
 
         <MobileBottomNav />
       </div>
     </BrowserRouter>
+    
   );
 }
 

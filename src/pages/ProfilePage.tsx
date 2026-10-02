@@ -1,15 +1,13 @@
 import {
   useEffect,
   useState,
-  type FormEvent,
 } from "react";
 
 import {
   ArrowRight,
   ChefHat,
-  Globe2,
   LogOut,
-  Mail,
+  Settings,
   ShieldCheck,
   UserRound,
 } from "lucide-react";
@@ -26,81 +24,82 @@ type Profile = {
 };
 
 function ProfilePage() {
-  const { t, i18n } = useTranslation();
+ const { t } = useTranslation();
   const { user, loading: authLoading, signOut } = useAuth();
 
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
+const [name, setName] = useState("");
+const [followerCount, setFollowerCount] =
+  useState<number | null>(null);
+
+const [isApprovedCook, setIsApprovedCook] =
+  useState(false);
+  const [cookUsername, setCookUsername] =
+  useState<string | null>(null);
+const [loading, setLoading] = useState(true);
+const [profileLoadError, setProfileLoadError] =
+  useState(false);
 
   useEffect(() => {
     async function loadProfile() {
       if (!user) {
-        setLoading(false);
-        return;
-      }
+  setProfile(null);
+  setLoading(false);
+  return;
+}
 
-      const { data, error } = await supabase
+setLoading(true);
+setProfileLoadError(false);
+
+const { data, error } = await supabase
         .from("profiles")
         .select("full_name, preferred_language, role")
         .eq("id", user.id)
         .single();
 
       if (error) {
-        console.error(error);
-        setLoading(false);
-        return;
-      }
+  console.error(error);
+  setProfile(null);
+  setProfileLoadError(true);
+  setLoading(false);
+  return;
+}
 
-      setProfile(data);
-      setName(data.full_name ?? "");
+setProfile(data);
+setName(data.full_name ?? "");
+
+const { data: cookData, error: cookError } =
+  await supabase
+    .from("cook_profiles")
+    .select("follower_count, is_approved, username")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+if (cookError) {
+  console.error(
+    "Could not load Cook follower count:",
+    cookError,
+  );
+}
+
+setIsApprovedCook(
+  cookData?.is_approved === true,
+);
+
+setCookUsername(
+  cookData?.username ?? null,
+);
+
+setFollowerCount(
+  cookData?.is_approved
+    ? cookData.follower_count ?? 0
+    : null,
+);
       setLoading(false);
     }
 
     loadProfile();
   }, [user]);
-
-  async function handleSave(event: FormEvent) {
-    event.preventDefault();
-
-    if (!user) {
-      return;
-    }
-
-    setSaving(true);
-    setMessage("");
-
-    const language = i18n.language.split("-")[0];
-
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        full_name: name.trim(),
-        preferred_language: language,
-      })
-      .eq("id", user.id);
-
-    if (error) {
-      console.error(error);
-      setSaving(false);
-      return;
-    }
-
-    setProfile((current) =>
-      current
-        ? {
-            ...current,
-            full_name: name.trim(),
-            preferred_language: language,
-          }
-        : current,
-    );
-
-    setMessage(t("profile.saved"));
-    setSaving(false);
-  }
 
   async function handleSignOut() {
     await signOut();
@@ -140,12 +139,46 @@ function ProfilePage() {
     );
   }
 
-  const roleLabel =
-    profile?.role === "creator"
+  if (profileLoadError) {
+  return (
+    <main className="profile-page">
+      <section className="profile-signed-out">
+        <div className="profile-signed-out-icon">
+          <UserRound size={31} />
+        </div>
+
+        <h1>
+          {t("profile.loadErrorTitle", {
+            defaultValue: "We couldn't load your profile",
+          })}
+        </h1>
+
+        <p>
+          {t("profile.loadErrorText", {
+            defaultValue:
+              "Please refresh the page and try again.",
+          })}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+        >
+          {t("profile.tryAgain", {
+            defaultValue: "Try again",
+          })}
+        </button>
+      </section>
+    </main>
+  );
+}
+
+const roleLabel =
+  profile?.role === "admin"
+    ? t("profile.admin")
+    : isApprovedCook
       ? t("profile.creator")
-      : profile?.role === "admin"
-        ? t("profile.admin")
-        : t("profile.regularUser");
+      : t("profile.regularUser");
 
   return (
     <main className="profile-page">
@@ -166,174 +199,198 @@ function ProfilePage() {
       </section>
 
       <section className="profile-content">
-        <form
-          className="profile-card"
-          onSubmit={handleSave}
-        >
-          <div className="profile-field">
-            <label>{t("profile.name")}</label>
+  <section className="profile-dashboard-card">
+    <div className="profile-dashboard-heading">
+      <div className="profile-dashboard-icon">
+        <UserRound size={24} />
+      </div>
 
-            <div className="profile-input">
-              <UserRound size={18} />
+      <div>
+        <p className="section-kicker">
+  {t("profile.accountKicker")}
+</p>
 
-              <input
-                type="text"
-                value={name}
-                onChange={(event) =>
-                  setName(event.target.value)
-                }
-                placeholder={t("profile.name")}
-              />
-            </div>
-          </div>
+        <h2>
+          {name ||
+            user.email?.split("@")[0]}
+        </h2>
 
-          <div className="profile-field">
-            <label>{t("profile.email")}</label>
+        <p>{roleLabel}</p>
 
-            <div className="profile-input profile-readonly">
-              <Mail size={18} />
-              <span>{user.email}</span>
-            </div>
-          </div>
+{followerCount !== null && (
+  <div className="profile-follower-count">
+    <strong>{followerCount}</strong>
 
-          <div className="profile-field">
-            <label>{t("profile.language")}</label>
+    <span>
+      {followerCount === 1
+  ? t("profile.follower")
+  : t("profile.followers")}
+    </span>
+  </div>
+)}
+      </div>
+    </div>
 
-            <div className="profile-input profile-readonly">
-              <Globe2 size={18} />
+    <div className="profile-dashboard-actions">
+      <Link
+        to="/settings"
+        className="profile-dashboard-action"
+      >
+        <Settings size={20} />
 
-              <span>
-                {i18n.language.startsWith("ar")
-                  ? "العربية"
-                  : i18n.language.startsWith("fr")
-                    ? "Français"
-                    : "English"}
-              </span>
-            </div>
-          </div>
+        <div>
+          <strong>
+  {t("profile.settingsTitle")}
+</strong>
 
-          <div className="profile-field">
-            <label>{t("profile.accountType")}</label>
+<span>
+  {t("profile.settingsText")}
+</span>
+        </div>
 
-            <div className="profile-input profile-readonly">
-              <ShieldCheck size={18} />
-              <span>{roleLabel}</span>
-            </div>
-          </div>
+        <ArrowRight size={17} />
+      </Link>
 
-          {message && (
-            <p className="profile-success">
-              {message}
-            </p>
-          )}
+      <Link
+        to="/my-requests"
+        className="profile-dashboard-action"
+      >
+        <UserRound size={20} />
 
-          <button
-            type="submit"
-            className="profile-save-button"
-            disabled={saving}
-          >
-            {saving
-              ? t("profile.saving")
-              : t("profile.saveChanges")}
-          </button>
-        </form>
+        <div>
+          <strong>
+            {t("myServiceRequests.title")}
+          </strong>
 
-        <aside className="profile-side-card">
-          <ChefHat size={27} />
+          <span>
+  {t("profile.requestsText")}
+</span>
+        </div>
 
-          <p className="section-kicker">
-            Alf Sahten
-          </p>
+        <ArrowRight size={17} />
+      </Link>
+    </div>
+  </section>
 
-          <h2>
-            {name || user.email?.split("@")[0]}
-          </h2>
+  <aside className="profile-side-card">
+    <ChefHat size={27} />
 
-                    <p>{roleLabel}</p>
+<p className="section-kicker">
+  {t("profile.cookSpace")}
+</p>
 
-<Link
-  to="/my-requests"
-  className="profile-cook-link"
->
-  <UserRound size={17} />
+<h2>
+  {t("profile.kitchenTitle")}
+</h2>
 
-  <span>{t("myServiceRequests.title")}</span>
-
-  <ArrowRight size={16} />
-</Link>
-
-{profile?.role === "admin" && (
+<p>
+  {t("profile.kitchenText")}
+</p>
+   {profile?.role === "admin" && (
   <Link
-    to="/admin/recipes"
+    to="/admin"
     className="profile-cook-link"
   >
     <ShieldCheck size={17} />
 
-    <span>{t("profile.adminDashboard")}</span>
+    <span>
+      {t("profile.adminDashboard", {
+        defaultValue: "Admin dashboard",
+      })}
+    </span>
 
     <ArrowRight size={16} />
   </Link>
 )}
 
-{profile?.role === "creator" ||
+{isApprovedCook ||
 profile?.role === "admin" ? (
-  <>
-    <Link
-      to="/cook/recipes"
-      className="profile-cook-link"
-    >
-      <ChefHat size={17} />
+      <>
 
-      <span>{t("cookDashboard.myRecipes")}</span>
-
-      <ArrowRight size={16} />
-    </Link>
-
-    <Link
-      to="/cook/services"
-      className="profile-cook-link"
-    >
-      <ChefHat size={17} />
-
-      <span>{t("cookDashboard.whatIOffer")}</span>
-
-      <ArrowRight size={16} />
-    </Link>
-
-    <Link
-      to="/cook/requests"
-      className="profile-cook-link"
-    >
-      <ChefHat size={17} />
-
-      <span>{t("cookDashboard.requests")}</span>
-
-      <ArrowRight size={16} />
-    </Link>
-  </>
-) : (
+      {cookUsername && (
   <Link
-    to="/become-creator"
+    to={`/cooks/${cookUsername}`}
     className="profile-cook-link"
   >
-    <ChefHat size={17} />
+    <UserRound size={17} />
 
-    <span>{t("profile.becomeCook")}</span>
+    <span>
+      {t("profile.viewPublicProfile", {
+        defaultValue:
+          "View public profile",
+      })}
+    </span>
 
     <ArrowRight size={16} />
   </Link>
 )}
 
-          <button
-            type="button"
-            className="profile-signout"
-            onClick={handleSignOut}
-          >
-            <LogOut size={17} />
-            {t("profile.signOut")}
-          </button>
-        </aside>
-      </section>
+        <Link
+          to="/cook/recipes"
+          className="profile-cook-link"
+        >
+          <ChefHat size={17} />
+
+          <span>
+            {t("cookDashboard.myRecipes")}
+          </span>
+
+          <ArrowRight size={16} />
+        </Link>
+
+        <Link
+          to="/cook/services"
+          className="profile-cook-link"
+        >
+          <ChefHat size={17} />
+
+          <span>
+            {t(
+              "cookDashboard.whatIOffer",
+            )}
+          </span>
+
+          <ArrowRight size={16} />
+        </Link>
+
+        <Link
+          to="/cook/requests"
+          className="profile-cook-link"
+        >
+          <ChefHat size={17} />
+
+          <span>
+            {t("cookDashboard.requests")}
+          </span>
+
+          <ArrowRight size={16} />
+        </Link>
+      </>
+    ) : (
+      <Link
+        to="/become-creator"
+        className="profile-cook-link"
+      >
+        <ChefHat size={17} />
+
+        <span>
+          {t("profile.becomeCook")}
+        </span>
+
+        <ArrowRight size={16} />
+      </Link>
+    )}
+
+    <button
+      type="button"
+      className="profile-signout"
+      onClick={handleSignOut}
+    >
+      <LogOut size={17} />
+      {t("profile.signOut")}
+    </button>
+  </aside>
+</section>
     </main>
   );
 }

@@ -3,26 +3,39 @@ import {
   useState,
   type FormEvent,
 } from "react";
+
 import {
   ArrowRight,
   Eye,
   EyeOff,
   LockKeyhole,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
+
+import { useTranslation } from "react-i18next";
+
 import { supabase } from "../lib/supabase";
 
 function ResetPasswordPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [password, setPassword] =
     useState("");
 
-  const [confirmPassword, setConfirmPassword] =
-    useState("");
+  const [
+    confirmPassword,
+    setConfirmPassword,
+  ] = useState("");
 
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [
+    showPassword,
+    setShowPassword,
+  ] = useState(false);
 
   const [loading, setLoading] =
     useState(false);
@@ -52,7 +65,8 @@ function ResetPasswordPage() {
     } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (
-          event === "PASSWORD_RECOVERY" ||
+          event ===
+            "PASSWORD_RECOVERY" ||
           session
         ) {
           setReady(true);
@@ -67,7 +81,7 @@ function ResetPasswordPage() {
   }, []);
 
   async function handleSubmit(
-    event: FormEvent,
+    event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
@@ -75,17 +89,20 @@ function ResetPasswordPage() {
 
     if (password.length < 6) {
       setMessage(
-        "Password must be at least 6 characters.",
+        t("resetPassword.tooShort"),
       );
+
       return;
     }
 
     if (
-      password !== confirmPassword
+      password !==
+      confirmPassword
     ) {
       setMessage(
-        "Passwords do not match.",
+        t("resetPassword.mismatch"),
       );
+
       return;
     }
 
@@ -97,19 +114,26 @@ function ResetPasswordPage() {
       });
 
     if (error) {
-      setMessage(error.message);
+      console.error(error);
+
+      setMessage(
+        t(
+          "resetPassword.updateError",
+        ),
+      );
+
       setLoading(false);
       return;
     }
 
     setMessage(
-      "Your password has been updated.",
+      t("resetPassword.updated"),
     );
 
     setLoading(false);
 
     setTimeout(() => {
-      navigate("/profile");
+      navigate("/");
     }, 1200);
   }
 
@@ -125,18 +149,25 @@ function ResetPasswordPage() {
 
         <div className="auth-brand-copy">
           <p className="section-kicker">
-            Account recovery
+            {t(
+              "resetPassword.brandKicker",
+            )}
           </p>
 
           <h1>
-            Choose a new
+            {t(
+              "resetPassword.brandTitleLine1",
+            )}
             <br />
-            password.
+            {t(
+              "resetPassword.brandTitleLine2",
+            )}
           </h1>
 
           <p>
-            Create a new password for
-            your Alf Sahten account.
+            {t(
+              "resetPassword.brandText",
+            )}
           </p>
         </div>
 
@@ -148,26 +179,28 @@ function ResetPasswordPage() {
       <section className="auth-form-panel">
         <div className="auth-form-wrap">
           <p className="section-kicker">
-            Reset password
+            {t("resetPassword.kicker")}
           </p>
 
           <h2>
-            Create a new password
+            {t("resetPassword.title")}
           </h2>
 
           {!ready ? (
             <>
               <p className="auth-intro">
-                Open this page from the
-                password reset link sent
-                to your email.
+                {t(
+                  "resetPassword.invalidLink",
+                )}
               </p>
 
               <Link
                 to="/auth"
                 className="auth-submit"
               >
-                Back to sign in
+                {t(
+                  "resetPassword.backToSignIn",
+                )}
               </Link>
             </>
           ) : (
@@ -177,7 +210,9 @@ function ResetPasswordPage() {
             >
               <label>
                 <span>
-                  New password
+                  {t(
+                    "resetPassword.newPassword",
+                  )}
                 </span>
 
                 <div className="auth-input">
@@ -194,12 +229,14 @@ function ResetPasswordPage() {
                     value={password}
                     onChange={(event) =>
                       setPassword(
-                        event.target
-                          .value,
+                        event.target.value,
                       )
                     }
-                    placeholder="At least 6 characters"
-                    minLength={6}
+                    placeholder={t(
+                      "resetPassword.newPasswordPlaceholder",
+                    )}
+                    autoComplete="new-password"
+                    minLength={8}
                     required
                   />
 
@@ -214,8 +251,12 @@ function ResetPasswordPage() {
                     }
                     aria-label={
                       showPassword
-                        ? "Hide password"
-                        : "Show password"
+                        ? t(
+                            "resetPassword.hidePassword",
+                          )
+                        : t(
+                            "resetPassword.showPassword",
+                          )
                     }
                   >
                     {showPassword ? (
@@ -233,7 +274,9 @@ function ResetPasswordPage() {
 
               <label>
                 <span>
-                  Confirm password
+                  {t(
+                    "resetPassword.confirmPassword",
+                  )}
                 </span>
 
                 <div className="auth-input">
@@ -252,12 +295,14 @@ function ResetPasswordPage() {
                     }
                     onChange={(event) =>
                       setConfirmPassword(
-                        event.target
-                          .value,
+                        event.target.value,
                       )
                     }
-                    placeholder="Repeat your password"
-                    minLength={6}
+                    placeholder={t(
+                      "resetPassword.confirmPasswordPlaceholder",
+                    )}
+                    autoComplete="new-password"
+                    minLength={8}
                     required
                   />
                 </div>
@@ -275,8 +320,12 @@ function ResetPasswordPage() {
                 disabled={loading}
               >
                 {loading
-                  ? "Updating..."
-                  : "Update password"}
+                  ? t(
+                      "resetPassword.updating",
+                    )
+                  : t(
+                      "resetPassword.updatePassword",
+                    )}
 
                 {!loading && (
                   <ArrowRight

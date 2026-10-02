@@ -20,7 +20,7 @@ export async function getPublicCookProfile(
   username: string,
 ) {
   const { data, error } = await supabase
-    .from("cook_profiles")
+    .from("public_cook_profiles")
     .select(
       `
         user_id,
@@ -59,9 +59,11 @@ export async function getPublishedCookRecipes(
 ) {
   const { data, error } = await supabase
     .from("recipes")
-    .select("*")
-    .eq("creator_id", userId)
-    .eq("status", "approved")
+.select(
+  "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+)
+.eq("creator_id", userId)
+.eq("status", "approved")
     .order("published_at", {
       ascending: false,
     });
@@ -144,7 +146,8 @@ export async function followCook(
       cook_id: cookId,
     });
 
-  if (error) {
+  // A second tab may already have followed the same cook.
+  if (error && error.code !== "23505") {
     console.error(
       "Error following cook:",
       error,

@@ -14,6 +14,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 
@@ -48,6 +49,8 @@ type CreatorApplication = {
 };
 
 function CreatorApplicationPage() {
+  const { t } = useTranslation();
+
   const { user, loading: authLoading } =
     useAuth();
 
@@ -254,20 +257,20 @@ function CreatorApplicationPage() {
     const cleanUsername =
       normalizeUsername(username);
 
-    if (!cleanDisplayName) {
-      setMessage(
-        "Please enter your Cook name.",
-      );
-      return;
-    }
+if (!cleanDisplayName) {
+  setMessage(
+    t("creatorApplication.enterCookName"),
+  );
+  return;
+}
 
     if (
       cleanUsername.length < 3 ||
       cleanUsername.length > 30
     ) {
       setMessage(
-        "Username must be between 3 and 30 characters.",
-      );
+  t("creatorApplication.usernameLength"),
+);
       return;
     }
 
@@ -290,8 +293,8 @@ function CreatorApplicationPage() {
         whatsapp.trim() || null,
     };
 
-    let savedCookProfile: CookProfile | null = null;
-    let cookError = null;
+    let savedCookProfile: CookProfile | null;
+    let cookError;
 
     if (cookProfile) {
       const result = await supabase
@@ -361,12 +364,12 @@ function CreatorApplicationPage() {
         cookError.code === "23505"
       ) {
         setMessage(
-          "That username is already taken. Try another one.",
-        );
+  t("creatorApplication.usernameTaken"),
+);
       } else {
         setMessage(
-          "We could not save your Cook profile. Please try again.",
-        );
+  t("creatorApplication.saveError"),
+);
       }
 
       setSaving(false);
@@ -433,8 +436,10 @@ function CreatorApplicationPage() {
         );
 
         setMessage(
-          "Your Cook profile was saved but we could not submit the approval request.",
-        );
+  t(
+    "creatorApplication.approvalRequestError",
+  ),
+);
 
         setSaving(false);
         return;
@@ -455,11 +460,15 @@ function CreatorApplicationPage() {
 
     setUsername(cleanUsername);
 
-    setMessage(
-      cookProfile
-        ? "Your Cook profile was updated."
-        : "Your Cook profile was created.",
-    );
+   setMessage(
+  cookProfile
+    ? t(
+        "creatorApplication.profileUpdated",
+      )
+    : t(
+        "creatorApplication.profileCreated",
+      ),
+);
 
     setSaving(false);
   }
@@ -481,25 +490,30 @@ function CreatorApplicationPage() {
           <ChefHat size={38} />
 
           <h1>
-            Become an Alf Sahten Cook
+            {t(
+              "creatorApplication.signInTitle",
+            )}
           </h1>
 
           <p>
-            Sign in first to create your
-            Cook profile.
+            {t(
+              "creatorApplication.signInText",
+            )}
           </p>
 
           <Link to="/auth">
-            Sign in
+            {t(
+              "creatorApplication.signIn",
+            )}
           </Link>
         </section>
       </main>
     );
   }
 
-const pending =
-  application?.status === "pending" &&
-  !cookProfile?.is_approved;
+  const pending =
+    application?.status === "pending" &&
+    !cookProfile?.is_approved;
 
   const changesRequested =
     application?.status ===
@@ -508,35 +522,42 @@ const pending =
   const declined =
     application?.status === "declined";
 
-const approved =
-  cookProfile?.is_approved === true ||
-  application?.status === "approved";
+  const approved =
+    cookProfile?.is_approved === true;
 
   return (
     <main className="creator-application-page">
       <div className="creator-application-back">
         <Link to="/profile">
           <ArrowLeft size={16} />
-          Back to profile
+
+          {t(
+            "creatorApplication.backToProfile",
+          )}
         </Link>
       </div>
 
       <section className="creator-application-hero">
         <p className="section-kicker">
-          Your kitchen, your story
+          {t(
+            "creatorApplication.heroKicker",
+          )}
         </p>
 
         <h1>
           {cookProfile
-            ? "Your Cook profile"
-            : "Become a Cook"}
+            ? t(
+                "creatorApplication.yourCookProfile",
+              )
+            : t(
+                "creatorApplication.becomeCook",
+              )}
         </h1>
 
         <p>
-          Create your public Cook
-          identity on Alf Sahten. You
-          can be a home cook, food
-          creator or professional chef.
+          {t(
+            "creatorApplication.heroText",
+          )}
         </p>
       </section>
 
@@ -551,12 +572,15 @@ const approved =
 
               <div>
                 <strong>
-                  Approved Cook
+                  {t(
+                    "creatorApplication.approvedCook",
+                  )}
                 </strong>
 
                 <p>
-                  Your Cook profile can
-                  be shown publicly.
+                  {t(
+                    "creatorApplication.approvedText",
+                  )}
                 </p>
               </div>
             </div>
@@ -568,13 +592,15 @@ const approved =
 
               <div>
                 <strong>
-                  Approval pending
+                  {t(
+                    "creatorApplication.approvalPending",
+                  )}
                 </strong>
 
                 <p>
-                  You can keep editing
-                  your profile while we
-                  review it.
+                  {t(
+                    "creatorApplication.pendingText",
+                  )}
                 </p>
               </div>
             </div>
@@ -583,12 +609,16 @@ const approved =
           {changesRequested && (
             <div className="creator-admin-note">
               <strong>
-                Changes requested
+                {t(
+                  "creatorApplication.changesRequested",
+                )}
               </strong>
 
               <p>
                 {application?.admin_note ||
-                  "Please review your Cook profile and submit it again."}
+                  t(
+                    "creatorApplication.changesFallback",
+                  )}
               </p>
             </div>
           )}
@@ -596,19 +626,25 @@ const approved =
           {declined && (
             <div className="creator-admin-note">
               <strong>
-                Application not approved
+                {t(
+                  "creatorApplication.declinedTitle",
+                )}
               </strong>
 
               <p>
                 {application?.admin_note ||
-                  "You can update your profile and submit it again."}
+                  t(
+                    "creatorApplication.declinedFallback",
+                  )}
               </p>
             </div>
           )}
 
           <div className="creator-form-field">
             <label>
-              Cook name
+              {t(
+                "creatorApplication.cookName",
+              )}
             </label>
 
             <div className="cook-input-with-icon">
@@ -622,7 +658,9 @@ const approved =
                     event.target.value,
                   )
                 }
-                placeholder="The name people will see"
+                placeholder={t(
+                  "creatorApplication.cookNamePlaceholder",
+                )}
                 required
               />
             </div>
@@ -630,7 +668,9 @@ const approved =
 
           <div className="creator-form-field">
             <label>
-              Username
+              {t(
+                "creatorApplication.username",
+              )}
             </label>
 
             <div className="cook-username-input">
@@ -646,7 +686,9 @@ const approved =
                     ),
                   )
                 }
-                placeholder="your-kitchen"
+                placeholder={t(
+                  "creatorApplication.usernamePlaceholder",
+                )}
                 minLength={3}
                 maxLength={30}
                 required
@@ -654,14 +696,17 @@ const approved =
             </div>
 
             <small className="cook-field-help">
-              This will be used for your
-              public Cook profile.
+              {t(
+                "creatorApplication.usernameHelp",
+              )}
             </small>
           </div>
 
           <div className="creator-form-field">
             <label>
-              Cook type
+              {t(
+                "creatorApplication.cookType",
+              )}
             </label>
 
             <select
@@ -674,22 +719,30 @@ const approved =
               }
             >
               <option value="home_cook">
-                Home Cook
+                {t(
+                  "creatorApplication.homeCook",
+                )}
               </option>
 
               <option value="food_creator">
-                Food Creator
+                {t(
+                  "creatorApplication.foodCreator",
+                )}
               </option>
 
               <option value="professional_chef">
-                Professional Chef
+                {t(
+                  "creatorApplication.professionalChef",
+                )}
               </option>
             </select>
           </div>
 
           <div className="creator-form-field">
             <label>
-              About you
+              {t(
+                "creatorApplication.aboutYou",
+              )}
             </label>
 
             <textarea
@@ -699,14 +752,18 @@ const approved =
                   event.target.value,
                 )
               }
-              placeholder="Tell people what you love to cook and what makes your kitchen yours."
+              placeholder={t(
+                "creatorApplication.aboutPlaceholder",
+              )}
               rows={5}
             />
           </div>
 
           <div className="creator-form-field">
             <label>
-              Location
+              {t(
+                "creatorApplication.location",
+              )}
             </label>
 
             <div className="cook-input-with-icon">
@@ -720,14 +777,18 @@ const approved =
                     event.target.value,
                   )
                 }
-                placeholder="Beirut, Lebanon"
+                placeholder={t(
+                  "creatorApplication.locationPlaceholder",
+                )}
               />
             </div>
           </div>
 
           <div className="creator-form-field">
             <label>
-              Specialties
+              {t(
+                "creatorApplication.specialties",
+              )}
             </label>
 
             <input
@@ -738,18 +799,23 @@ const approved =
                   event.target.value,
                 )
               }
-              placeholder="Lebanese, desserts, healthy cooking"
+              placeholder={t(
+                "creatorApplication.specialtiesPlaceholder",
+              )}
             />
 
             <small className="cook-field-help">
-              Separate specialties with
-              commas.
+              {t(
+                "creatorApplication.specialtiesHelp",
+              )}
             </small>
           </div>
 
           <div className="creator-form-field">
             <label>
-              Instagram
+              {t(
+                "creatorApplication.instagram",
+              )}
             </label>
 
             <div className="cook-input-with-icon">
@@ -770,7 +836,9 @@ const approved =
 
           <div className="creator-form-field">
             <label>
-              Website
+              {t(
+                "creatorApplication.website",
+              )}
             </label>
 
             <div className="cook-input-with-icon">
@@ -791,7 +859,9 @@ const approved =
 
           <div className="creator-form-field">
             <label>
-              WhatsApp or contact
+              {t(
+                "creatorApplication.whatsapp",
+              )}
             </label>
 
             <input
@@ -809,8 +879,9 @@ const approved =
           {!approved && (
             <div className="creator-form-field">
               <label>
-                What would you like to
-                share on Alf Sahten?
+                {t(
+                  "creatorApplication.shareQuestion",
+                )}
               </label>
 
               <textarea
@@ -820,7 +891,9 @@ const approved =
                     event.target.value,
                   )
                 }
-                placeholder="Tell us a little about the recipes or cooking you would like to share."
+                placeholder={t(
+                  "creatorApplication.sharePlaceholder",
+                )}
                 rows={4}
               />
             </div>
@@ -839,10 +912,16 @@ const approved =
             <Save size={17} />
 
             {saving
-              ? "Saving..."
+              ? t(
+                  "creatorApplication.saving",
+                )
               : cookProfile
-                ? "Save Cook profile"
-                : "Create Cook profile"}
+                ? t(
+                    "creatorApplication.saveProfile",
+                  )
+                : t(
+                    "creatorApplication.createProfile",
+                  )}
           </button>
         </form>
 
@@ -850,20 +929,21 @@ const approved =
           <ChefHat size={30} />
 
           <p className="section-kicker">
-            Alf Sahten Cooks
+            {t(
+              "creatorApplication.sideKicker",
+            )}
           </p>
 
           <h2>
-            Good food always has a
-            person behind it.
+            {t(
+              "creatorApplication.sideTitle",
+            )}
           </h2>
 
           <p>
-            Build your Cook identity
-            now. Recipes, followers and
-            community activity will
-            appear here as Alf Sahten
-            grows.
+            {t(
+              "creatorApplication.sideText",
+            )}
           </p>
 
           {cookProfile && (
@@ -874,7 +954,12 @@ const approved =
                     cookProfile.recipe_count
                   }
                 </strong>
-                <span>Recipes</span>
+
+                <span>
+                  {t(
+                    "creatorApplication.recipes",
+                  )}
+                </span>
               </div>
 
               <div>
@@ -883,7 +968,12 @@ const approved =
                     cookProfile.follower_count
                   }
                 </strong>
-                <span>Followers</span>
+
+                <span>
+                  {t(
+                    "creatorApplication.followers",
+                  )}
+                </span>
               </div>
             </div>
           )}

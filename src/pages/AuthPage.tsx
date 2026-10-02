@@ -2,6 +2,7 @@ import {
   useState,
   type FormEvent,
 } from "react";
+
 import {
   ArrowRight,
   Eye,
@@ -10,29 +11,44 @@ import {
   Mail,
   UserRound,
 } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
+import { useTranslation } from "react-i18next";
+
 import { supabase } from "../lib/supabase";
 
 type AuthMode = "login" | "signup";
 
 function AuthPage() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const location = useLocation();
-  const requestedPath: unknown = location.state?.from;
 
-const returnTo =
-  typeof requestedPath === "string" &&
-  requestedPath.startsWith("/") &&
-  !requestedPath.startsWith("//")
-    ? requestedPath
-    : "/profile";
+  const requestedPath: unknown =
+    location.state?.from;
+
+  const returnTo =
+    typeof requestedPath === "string" &&
+    requestedPath.startsWith("/") &&
+    !requestedPath.startsWith("//")
+      ? requestedPath
+      : "/";
 
   const [mode, setMode] =
     useState<AuthMode>("login");
 
-  const [name, setName] = useState("");
+  const [name, setName] =
+    useState("");
+
   const [email, setEmail] =
     useState("");
+
   const [password, setPassword] =
     useState("");
 
@@ -46,39 +62,46 @@ const returnTo =
     useState("");
 
   async function handleForgotPassword() {
-  if (!email.trim()) {
+    if (!email.trim()) {
+      setMessage(
+        t("auth.enterEmailFirst"),
+      );
+
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    const { error } =
+      await supabase.auth.resetPasswordForEmail(
+        email.trim(),
+        {
+          redirectTo:
+            `${window.location.origin}/reset-password`,
+        },
+      );
+
+    if (error) {
+      console.error(error);
+
+      setMessage(
+        t("auth.resetEmailError"),
+      );
+
+      setLoading(false);
+      return;
+    }
+
     setMessage(
-      "Enter your email address first.",
-    );
-    return;
-  }
-
-  setLoading(true);
-  setMessage("");
-
-  const { error } =
-    await supabase.auth.resetPasswordForEmail(
-      email.trim(),
-      {
-        redirectTo: `${window.location.origin}/reset-password`,
-      },
+      t("auth.resetEmailSent"),
     );
 
-  if (error) {
-    setMessage(error.message);
     setLoading(false);
-    return;
   }
-
-  setMessage(
-    "If an account exists for this email, we sent a password reset link.",
-  );
-
-  setLoading(false);
-}  
 
   async function handleSubmit(
-    event: FormEvent,
+    event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
@@ -86,7 +109,7 @@ const returnTo =
     setMessage("");
 
     if (mode === "signup") {
-      const { error } =
+      const { data, error } =
         await supabase.auth.signUp({
           email,
           password,
@@ -99,13 +122,28 @@ const returnTo =
         });
 
       if (error) {
-        setMessage(error.message);
+        console.error(error);
+
+        setMessage(
+          t("auth.signupError"),
+        );
+
         setLoading(false);
         return;
       }
 
+      if (data.session) {
+        setLoading(false);
+
+        navigate("/", {
+          replace: true,
+        });
+
+        return;
+      }
+
       setMessage(
-        "Account created. Check your email if confirmation is required.",
+        t("auth.signupConfirmation"),
       );
 
       setLoading(false);
@@ -119,13 +157,21 @@ const returnTo =
       });
 
     if (error) {
-      setMessage(error.message);
+      console.error(error);
+
+      setMessage(
+        t("auth.loginError"),
+      );
+
       setLoading(false);
       return;
     }
 
     setLoading(false);
-    navigate(returnTo, { replace: true });
+
+    navigate(returnTo, {
+      replace: true,
+    });
   }
 
   return (
@@ -140,18 +186,17 @@ const returnTo =
 
         <div className="auth-brand-copy">
           <p className="section-kicker">
-            Welcome to the table
+            {t("auth.brandKicker")}
           </p>
 
           <h1>
-            Cook more.
+            {t("auth.brandTitleLine1")}
             <br />
-            Waste less.
+            {t("auth.brandTitleLine2")}
           </h1>
 
           <p>
-            Save recipes, build your kitchen and discover what
-            you can cook with what you already have.
+            {t("auth.brandText")}
           </p>
         </div>
 
@@ -164,20 +209,22 @@ const returnTo =
         <div className="auth-form-wrap">
           <p className="section-kicker">
             {mode === "login"
-              ? "Welcome back"
-              : "Join Alf Sahten"}
+              ? t("auth.welcomeBack")
+              : t("auth.join")}
           </p>
 
           <h2>
             {mode === "login"
-              ? "Sign in"
-              : "Create your account"}
+              ? t("auth.signIn")
+              : t(
+                  "auth.createAccountTitle",
+                )}
           </h2>
 
           <p className="auth-intro">
             {mode === "login"
-              ? "Your saved recipes and kitchen are waiting."
-              : "Start building your personal Alf Sahten kitchen."}
+              ? t("auth.loginIntro")
+              : t("auth.signupIntro")}
           </p>
 
           <form
@@ -186,7 +233,9 @@ const returnTo =
           >
             {mode === "signup" && (
               <label>
-                <span>Name</span>
+                <span>
+                  {t("auth.name")}
+                </span>
 
                 <div className="auth-input">
                   <UserRound size={18} />
@@ -199,7 +248,9 @@ const returnTo =
                         event.target.value,
                       )
                     }
-                    placeholder="Your name"
+                    placeholder={t(
+                      "auth.namePlaceholder",
+                    )}
                     required
                   />
                 </div>
@@ -207,7 +258,9 @@ const returnTo =
             )}
 
             <label>
-              <span>Email</span>
+              <span>
+                {t("auth.email")}
+              </span>
 
               <div className="auth-input">
                 <Mail size={18} />
@@ -220,14 +273,19 @@ const returnTo =
                       event.target.value,
                     )
                   }
-                  placeholder="you@example.com"
+                  placeholder={t(
+                    "auth.emailPlaceholder",
+                  )}
+                  autoComplete="email"
                   required
                 />
               </div>
             </label>
 
             <label>
-              <span>Password</span>
+              <span>
+                {t("auth.password")}
+              </span>
 
               <div className="auth-input">
                 <LockKeyhole size={18} />
@@ -244,8 +302,15 @@ const returnTo =
                       event.target.value,
                     )
                   }
-                  placeholder="At least 6 characters"
-                  minLength={6}
+                  placeholder={t(
+                    "auth.passwordPlaceholder",
+                  )}
+                  autoComplete={
+                    mode === "login"
+                      ? "current-password"
+                      : "new-password"
+                  }
+                  minLength={8}
                   required
                 />
 
@@ -260,8 +325,12 @@ const returnTo =
                   }
                   aria-label={
                     showPassword
-                      ? "Hide password"
-                      : "Show password"
+                      ? t(
+                          "auth.hidePassword",
+                        )
+                      : t(
+                          "auth.showPassword",
+                        )
                   }
                 >
                   {showPassword ? (
@@ -277,10 +346,14 @@ const returnTo =
               <button
                 type="button"
                 className="auth-forgot-password"
-                onClick={handleForgotPassword}
+                onClick={
+                  handleForgotPassword
+                }
                 disabled={loading}
               >
-                Forgot password?
+                {t(
+                  "auth.forgotPassword",
+                )}
               </button>
             )}
 
@@ -296,10 +369,12 @@ const returnTo =
               disabled={loading}
             >
               {loading
-                ? "Please wait..."
+                ? t("auth.pleaseWait")
                 : mode === "login"
-                  ? "Sign in"
-                  : "Create account"}
+                  ? t("auth.signIn")
+                  : t(
+                      "auth.createAccount",
+                    )}
 
               {!loading && (
                 <ArrowRight
@@ -312,8 +387,10 @@ const returnTo =
           <div className="auth-switch">
             <span>
               {mode === "login"
-                ? "New to Alf Sahten?"
-                : "Already have an account?"}
+                ? t("auth.newHere")
+                : t(
+                    "auth.alreadyHaveAccount",
+                  )}
             </span>
 
             <button
@@ -329,8 +406,10 @@ const returnTo =
               }}
             >
               {mode === "login"
-                ? "Create an account"
-                : "Sign in"}
+                ? t(
+                    "auth.createAccount",
+                  )
+                : t("auth.signIn")}
             </button>
           </div>
         </div>

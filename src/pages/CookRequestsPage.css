@@ -335,6 +335,35 @@
   text-align: center;
 }
 
+.service-requests-load-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  border: 1px solid rgba(152, 81, 75, 0.2);
+  border-radius: 16px;
+  background: #fff8f6;
+}
+
+.service-requests-load-error .form-error {
+  margin: 0;
+}
+
+.service-requests-load-error button {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 9px 16px;
+  border: 1px solid #214f3d;
+  border-radius: 999px;
+  background: transparent;
+  color: #214f3d;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .cook-requests-empty svg {
   margin-bottom: 14px;
   color: #839087;
@@ -395,6 +424,11 @@ html[dir="rtl"] .cook-request-message {
 }
 
 @media (max-width: 520px) {
+  .service-requests-load-error {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .cook-request-stats {
     grid-template-columns: 1fr 1fr;
     gap: 10px;

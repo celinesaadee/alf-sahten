@@ -346,6 +346,11 @@ export async function updateCookServiceRequestStatus(
   const userId =
     await currentUserId();
 
+  const expectedStatus =
+    status === "completed"
+      ? "accepted"
+      : "pending";
+
   const { data, error } =
     await supabase
       .from("service_requests")
@@ -359,6 +364,10 @@ export async function updateCookServiceRequestStatus(
       .eq(
         "cook_id",
         userId,
+      )
+      .eq(
+        "status",
+        expectedStatus,
       )
       .select("*")
       .single();

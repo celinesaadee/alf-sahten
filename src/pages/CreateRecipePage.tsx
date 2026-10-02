@@ -14,6 +14,8 @@ import {
   X,
 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 import { supabase } from "../lib/supabase";
 
 import {
@@ -33,6 +35,8 @@ type RecipeLanguage = "en" | "fr" | "ar";
 
 function CreateRecipePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [adminNote, setAdminNote] = useState<string | null>(null);
   const { id: recipeId } = useParams();
 
   const isEditing = Boolean(recipeId);
@@ -90,6 +94,54 @@ const [imagePreview, setImagePreview] =
   const [submitting, setSubmitting] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
+const [isAdmin, setIsAdmin] = useState(false);
+
+useEffect(() => {
+  let cancelled = false;
+
+  async function loadCurrentRole() {
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw userError;
+      }
+
+      if (!user) {
+        return;
+      }
+
+      const { data, error: profileError } =
+        await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+
+      if (profileError) {
+        throw profileError;
+      }
+
+      if (!cancelled) {
+        setIsAdmin(data.role === "admin");
+      }
+    } catch (err) {
+      console.error(
+        "Could not load recipe author role:",
+        err,
+      );
+    }
+  }
+
+  void loadCurrentRole();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
 
   useEffect(() => {
   async function loadCategories() {
@@ -122,146 +174,211 @@ useEffect(() => {
   }
 }, [isEditing, categories, category]);
 
-  useEffect(() => {
-    if (!recipeId) {
-      return;
-    }
+ useEffect(() => {
+  if (!recipeId) {
+    return;
+  }
 
-    async function loadRecipe() {
-      try {
-        setLoadingRecipe(true);
-        setError(null);
+  async function loadRecipe() {
+    try {
+      setLoadingRecipe(true);
+      setError(null);
 
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-        if (userError) {
-          throw userError;
-        }
+      if (userError) {
+        throw userError;
+      }
 
-        if (!user) {
-          throw new Error(
-            "You must be signed in to edit a recipe.",
-          );
-        }
+      if (!user) {
+        throw new Error(
+          t("recipeEditor.mustSignInEdit"),
+        );
+      }
 
-        const recipe = await getCookRecipeById(
+      const recipe =
+        await getCookRecipeById(
           recipeId!,
           user.id,
         );
 
-        if (!["draft", "changes_requested", "declined"].includes(recipe.status)) {
-          setEditBlockedMessage(
-            recipe.status === "pending"
-              ? "This recipe is waiting for review and cannot be edited right now."
-              : recipe.status === "approved"
-                ? "This recipe is published and is no longer open for editing."
-                : "This recipe is not available for editing.",
-          );
-          return;
-        }
-
-        setTitle(recipe.title ?? "");
-        setDescription(recipe.description ?? "");
-        setCategory(recipe.category ?? "");
-        setImageUrl(recipe.image_url ?? null);
-setOriginalImageUrl(recipe.image_url ?? null);
-setImagePreview(recipe.image_url ?? null);
-
-        setPrepMinutes(
-          recipe.prep_minutes !== null &&
-            recipe.prep_minutes !== undefined
-            ? String(recipe.prep_minutes)
-            : "",
-        );
-
-        setCookMinutes(
-          recipe.cook_minutes !== null &&
-            recipe.cook_minutes !== undefined
-            ? String(recipe.cook_minutes)
-            : "",
-        );
-
-        setServings(
-          recipe.servings !== null &&
-            recipe.servings !== undefined
-            ? String(recipe.servings)
-            : "",
-        );
-
-        setLanguage(
-          (recipe.original_language ??
-            "en") as RecipeLanguage,
-        );
-
-        if (
-          Array.isArray(recipe.ingredients) &&
-          recipe.ingredients.length > 0
-        ) {
-          setIngredients(
-            recipe.ingredients.map((ingredient: any) => ({
-              quantity: ingredient.quantity ?? "",
-              unit: ingredient.unit ?? "",
-              ingredient: ingredient.ingredient ?? "",
-            })),
-          );
-        }
-
-        if (
-          Array.isArray(recipe.instructions) &&
-          recipe.instructions.length > 0
-        ) {
-          setInstructions(
-            recipe.instructions.map(
-              (instruction: any) =>
-                instruction.text ?? "",
-            ),
-          );
-        }
-      } catch (err) {
-        console.error(err);
-
+      if (
+        ![
+          "draft",
+          "changes_requested",
+          "declined",
+        ].includes(recipe.status)
+      ) {
         setEditBlockedMessage(
-          "We couldn't load this recipe. Make sure it belongs to your account.",
+          recipe.status === "pending"
+            ? t(
+                "recipeEditor.pendingBlocked",
+              )
+            : recipe.status ===
+                "approved"
+              ? t(
+                  "recipeEditor.approvedBlocked",
+                )
+              : t(
+                  "recipeEditor.unavailableBlocked",
+                ),
         );
-      } finally {
-        setLoadingRecipe(false);
+
+        return;
       }
+
+      setAdminNote(
+        recipe.admin_note ?? null,
+      );
+
+      setTitle(recipe.title ?? "");
+
+      setDescription(
+        recipe.description ?? "",
+      );
+
+      setCategory(
+        recipe.category ?? "",
+      );
+
+      setImageUrl(
+        recipe.image_url ?? null,
+      );
+
+      setOriginalImageUrl(
+        recipe.image_url ?? null,
+      );
+
+      setImagePreview(
+        recipe.image_url ?? null,
+      );
+
+      setPrepMinutes(
+        recipe.prep_minutes !== null &&
+          recipe.prep_minutes !==
+            undefined
+          ? String(
+              recipe.prep_minutes,
+            )
+          : "",
+      );
+
+      setCookMinutes(
+        recipe.cook_minutes !== null &&
+          recipe.cook_minutes !==
+            undefined
+          ? String(
+              recipe.cook_minutes,
+            )
+          : "",
+      );
+
+      setServings(
+        recipe.servings !== null &&
+          recipe.servings !== undefined
+          ? String(recipe.servings)
+          : "",
+      );
+
+      setLanguage(
+        (recipe.original_language ??
+          "en") as RecipeLanguage,
+      );
+
+      if (
+        Array.isArray(
+          recipe.ingredients,
+        ) &&
+        recipe.ingredients.length > 0
+      ) {
+        setIngredients(
+          recipe.ingredients.map(
+            (ingredient: any) => ({
+              quantity:
+                ingredient.quantity ??
+                "",
+              unit:
+                ingredient.unit ?? "",
+              ingredient:
+                ingredient.ingredient ??
+                "",
+            }),
+          ),
+        );
+      }
+
+      if (
+        Array.isArray(
+          recipe.instructions,
+        ) &&
+        recipe.instructions.length >
+          0
+      ) {
+        setInstructions(
+          recipe.instructions.map(
+            (instruction: any) =>
+              instruction.text ?? "",
+          ),
+        );
+      }
+    } catch (err) {
+      console.error(err);
+
+      setEditBlockedMessage(
+        t("recipeEditor.loadError"),
+      );
+    } finally {
+      setLoadingRecipe(false);
     }
+  }
 
-    loadRecipe();
-  }, [recipeId]);
+  void loadRecipe();
+}, [recipeId, t]);
 
-  function handleImageChange(
+function handleImageChange(
   event: React.ChangeEvent<HTMLInputElement>,
 ) {
-  const file = event.target.files?.[0];
+  const file =
+    event.target.files?.[0];
 
   if (!file) {
     return;
   }
 
-  if (!file.type.startsWith("image/")) {
-    setError("Please choose an image file.");
+  if (
+    !file.type.startsWith("image/")
+  ) {
+    setError(
+      t("recipeEditor.imageFileOnly"),
+    );
+
     return;
   }
 
-  if (file.size > 15 * 1024 * 1024) {
+  if (
+    file.size >
+    15 * 1024 * 1024
+  ) {
     setError(
-      "The original photo is too large. Please choose an image smaller than 15 MB.",
+      t("recipeEditor.imageTooLarge"),
     );
+
     return;
   }
 
   setError(null);
   setSelectedImageFile(file);
 
-  const previewUrl = URL.createObjectURL(file);
+  const previewUrl =
+    URL.createObjectURL(file);
 
   setImagePreview((current) => {
-    if (current?.startsWith("blob:")) {
+    if (
+      current?.startsWith("blob:")
+    ) {
       URL.revokeObjectURL(current);
     }
 
@@ -342,140 +459,191 @@ function removeSelectedImage() {
     );
   }
 
-  async function saveRecipe(
-    status: "draft" | "pending",
+async function saveRecipe(
+  status: "draft" | "pending",
+) {
+  if (
+    loadingRecipe ||
+    editBlockedMessage ||
+    submitting
   ) {
-    if (loadingRecipe || editBlockedMessage || submitting) return;
+    return;
+  }
 
-    try {
-      setSubmitting(true);
-      setError(null);
+  try {
+    setSubmitting(true);
+    setError(null);
 
-      if (!title.trim()) {
-        setError("Please enter a recipe name.");
-        return;
-      }
+    if (!title.trim()) {
+      setError(
+        t(
+          "recipeEditor.enterRecipeName",
+        ),
+      );
 
-      const cleanedIngredients = ingredients.filter(
+      return;
+    }
+
+    const cleanedIngredients =
+      ingredients.filter(
         (ingredient) =>
           ingredient.quantity.trim() ||
           ingredient.unit.trim() ||
           ingredient.ingredient.trim(),
       );
 
-      const cleanedInstructions = instructions
-        .map((instruction) => instruction.trim())
+    const cleanedInstructions =
+      instructions
+        .map((instruction) =>
+          instruction.trim(),
+        )
         .filter(Boolean)
-        .map((instruction, index) => ({
-          step: index + 1,
-          text: instruction,
-        }));
+        .map(
+          (
+            instruction,
+            index,
+          ) => ({
+            step: index + 1,
+            text: instruction,
+          }),
+        );
 
-      if (status === "pending") {
-        if (cleanedIngredients.length === 0) {
-          setError(
-            "Add at least one ingredient before submitting the recipe.",
-          );
-          return;
-        }
+    if (status === "pending") {
+      if (
+        cleanedIngredients.length ===
+        0
+      ) {
+        setError(
+          isAdmin
+            ? t(
+                "recipeEditor.ingredientPublishRequired",
+              )
+            : t(
+                "recipeEditor.ingredientSubmitRequired",
+              ),
+        );
 
-        if (cleanedInstructions.length === 0) {
-          setError(
-            "Add at least one instruction before submitting the recipe.",
-          );
-          return;
-        }
+        return;
       }
 
-      let finalImageUrl = imageUrl;
+      if (
+        cleanedInstructions.length ===
+        0
+      ) {
+        setError(
+          isAdmin
+            ? t(
+                "recipeEditor.instructionPublishRequired",
+              )
+            : t(
+                "recipeEditor.instructionSubmitRequired",
+              ),
+        );
 
-if (selectedImageFile) {
-  finalImageUrl = await uploadRecipeImage(
-    selectedImageFile,
+        return;
+      }
+    }
+
+    let finalImageUrl = imageUrl;
+
+    if (selectedImageFile) {
+      finalImageUrl =
+        await uploadRecipeImage(
+          selectedImageFile,
+        );
+    }
+
+    const recipeInput = {
+      title: title.trim(),
+
+      description:
+        description.trim(),
+
+      category:
+        categoryMode === "other"
+          ? customCategory.trim()
+          : category.trim(),
+
+      image_url: finalImageUrl,
+
+      prep_minutes: prepMinutes
+        ? Number(prepMinutes)
+        : null,
+
+      cook_minutes: cookMinutes
+        ? Number(cookMinutes)
+        : null,
+
+      servings: servings
+        ? Number(servings)
+        : null,
+
+      ingredients:
+        cleanedIngredients,
+
+      instructions:
+        cleanedInstructions,
+
+      original_language: language,
+
+      status,
+    };
+
+    if (recipeId) {
+      await updateRecipe(
+        recipeId,
+        recipeInput,
+      );
+
+      if (
+        originalImageUrl &&
+        originalImageUrl !==
+          finalImageUrl
+      ) {
+        await deleteRecipeImageByUrl(
+          originalImageUrl,
+        );
+      }
+    } else {
+      await createRecipe(
+        recipeInput,
+      );
+    }
+
+    navigate("/cook/recipes");
+  } catch (err) {
+    console.error(err);
+
+    setError(
+      isEditing
+        ? t(
+            "recipeEditor.updateError",
+          )
+        : t(
+            "recipeEditor.saveError",
+          ),
+    );
+  } finally {
+    setSubmitting(false);
+  }
+}
+
+if (loadingRecipe) {
+  return (
+    <main className="create-recipe-page">
+      <div className="create-recipe-container">
+        <p>
+          {t("recipeEditor.loading")}
+        </p>
+      </div>
+    </main>
   );
 }
 
-      const recipeInput = {
-        title: title.trim(),
-        description: description.trim(),
-        category:
-  categoryMode === "other"
-    ? customCategory.trim()
-    : category.trim(),
-        image_url: finalImageUrl,
-
-        prep_minutes: prepMinutes
-          ? Number(prepMinutes)
-          : null,
-
-        cook_minutes: cookMinutes
-          ? Number(cookMinutes)
-          : null,
-
-        servings: servings
-          ? Number(servings)
-          : null,
-
-        ingredients: cleanedIngredients,
-        instructions: cleanedInstructions,
-        original_language: language,
-        status,
-      };
-
-      if (recipeId) {
-  await updateRecipe(recipeId, recipeInput);
-
-  if (
-    originalImageUrl &&
-    originalImageUrl !== finalImageUrl
-  ) {
-    await deleteRecipeImageByUrl(originalImageUrl);
-  }
-} else {
-  await createRecipe(recipeInput);
-}
-
-      navigate("/cook/recipes");
-    } catch (err) {
-      console.error(err);
-
-      setError(
-        isEditing
-          ? "We couldn't update your recipe. Please try again."
-          : "We couldn't save your recipe. Please try again.",
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  if (loadingRecipe) {
-    return (
-      <main className="create-recipe-page">
-        <div className="create-recipe-container">
-          <p>Loading recipe...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (isEditing && editBlockedMessage) {
-    return (
-      <main className="create-recipe-page">
-        <div className="create-recipe-container">
-          <Link to="/cook/recipes" className="create-recipe-back">
-            <ArrowLeft size={18} />
-            My recipes
-          </Link>
-          <header className="create-recipe-header">
-            <h1>Recipe unavailable for editing</h1>
-            <p role="alert">{editBlockedMessage}</p>
-          </header>
-        </div>
-      </main>
-    );
-  }
-
+if (
+  isEditing &&
+  editBlockedMessage
+) {
   return (
     <main className="create-recipe-page">
       <div className="create-recipe-container">
@@ -484,270 +652,483 @@ if (selectedImageFile) {
           className="create-recipe-back"
         >
           <ArrowLeft size={18} />
-          My recipes
+
+          {t("recipeEditor.myRecipes")}
         </Link>
 
         <header className="create-recipe-header">
-          <p className="eyebrow">Cook dashboard</p>
-
           <h1>
-            {isEditing
-              ? "Edit recipe"
-              : "Create a recipe"}
+            {t(
+              "recipeEditor.unavailableTitle",
+            )}
           </h1>
 
-          <p>
-            {isEditing
-              ? "Update your recipe details or submit it for approval when it is ready."
-              : "Add your recipe details. You can save it as a draft or submit it for approval when it is ready."}
+          <p role="alert">
+            {editBlockedMessage}
           </p>
         </header>
+      </div>
+    </main>
+  );
+}
 
-        {error && (
-          <div className="create-recipe-error">
-            {error}
+return (
+  <main className="create-recipe-page">
+    <div className="create-recipe-container">
+      <Link
+        to="/cook/recipes"
+        className="create-recipe-back"
+      >
+        <ArrowLeft size={18} />
+
+        {t("recipeEditor.myRecipes")}
+      </Link>
+
+      <header className="create-recipe-header">
+        <p className="eyebrow">
+          {t(
+            "recipeEditor.dashboard",
+          )}
+        </p>
+
+        <h1>
+          {isEditing
+            ? t(
+                "recipeEditor.editTitle",
+              )
+            : t(
+                "recipeEditor.createTitle",
+              )}
+        </h1>
+
+        <p>
+          {isAdmin
+            ? isEditing
+              ? t(
+                  "recipeEditor.adminEditIntro",
+                )
+              : t(
+                  "recipeEditor.adminCreateIntro",
+                )
+            : isEditing
+              ? t(
+                  "recipeEditor.cookEditIntro",
+                )
+              : t(
+                  "recipeEditor.cookCreateIntro",
+                )}
+        </p>
+      </header>
+
+      {adminNote && (
+        <aside className="recipe-review-note">
+          <strong>
+            {t(
+              "myRecipes.adminNote",
+            )}
+          </strong>
+
+          <p>{adminNote}</p>
+        </aside>
+      )}
+
+      {error && (
+        <div className="create-recipe-error">
+          {error}
+        </div>
+      )}
+
+      <section className="recipe-form-section">
+        <div className="recipe-form-section-heading">
+          <span>01</span>
+
+          <div>
+            <h2>
+              {t(
+                "recipeEditor.detailsTitle",
+              )}
+            </h2>
+
+            <p>
+              {t(
+                "recipeEditor.detailsText",
+              )}
+            </p>
           </div>
-        )}
+        </div>
 
-        <section className="recipe-form-section">
-          <div className="recipe-form-section-heading">
-            <span>01</span>
+        <div className="recipe-form-grid">
+          <label className="recipe-field recipe-field-full">
+            <span>
+              {t(
+                "recipeEditor.recipeName",
+              )}
+            </span>
 
-            <div>
-              <h2>Recipe details</h2>
-              <p>Start with the basic information.</p>
-            </div>
+            <input
+              type="text"
+              value={title}
+              onChange={(event) =>
+                setTitle(
+                  event.target.value,
+                )
+              }
+              placeholder={t(
+                "recipeEditor.recipeNamePlaceholder",
+              )}
+            />
+          </label>
+
+          <label className="recipe-field recipe-field-full">
+            <span>
+              {t(
+                "recipeEditor.description",
+              )}
+            </span>
+
+            <textarea
+              value={description}
+              onChange={(event) =>
+                setDescription(
+                  event.target.value,
+                )
+              }
+              placeholder={t(
+                "recipeEditor.descriptionPlaceholder",
+              )}
+              rows={4}
+            />
+          </label>
+
+          <div className="recipe-field recipe-field-full">
+            <span>
+              {t(
+                "recipeEditor.photo",
+              )}
+            </span>
+
+            {!imagePreview ? (
+              <label className="recipe-image-upload">
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={
+                    handleImageChange
+                  }
+                />
+
+                <ImagePlus size={28} />
+
+                <strong>
+                  {t(
+                    "recipeEditor.browsePhoto",
+                  )}
+                </strong>
+
+                <small>
+                  {t(
+                    "recipeEditor.photoHelp",
+                  )}
+                </small>
+              </label>
+            ) : (
+              <div className="recipe-image-preview">
+                <img
+                  src={imagePreview}
+                  alt={t(
+                    "recipeEditor.previewAlt",
+                  )}
+                />
+
+                <div className="recipe-image-preview-actions">
+                  <label className="recipe-change-image-button">
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={
+                        handleImageChange
+                      }
+                    />
+
+                    <ImagePlus
+                      size={17}
+                    />
+
+                    {t(
+                      "recipeEditor.changePhoto",
+                    )}
+                  </label>
+
+                  <button
+                    type="button"
+                    className="recipe-remove-image-button"
+                    onClick={
+                      removeSelectedImage
+                    }
+                  >
+                    <X size={17} />
+
+                    {t(
+                      "recipeEditor.removePhoto",
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="recipe-form-grid">
-            <label className="recipe-field recipe-field-full">
-              <span>Recipe name *</span>
+          <div className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.category",
+              )}
+            </span>
 
+            <select
+              value={
+                categoryMode ===
+                "other"
+                  ? "__other__"
+                  : category
+              }
+              onChange={(event) => {
+                const value =
+                  event.target.value;
+
+                if (
+                  value ===
+                  "__other__"
+                ) {
+                  setCategoryMode(
+                    "other",
+                  );
+
+                  setCategory("");
+                } else {
+                  setCategoryMode(
+                    "existing",
+                  );
+
+                  setCategory(value);
+
+                  setCustomCategory("");
+                }
+              }}
+            >
+              <option value="">
+                {t(
+                  "recipeEditor.chooseCategory",
+                )}
+              </option>
+
+              {categories.map(
+                (item) => (
+                  <option
+                    key={item.id}
+                    value={item.name}
+                  >
+                    {t(
+                      `categories.${item.name}`,
+                      {
+                        defaultValue:
+                          item.name,
+                      },
+                    )}
+                  </option>
+                ),
+              )}
+
+              <option value="__other__">
+                {t(
+                  "recipeEditor.otherCategory",
+                )}
+              </option>
+            </select>
+
+            {categoryMode ===
+              "other" && (
               <input
                 type="text"
-                value={title}
+                value={customCategory}
                 onChange={(event) =>
-                  setTitle(event.target.value)
-                }
-                placeholder="Example: Lebanese lentil soup"
-              />
-            </label>
-
-            <label className="recipe-field recipe-field-full">
-              <span>Description</span>
-
-              <textarea
-                value={description}
-                onChange={(event) =>
-                  setDescription(event.target.value)
-                }
-                placeholder="Tell people a little about this recipe..."
-                rows={4}
-              />
-            </label>
-
-            <div className="recipe-field recipe-field-full">
-  <span>Recipe photo</span>
-
-  {!imagePreview ? (
-    <label className="recipe-image-upload">
-      <input
-        type="file"
-        accept="image/jpeg,image/png,image/webp"
-        onChange={handleImageChange}
-      />
-
-      <ImagePlus size={28} />
-
-      <strong>Browse for a photo</strong>
-
-      <small>
-        JPG, PNG or WebP. Large photos are automatically
-        compressed before upload.
-      </small>
-    </label>
-  ) : (
-    <div className="recipe-image-preview">
-      <img
-        src={imagePreview}
-        alt="Recipe preview"
-      />
-
-      <div className="recipe-image-preview-actions">
-        <label className="recipe-change-image-button">
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            onChange={handleImageChange}
-          />
-
-          <ImagePlus size={17} />
-          Change photo
-        </label>
-
-        <button
-          type="button"
-          className="recipe-remove-image-button"
-          onClick={removeSelectedImage}
-        >
-          <X size={17} />
-          Remove
-        </button>
-      </div>
-    </div>
-  )}
-</div>
-
-            <div className="recipe-field">
-  <span>Category</span>
-
-  <select
-    value={
-      categoryMode === "other"
-        ? "__other__"
-        : category
-    }
-    onChange={(event) => {
-      const value = event.target.value;
-
-      if (value === "__other__") {
-        setCategoryMode("other");
-        setCategory("");
-      } else {
-        setCategoryMode("existing");
-        setCategory(value);
-        setCustomCategory("");
-      }
-    }}
-  >
-    <option value="">Choose a category</option>
-
-    {categories.map((item) => (
-      <option key={item.id} value={item.name}>
-        {item.name}
-      </option>
-    ))}
-
-    <option value="__other__">Other</option>
-  </select>
-
-  {categoryMode === "other" && (
-    <input
-      type="text"
-      value={customCategory}
-      onChange={(event) =>
-        setCustomCategory(event.target.value)
-      }
-      placeholder="Type another category"
-    />
-  )}
-</div>
-
-            <label className="recipe-field">
-              <span>Recipe language</span>
-
-              <select
-                value={language}
-                onChange={(event) =>
-                  setLanguage(
-                    event.target.value as RecipeLanguage,
+                  setCustomCategory(
+                    event.target.value,
                   )
                 }
-              >
-                <option value="en">English</option>
-                <option value="fr">French</option>
-                <option value="ar">Arabic</option>
-              </select>
-            </label>
-          </div>
-        </section>
-
-        <section className="recipe-form-section">
-          <div className="recipe-form-section-heading">
-            <span>02</span>
-
-            <div>
-              <h2>Time & servings</h2>
-              <p>Help people know what to expect.</p>
-            </div>
+                placeholder={t(
+                  "recipeEditor.customCategoryPlaceholder",
+                )}
+              />
+            )}
           </div>
 
-          <div className="recipe-form-grid recipe-time-grid">
-            <label className="recipe-field">
-              <span>Prep time</span>
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.recipeLanguage",
+              )}
+            </span>
 
-              <div className="recipe-number-field">
-                <input
-                  type="number"
-                  min="0"
-                  value={prepMinutes}
-                  onChange={(event) =>
-                    setPrepMinutes(event.target.value)
-                  }
-                  placeholder="15"
-                />
+            <select
+              value={language}
+              onChange={(event) =>
+                setLanguage(
+                  event.target
+                    .value as RecipeLanguage,
+                )
+              }
+            >
+              <option value="en">
+                {t(
+                  "language.english",
+                )}
+              </option>
 
-                <span>min</span>
-              </div>
-            </label>
+              <option value="fr">
+                {t(
+                  "language.french",
+                )}
+              </option>
 
-            <label className="recipe-field">
-              <span>Cook time</span>
+              <option value="ar">
+                {t(
+                  "language.arabic",
+                )}
+              </option>
+            </select>
+          </label>
+        </div>
+      </section>
 
-              <div className="recipe-number-field">
-                <input
-                  type="number"
-                  min="0"
-                  value={cookMinutes}
-                  onChange={(event) =>
-                    setCookMinutes(event.target.value)
-                  }
-                  placeholder="30"
-                />
+      <section className="recipe-form-section">
+        <div className="recipe-form-section-heading">
+          <span>02</span>
 
-                <span>min</span>
-              </div>
-            </label>
+          <div>
+            <h2>
+              {t(
+                "recipeEditor.timeTitle",
+              )}
+            </h2>
 
-            <label className="recipe-field">
-              <span>Servings</span>
+            <p>
+              {t(
+                "recipeEditor.timeText",
+              )}
+            </p>
+          </div>
+        </div>
 
+        <div className="recipe-form-grid recipe-time-grid">
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.prepTime",
+              )}
+            </span>
+
+            <div className="recipe-number-field">
               <input
                 type="number"
-                min="1"
-                value={servings}
+                min="0"
+                value={prepMinutes}
                 onChange={(event) =>
-                  setServings(event.target.value)
+                  setPrepMinutes(
+                    event.target.value,
+                  )
                 }
-                placeholder="4"
+                placeholder="15"
               />
-            </label>
-          </div>
-        </section>
 
-        <section className="recipe-form-section">
-          <div className="recipe-form-section-heading">
-            <span>03</span>
-
-            <div>
-              <h2>Ingredients</h2>
-
-              <p>
-                Add ingredients one by one so they can be
-                searchable later.
-              </p>
+              <span>
+                {t(
+                  "recipeEditor.minutesShort",
+                )}
+              </span>
             </div>
-          </div>
+          </label>
 
-          <div className="recipe-ingredients-list">
-            {ingredients.map((ingredient, index) => (
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.cookTime",
+              )}
+            </span>
+
+            <div className="recipe-number-field">
+              <input
+                type="number"
+                min="0"
+                value={cookMinutes}
+                onChange={(event) =>
+                  setCookMinutes(
+                    event.target.value,
+                  )
+                }
+                placeholder="30"
+              />
+
+              <span>
+                {t(
+                  "recipeEditor.minutesShort",
+                )}
+              </span>
+            </div>
+          </label>
+
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.servings",
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="1"
+              value={servings}
+              onChange={(event) =>
+                setServings(
+                  event.target.value,
+                )
+              }
+              placeholder="4"
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="recipe-form-section">
+        <div className="recipe-form-section-heading">
+          <span>03</span>
+
+          <div>
+            <h2>
+              {t(
+                "recipeEditor.ingredientsTitle",
+              )}
+            </h2>
+
+            <p>
+              {t(
+                "recipeEditor.ingredientsText",
+              )}
+            </p>
+          </div>
+        </div>
+
+        <div className="recipe-ingredients-list">
+          {ingredients.map(
+            (ingredient, index) => (
               <div
                 className="recipe-ingredient-row"
                 key={index}
               >
                 <input
                   type="text"
-                  value={ingredient.quantity}
+                  value={
+                    ingredient.quantity
+                  }
                   onChange={(event) =>
                     updateIngredient(
                       index,
@@ -756,12 +1137,16 @@ if (selectedImageFile) {
                     )
                   }
                   placeholder="2"
-                  aria-label="Quantity"
+                  aria-label={t(
+                    "recipeEditor.quantity",
+                  )}
                 />
 
                 <input
                   type="text"
-                  value={ingredient.unit}
+                  value={
+                    ingredient.unit
+                  }
                   onChange={(event) =>
                     updateIngredient(
                       index,
@@ -769,13 +1154,19 @@ if (selectedImageFile) {
                       event.target.value,
                     )
                   }
-                  placeholder="cups"
-                  aria-label="Unit"
+                  placeholder={t(
+                    "recipeEditor.unitPlaceholder",
+                  )}
+                  aria-label={t(
+                    "recipeEditor.unit",
+                  )}
                 />
 
                 <input
                   type="text"
-                  value={ingredient.ingredient}
+                  value={
+                    ingredient.ingredient
+                  }
                   onChange={(event) =>
                     updateIngredient(
                       index,
@@ -783,47 +1174,72 @@ if (selectedImageFile) {
                       event.target.value,
                     )
                   }
-                  placeholder="Flour"
-                  aria-label="Ingredient"
+                  placeholder={t(
+                    "recipeEditor.ingredientPlaceholder",
+                  )}
+                  aria-label={t(
+                    "recipeEditor.ingredient",
+                  )}
                 />
 
                 <button
                   type="button"
                   className="recipe-remove-button"
                   onClick={() =>
-                    removeIngredient(index)
+                    removeIngredient(
+                      index,
+                    )
                   }
-                  disabled={ingredients.length === 1}
-                  aria-label="Remove ingredient"
+                  disabled={
+                    ingredients.length ===
+                    1
+                  }
+                  aria-label={t(
+                    "recipeEditor.removeIngredient",
+                  )}
                 >
                   <Trash2 size={18} />
                 </button>
               </div>
-            ))}
+            ),
+          )}
 
-            <button
-              type="button"
-              className="recipe-add-row-button"
-              onClick={addIngredient}
-            >
-              <Plus size={18} />
-              Add ingredient
-            </button>
+          <button
+            type="button"
+            className="recipe-add-row-button"
+            onClick={addIngredient}
+          >
+            <Plus size={18} />
+
+            {t(
+              "recipeEditor.addIngredient",
+            )}
+          </button>
+        </div>
+      </section>
+
+      <section className="recipe-form-section">
+        <div className="recipe-form-section-heading">
+          <span>04</span>
+
+          <div>
+            <h2>
+              {t(
+                "recipeEditor.instructionsTitle",
+              )}
+            </h2>
+
+            <p>
+              {t(
+                "recipeEditor.instructionsText",
+              )}
+            </p>
           </div>
-        </section>
+        </div>
 
-        <section className="recipe-form-section">
-          <div className="recipe-form-section-heading">
-            <span>04</span>
-
-            <div>
-              <h2>Instructions</h2>
-              <p>Write the method step by step.</p>
-            </div>
-          </div>
-
-          <div className="recipe-instructions-list">
-            {instructions.map((instruction, index) => (
+        <div className="recipe-instructions-list">
+          {instructions.map(
+            (instruction, index) => (
               <div
                 className="recipe-instruction-row"
                 key={index}
@@ -840,7 +1256,13 @@ if (selectedImageFile) {
                       event.target.value,
                     )
                   }
-                  placeholder={`Describe step ${index + 1}...`}
+                  placeholder={t(
+                    "recipeEditor.stepPlaceholder",
+                    {
+                      number:
+                        index + 1,
+                    },
+                  )}
                   rows={3}
                 />
 
@@ -848,57 +1270,84 @@ if (selectedImageFile) {
                   type="button"
                   className="recipe-remove-button"
                   onClick={() =>
-                    removeInstruction(index)
+                    removeInstruction(
+                      index,
+                    )
                   }
-                  disabled={instructions.length === 1}
-                  aria-label="Remove instruction"
+                  disabled={
+                    instructions.length ===
+                    1
+                  }
+                  aria-label={t(
+                    "recipeEditor.removeInstruction",
+                  )}
                 >
                   <Trash2 size={18} />
                 </button>
               </div>
-            ))}
-
-            <button
-              type="button"
-              className="recipe-add-row-button"
-              onClick={addInstruction}
-            >
-              <Plus size={18} />
-              Add step
-            </button>
-          </div>
-        </section>
-
-        <div className="create-recipe-actions">
-          <button
-            type="button"
-            className="recipe-draft-button"
-            disabled={submitting}
-            onClick={() => saveRecipe("draft")}
-          >
-            <Save size={18} />
-
-            {submitting
-              ? "Saving..."
-              : "Save as draft"}
-          </button>
+            ),
+          )}
 
           <button
             type="button"
-            className="recipe-submit-button"
-            disabled={submitting}
-            onClick={() => saveRecipe("pending")}
+            className="recipe-add-row-button"
+            onClick={addInstruction}
           >
-            <Send size={18} />
+            <Plus size={18} />
 
-            {submitting
-              ? "Saving..."
-              : "Submit for approval"}
+            {t(
+              "recipeEditor.addStep",
+            )}
           </button>
         </div>
+      </section>
+
+      <div className="create-recipe-actions">
+        <button
+          type="button"
+          className="recipe-draft-button"
+          disabled={submitting}
+          onClick={() =>
+            saveRecipe("draft")
+          }
+        >
+          <Save size={18} />
+
+          {submitting
+            ? t(
+                "recipeEditor.saving",
+              )
+            : t(
+                "recipeEditor.saveDraft",
+              )}
+        </button>
+
+        <button
+          type="button"
+          className="recipe-submit-button"
+          disabled={submitting}
+          onClick={() =>
+            saveRecipe("pending")
+          }
+        >
+          <Send size={18} />
+
+          {submitting
+            ? t(
+                "recipeEditor.saving",
+              )
+            : isAdmin
+              ? t(
+                  "recipeEditor.publish",
+                )
+              : t(
+                  "recipeEditor.submitApproval",
+                )}
+        </button>
       </div>
-    </main>
-  );
+    </div>
+  </main>
+);
 }
 
 export default CreateRecipePage;

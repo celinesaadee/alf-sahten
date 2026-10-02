@@ -183,22 +183,26 @@ export function useKitchenIngredients() {
       return;
     }
 
-    // Signed-out user
-    if (!user) {
-      const nextIngredients = [
-        ...ingredients,
-        cleanIngredient,
-      ];
-
-      setIngredients(nextIngredients);
-
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY,
-        JSON.stringify(nextIngredients),
+// Signed-out user
+if (!user) {
+  setIngredients((current) => {
+    const nextIngredients =
+      current.filter(
+        (item) =>
+          item.toLowerCase() !==
+          ingredient.toLowerCase(),
       );
 
-      return;
-    }
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify(nextIngredients),
+    );
+
+    return nextIngredients;
+  });
+
+  return;
+}
 
     // Signed-in user
     const { error } = await supabase

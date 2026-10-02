@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   AtSign,
@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next";
 
 import {
   followCook,
-  getCurrentUserId,
   getPublicCookProfile,
   getPublishedCookRecipes,
   isFollowingCook,
@@ -26,6 +25,8 @@ import {
   getPublicCookServices,
   type CookService,
 } from "../services/cookServices";
+
+import { useAuth } from "../context/AuthContext";
 
 import "./PublicCookPage.css";
 
@@ -42,274 +43,120 @@ type CookRecipe = {
 };
 
 function PublicCookPage() {
-  const { t } = useTranslation();
   const { username } = useParams();
+  const { user, loading } = useAuth();
+  if (loading) return <main className="public-cook-page" aria-busy="true" />;
+  return (
+    <PublicCookContent
+      key={username + ":" + (user?.id ?? "guest")}
+      username={username}
+      currentUserId={user?.id ?? null}
+    />
+  );
+}
 
-  const [cook, setCook] =
-    useState<PublicCookProfile | null>(null);
-
-  const [recipes, setRecipes] =
-    useState<CookRecipe[]>([]);
-
-  const [services, setServices] =
-    useState<CookService[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState(false);
-
-  const [currentUserId, setCurrentUserId] =
-    useState<string | null>(null);
-
-  const [following, setFollowing] =
-    useState(false);
-
-  const [followBusy, setFollowBusy] =
-    useState(false);
-
-  const [followError, setFollowError] =
-    useState("");
-
-  const [followerCount, setFollowerCount] =
-    useState(0);
+function PublicCookContent({ username, currentUserId }: {
+  username: string | undefined;
+  currentUserId: string | null;
+}) {
+  const { t } = useTranslation();
+  const [cook, setCook] = useState<PublicCookProfile | null>(null);
+  const [recipes, setRecipes] = useState<CookRecipe[]>([]);
+  const [services, setServices] = useState<CookService[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [notFound, setNotFound] = useState(false);
+  const [recipesError, setRecipesError] = useState(false);
+  const [servicesError, setServicesError] = useState(false);
+  const [following, setFollowing] = useState<boolean | null>(null);
+  const [followBusy, setFollowBusy] = useState(false);
+  const [followError, setFollowError] = useState("");
+  const [followerCount, setFollowerCount] = useState(0);
+  const [attempt, setAttempt] = useState(0);
+  const followLock = useRef(false);
+  const requestVersion = useRef(0);
 
   useEffect(() => {
     let cancelled = false;
-
+    requestVersion.current += 1;
     async function loadCook() {
-      if (!username) {
-        setLoading(false);
-        setError(true);
-        return;
-      }
-
       setLoading(true);
       setError(false);
-      setCook(null);
-      setRecipes([]);
-      setServices([]);
-      setFollowing(false);
+      setNotFound(false);
+      setRecipesError(false);
+      setServicesError(false);
+      setFollowing(null);
       setFollowError("");
-
       try {
-        /*
-         * The cook profile is the only critical request.
-         * If this fails, the page genuinely cannot load.
-         */
-        const profile =
-          await getPublicCookProfile(username);
-
-        if (cancelled) {
-          return;
-        }
-
+        const profile = username ? await getPublicCookProfile(username) : null;
+        if (cancelled) return;
         if (!profile) {
-          setError(true);
-          return;
-        }
-
-        setCook(profile);
-
-        setFollowerCount(
-          profile.follower_count ?? 0,
-        );
-
-        /*
-         * Follow state is optional.
-         * A failure here must never hide a valid cook.
-         */
-        try {
-          const visitorId =
-            await getCurrentUserId();
-
-          if (cancelled) {
-            return;
-          }
-
-          setCurrentUserId(visitorId);
-
-          if (
-            visitorId &&
-            visitorId !== profile.user_id
-          ) {
-            try {
-              const visitorFollowing =
-                await isFollowingCook(
-                  profile.user_id,
-                );
-
-              if (!cancelled) {
-                setFollowing(
-                  visitorFollowing,
-                );
-              }
-            } catch (followStateError) {
-              console.error(
-                "Could not load follow state:",
-                followStateError,
-              );
-
-              if (!cancelled) {
-                setFollowing(false);
-              }
-            }
-          } else {
-            setFollowing(false);
-          }
-        } catch (visitorError) {
-          console.error(
-            "Could not load current user:",
-            visitorError,
-          );
-
-          if (!cancelled) {
-            setCurrentUserId(null);
-            setFollowing(false);
-          }
-        }
-
-        /*
-         * Recipes and services are also optional.
-         * One failing must not prevent the other
-         * or hide the cook profile.
-         */
-        const [
-          recipeResult,
-          serviceResult,
-        ] = await Promise.allSettled([
-          getPublishedCookRecipes(
-            profile.user_id,
-          ),
-          getPublicCookServices(
-            profile.user_id,
-          ),
-        ]);
-
-        if (cancelled) {
-          return;
-        }
-
-        if (
-          recipeResult.status ===
-          "fulfilled"
-        ) {
-          setRecipes(
-            recipeResult.value as CookRecipe[],
-          );
-        } else {
-          console.error(
-            "Could not load cook recipes:",
-            recipeResult.reason,
-          );
-
-          setRecipes([]);
-        }
-
-        if (
-          serviceResult.status ===
-          "fulfilled"
-        ) {
-          setServices(
-            serviceResult.value,
-          );
-        } else {
-          console.error(
-            "Could not load cook services:",
-            serviceResult.reason,
-          );
-
-          setServices([]);
-        }
-      } catch (err) {
-        console.error(
-          "Could not load cook profile:",
-          err,
-        );
-
-        if (!cancelled) {
-          setError(true);
+          setNotFound(true);
           setCook(null);
-          setRecipes([]);
-          setServices([]);
+          return;
         }
+        setCook(profile);
+        setFollowerCount(profile.follower_count ?? 0);
+        const [recipeResult, serviceResult, followResult] = await Promise.allSettled([
+          getPublishedCookRecipes(profile.user_id),
+          getPublicCookServices(profile.user_id),
+          currentUserId && currentUserId !== profile.user_id
+            ? isFollowingCook(profile.user_id)
+            : Promise.resolve(false),
+        ]);
+        if (cancelled) return;
+        setRecipes(recipeResult.status === "fulfilled" ? recipeResult.value as CookRecipe[] : []);
+        setRecipesError(recipeResult.status === "rejected");
+        setServices(serviceResult.status === "fulfilled" ? serviceResult.value : []);
+        setServicesError(serviceResult.status === "rejected");
+        setFollowing(followResult.status === "fulfilled" ? followResult.value : null);
+      } catch (err) {
+        console.error("Could not load cook profile:", err);
+        if (!cancelled) setError(true);
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
-
     void loadCook();
-
     return () => {
       cancelled = true;
+      requestVersion.current += 1;
     };
-  }, [username]);
+  }, [username, currentUserId, attempt]);
 
   async function handleFollowToggle() {
-    if (!cook) {
-      return;
-    }
-
-    if (!currentUserId) {
-   setFollowError(
-  t("publicCookProfile.signInToFollow"),
-);
-
-      return;
-    }
-
-    if (
-      currentUserId === cook.user_id
-    ) {
-      return;
-    }
-
+    if (!cook || !currentUserId || currentUserId === cook.user_id ||
+        following === null || followLock.current) return;
+    followLock.current = true;
+    const version = requestVersion.current;
+    const nextFollowing = !following;
+    setFollowBusy(true);
+    setFollowError("");
     try {
-      setFollowBusy(true);
-      setFollowError("");
-
-      if (following) {
-        await unfollowCook(
-          cook.user_id,
-        );
-
-        setFollowing(false);
-
-        setFollowerCount(
-          (current) =>
-            Math.max(
-              0,
-              current - 1,
-            ),
-        );
-      } else {
-        await followCook(
-          cook.user_id,
-        );
-
-        setFollowing(true);
-
-        setFollowerCount(
-          (current) =>
-            current + 1,
-        );
+      if (nextFollowing) await followCook(cook.user_id);
+      else await unfollowCook(cook.user_id);
+      if (version !== requestVersion.current) return;
+      setFollowing(nextFollowing);
+      setFollowerCount(count => Math.max(0, count + (nextFollowing ? 1 : -1)));
+      // Refresh the server count: another tab may already have changed this follow.
+      try {
+        const profile = await getPublicCookProfile(username!);
+        if (profile && version === requestVersion.current) {
+          setFollowerCount(profile.follower_count ?? 0);
+        }
+      } catch {
+        // The follow succeeded; keep the local count until the next page load.
       }
     } catch (err) {
-      console.error(
-        "Could not update follow:",
-        err,
-      );
-
-      setFollowError(
-  t("publicCookProfile.followError"),
-);
+      console.error("Could not update follow:", err);
+      if (version === requestVersion.current) setFollowError("followError");
     } finally {
-      setFollowBusy(false);
+      followLock.current = false;
+      if (version === requestVersion.current) setFollowBusy(false);
     }
   }
+
+  function retry() { setAttempt(value => value + 1); }
 
   if (loading) {
     return (
@@ -334,12 +181,14 @@ function PublicCookPage() {
           />
 
           <h1>
-  {t("publicCookProfile.notFoundTitle")}
+  {t(error ? "publicCookProfile.loadErrorTitle" : "publicCookProfile.notFoundTitle")}
 </h1>
 
 <p>
-  {t("publicCookProfile.notFoundText")}
+  {t(error ? "publicCookProfile.loadErrorText" : "publicCookProfile.notFoundText")}
 </p>
+
+{error && !notFound && <button type="button" className="public-cook-retry" onClick={retry}>{t("publicCookProfile.retry")}</button>}
 
 <Link to="/discover">
   {t("publicCookProfile.discoverRecipes")}
@@ -348,6 +197,7 @@ function PublicCookPage() {
     size={16}
   />
 </Link>
+
         </section>
       </main>
     );
@@ -356,7 +206,7 @@ function PublicCookPage() {
   const displayName =
     cook.display_name ??
     cook.username ??
-    "Cook";
+    t("common.cook");
 
   return (
     <main className="public-cook-page">
@@ -432,7 +282,7 @@ function PublicCookPage() {
                   />
 
                   {
-                    cook.cook_type
+                    t(({ home_cook: "creatorApplication.homeCook", food_creator: "creatorApplication.foodCreator", professional_chef: "creatorApplication.professionalChef" } as Record<string, string>)[cook.cook_type] ?? "common.cook")
                   }
                 </span>
               )}
@@ -451,47 +301,32 @@ function PublicCookPage() {
 </span>
               </div>
 
-              {currentUserId !==
-                cook.user_id && (
-                <button
-                  type="button"
-                  className={`public-cook-follow-button ${
-                    following
-                      ? "following"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    void handleFollowToggle();
-                  }}
-                  disabled={
-                    followBusy
-                  }
-                  aria-pressed={
-                    following
-                  }
-                >
-                  {following ? (
-                    <Check
-                      size={17}
-                    />
-                  ) : (
-                    <Heart
-                      size={17}
-                    />
-                  )}
-
-                  {followBusy
-  ? t("publicCookProfile.updating")
-  : following
-    ? t("publicCookProfile.following")
-    : t("publicCookProfile.follow")}
-                </button>
+              {currentUserId !== cook.user_id && (
+                !currentUserId ? (
+                  <Link className="public-cook-follow-button" to="/auth"
+                    state={{ from: "/cooks/" + encodeURIComponent(username!) }}>
+                    <Heart size={17} aria-hidden="true" />
+                    {t("publicCookProfile.signInToFollow")}
+                  </Link>
+                ) : following === null ? (
+                  <button type="button" className="public-cook-retry" onClick={retry}>
+                    {t("publicCookProfile.retry")}
+                  </button>
+                ) : (
+                  <button type="button"
+                    className={"public-cook-follow-button " + (following ? "following" : "")}
+                    onClick={() => void handleFollowToggle()}
+                    disabled={followBusy} aria-busy={followBusy} aria-pressed={following}
+                    aria-label={t(following ? "publicCookProfile.unfollow" : "publicCookProfile.follow")}>
+                    {following ? <Check size={17} aria-hidden="true" /> : <Heart size={17} aria-hidden="true" />}
+                    {t(followBusy ? "publicCookProfile.updating" : following ? "publicCookProfile.following" : "publicCookProfile.follow")}
+                  </button>
+                )
               )}
             </div>
-
-            {followError && (
-              <p className="public-cook-follow-error">
-                {followError}
+            {(followError || (currentUserId && following === null)) && (
+              <p className="public-cook-follow-error" role="alert">
+                {t(followError ? "publicCookProfile.followError" : "publicCookProfile.followStateError")}
               </p>
             )}
 
@@ -556,6 +391,12 @@ function PublicCookPage() {
           </section>
         )}
 
+      {servicesError && (
+        <section className="public-cook-services public-cook-load-error" role="alert">
+          <p>{t("publicCookProfile.servicesError")}</p>
+          <button type="button" className="public-cook-retry" onClick={retry}>{t("publicCookProfile.retry")}</button>
+        </section>
+      )}
       {services.length > 0 && (
         <section className="public-cook-services">
           <div className="public-cook-services-heading">
@@ -723,7 +564,7 @@ function PublicCookPage() {
       </h2>
     </div>
 
-    <span>
+    {!recipesError && <span>
       {recipes.length === 1
         ? t("publicCookProfile.recipeCount", {
             count: recipes.length,
@@ -731,10 +572,15 @@ function PublicCookPage() {
         : t("publicCookProfile.recipeCountPlural", {
             count: recipes.length,
           })}
-    </span>
+    </span>}
   </div>
 
-        {recipes.length > 0 ? (
+        {recipesError ? (
+          <div className="public-cook-load-error" role="alert">
+            <p>{t("publicCookProfile.recipesError")}</p>
+            <button type="button" className="public-cook-retry" onClick={retry}>{t("publicCookProfile.retry")}</button>
+          </div>
+        ) : recipes.length > 0 ? (
           <div className="public-cook-recipe-grid">
             {recipes.map(
               (recipe) => {
@@ -784,7 +630,7 @@ function PublicCookPage() {
                         {recipe.category && (
                           <span>
                             {
-                              recipe.category
+                              t(`categories.${recipe.category}`, { defaultValue: recipe.category })
                             }
                           </span>
                         )}
@@ -824,19 +670,16 @@ function PublicCookPage() {
                         </p>
                       )}
 
-                      <Link
-                        to={`/recipe/${recipe.id}`}
-                        className="public-cook-view-recipe"
-                      >
-                        {t("publicCookProfile.viewRecipe")}
+                     <Link
+  to={`/recipe/${recipe.id}`}
+  className="public-cook-view-recipe"
+>
+  {t("publicCookProfile.viewRecipe")}
 
-                        <ArrowRight
-                          size={
-                            15
-                          }
-                        />
-                      </Link>
-                    </div>
+  <ArrowRight size={15} />
+</Link>
+
+</div>
                   </article>
                 );
               },

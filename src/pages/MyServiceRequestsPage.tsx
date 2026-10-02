@@ -1,6 +1,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -65,6 +66,11 @@ function MyServiceRequestsPage() {
     null,
   );
 
+  const [loadAttempt, setLoadAttempt] =
+    useState(0);
+
+  const actionLock = useRef(false);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -106,7 +112,7 @@ function MyServiceRequestsPage() {
     return () => {
       cancelled = true;
     };
-  }, [t]);
+  }, [t, loadAttempt]);
 
   const filteredRequests =
     useMemo(() => {
@@ -171,6 +177,10 @@ function MyServiceRequestsPage() {
   async function handleCancel(
     request: ServiceRequest,
   ) {
+    if (actionLock.current) {
+      return;
+    }
+
     const confirmed =
       window.confirm(
         t(
@@ -185,6 +195,8 @@ function MyServiceRequestsPage() {
     if (!confirmed) {
       return;
     }
+
+    actionLock.current = true;
 
     try {
       setBusyRequestId(
@@ -220,6 +232,7 @@ function MyServiceRequestsPage() {
         ),
       );
     } finally {
+      actionLock.current = false;
       setBusyRequestId(null);
     }
   }
@@ -318,16 +331,29 @@ function MyServiceRequestsPage() {
         </div>
 
         {error && (
-          <p className="form-error">
-            {error}
-          </p>
+          <div className="service-requests-load-error" role="alert">
+            <p className="form-error">
+              {error}
+            </p>
+
+            <button
+              type="button"
+              onClick={() =>
+                setLoadAttempt(
+                  (value) => value + 1,
+                )
+              }
+            >
+              {t("myServiceRequests.retry")}
+            </button>
+          </div>
         )}
 
         {loading ? (
           <div className="profile-loading">
             <ChefHat size={28} />
           </div>
-        ) : filteredRequests.length ===
+        ) : error ? null : filteredRequests.length ===
           0 ? (
           <section className="my-service-requests-empty">
             <ChefHat

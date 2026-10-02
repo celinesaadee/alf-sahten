@@ -92,7 +92,8 @@ const homeCategories = [
 ];
 
 function HomePage() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } =
+  useTranslation();
   const navigate = useNavigate();
 
   const {
@@ -102,10 +103,11 @@ function HomePage() {
     removeIngredient,
   } = useKitchenIngredients();
 
-  const {
-    recipes: publishedRecipes,
-    loading: publishedRecipesLoading,
-  } = usePublishedRecipes();
+const {
+  recipes: publishedRecipes,
+  loading: publishedRecipesLoading,
+  error: publishedRecipesError,
+} = usePublishedRecipes();
 
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -369,15 +371,6 @@ function HomePage() {
               </button>
             </div>
 
-            <div className="food-note">
-              <span aria-hidden="true">
-                🌿
-              </span>
-
-              <em>
-                {t("home.note")}
-              </em>
-            </div>
           </div>
 
           <div className="hero-image-wrap">
@@ -425,19 +418,35 @@ function HomePage() {
           </Link>
         </div>
 
-        {publishedRecipesLoading ? (
-          <p className="home-recipes-loading">
-            Loading recipes...
-          </p>
-        ) : suggestions.length === 0 ? (
-          <div className="home-recipes-empty">
-            <ChefHat size={28} />
+{publishedRecipesLoading ? (
+  <p className="home-recipes-loading">
+    {t("home.loadingRecipes", {
+      defaultValue: "Loading recipes...",
+    })}
+  </p>
+) : publishedRecipesError ? (
+  <div className="home-recipes-empty">
+    <ChefHat size={28} />
 
-            <p>
-              No published recipes yet.
-            </p>
-          </div>
-        ) : (
+    <p>
+      {t("home.recipeLoadError", {
+        defaultValue:
+          "We couldn't load the recipes right now.",
+      })}
+    </p>
+  </div>
+) : suggestions.length === 0 ? (
+  <div className="home-recipes-empty">
+    <ChefHat size={28} />
+
+    <p>
+      {t("home.noPublishedRecipes", {
+        defaultValue:
+          "Recipes are coming soon.",
+      })}
+    </p>
+  </div>
+) : (
           <div className="recipe-grid">
             {suggestions.map(
               ({
@@ -451,97 +460,83 @@ function HomePage() {
                 const creatorName =
                   recipe.cook?.display_name ??
                   recipe.cook?.username ??
-                  "Cook";
+                  t("common.cook");
 
                 return (
-                  <article
-                    className="recipe-card"
-                    key={recipe.id}
-                  >
-                    <Link
-                      to={`/recipe/${recipe.id}`}
-                      className="home-recipe-link"
-                    >
-                      <div className="recipe-image">
-                        {recipe.image_url ? (
-                          <img
-                            src={
-                              recipe.image_url
-                            }
-                            alt={recipe.title}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="home-recipe-placeholder">
-                            <ChefHat
-                              size={34}
-                            />
-                          </div>
-                        )}
-
-                        {!loading &&
-                          ingredients.length >
-                            0 && (
-                            <span
-                              className={`recipe-status ${
-                                missing === 0
-                                  ? "ready"
-                                  : "warning"
-                              }`}
-                            >
-                              {missing === 0
-                                ? t(
-                                    "home.ready",
-                                  )
-                                : t(
-                                    "home.missing",
-                                    {
-                                      count:
-                                        missing,
-                                    },
-                                  )}
-                            </span>
-                          )}
-                      </div>
-
-                      <div className="recipe-content">
-                        <h3>
-                          {recipe.title}
-                        </h3>
-
-                        <div className="recipe-meta">
-                          <span>
-  {t("home.by", {
-    creator: "",
-  })}
-
-  {recipe.cook?.username ? (
+<article
+  className="recipe-card"
+  key={recipe.id}
+>
+  <div className="home-recipe-link">
     <Link
-      to={`/cooks/${recipe.cook.username}`}
-      className="home-recipe-cook-link"
-      onClick={(event) =>
-        event.stopPropagation()
-      }
+      to={`/recipe/${recipe.id}`}
+      className="home-recipe-main-link"
     >
-      {creatorName}
-    </Link>
-  ) : (
-    creatorName
-  )}
-</span>
+      <div className="recipe-image">
+        {recipe.image_url ? (
+          <img
+            src={recipe.image_url}
+            alt={recipe.title}
+            loading="lazy"
+          />
+        ) : (
+          <div className="home-recipe-placeholder">
+            <ChefHat size={34} />
+          </div>
+        )}
 
-                          {totalMinutes > 0 && (
-                            <span className="recipe-time">
-                              <Clock3
-                                size={15}
-                              />
-                              {totalMinutes} min
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  </article>
+        {!loading &&
+          ingredients.length > 0 && (
+            <span
+              className={`recipe-status ${
+                missing === 0
+                  ? "ready"
+                  : "warning"
+              }`}
+            >
+              {missing === 0
+                ? t("home.ready")
+                : t("home.missing", {
+                    count: missing,
+                  })}
+            </span>
+          )}
+      </div>
+
+      <div className="recipe-content">
+        <h3>{recipe.title}</h3>
+      </div>
+    </Link>
+
+    <div className="recipe-content home-recipe-meta-content">
+      <div className="recipe-meta">
+        <span>
+          {t("home.by", {
+            creator: "",
+          })}
+
+          {recipe.cook?.username ? (
+            <Link
+              to={`/cooks/${recipe.cook.username}`}
+              className="home-recipe-cook-link"
+            >
+              {creatorName}
+            </Link>
+          ) : (
+            creatorName
+          )}
+        </span>
+
+        {totalMinutes > 0 && (
+          <span className="recipe-time">
+            <Clock3 size={15} />
+            {totalMinutes} {t("publicCookProfile.minuteShort")}
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+</article>
                 );
               },
             )}
@@ -629,6 +624,14 @@ function HomePage() {
             recipe.image_url,
         );
 
+        const categoryLabel =
+  t(
+    `categories.${category}`,
+    {
+      defaultValue: category,
+    },
+  );
+
       return (
         <Link
           key={category}
@@ -660,8 +663,8 @@ function HomePage() {
 
           <span className="category-content">
             <strong>
-              {category}
-            </strong>
+  {categoryLabel}
+</strong>
 
             <span>
               {t("home.explore")}
@@ -696,43 +699,81 @@ function HomePage() {
           </div>
 
           <nav
-            className="footer-links"
-            aria-label={t(
-              "home.footerNav",
-            )}
-          >
-            <div>
-              <strong>
-                {t(
-                  "home.explore",
-                )}
-              </strong>
+  className="footer-links"
+  aria-label={t(
+    "home.footerNav",
+  )}
+>
+  <div>
+    <strong>
+      {t(
+        "home.explore",
+      )}
+    </strong>
 
-              <Link to="/discover">
-                {t(
-                  "nav.discover",
-                )}
-              </Link>
+    <Link to="/discover">
+      {t(
+        "nav.discover",
+      )}
+    </Link>
 
-              <Link to="/kitchen">
-                {t(
-                  "nav.kitchen",
-                )}
-              </Link>
+    <Link to="/kitchen">
+      {t(
+        "nav.kitchen",
+      )}
+    </Link>
 
-              <Link to="/saved">
-                {t(
-                  "nav.saved",
-                )}
-              </Link>
+    <Link to="/saved">
+      {t(
+        "nav.saved",
+      )}
+    </Link>
 
-              <Link to="/become-creator">
-                {t(
-                  "home.creatorAction",
-                )}
-              </Link>
-            </div>
-          </nav>
+    <Link to="/become-creator">
+      {t(
+        "home.creatorAction",
+      )}
+    </Link>
+  </div>
+
+  <div>
+    <strong>
+      {i18n.language.startsWith(
+        "fr",
+      )
+        ? "Informations"
+        : i18n.language.startsWith(
+              "ar",
+            )
+          ? "معلومات"
+          : "Information"}
+    </strong>
+
+    <Link to="/privacy">
+      {i18n.language.startsWith(
+        "fr",
+      )
+        ? "Confidentialité"
+        : i18n.language.startsWith(
+              "ar",
+            )
+          ? "سياسة الخصوصية"
+          : "Privacy Policy"}
+    </Link>
+
+    <Link to="/terms">
+      {i18n.language.startsWith(
+        "fr",
+      )
+        ? "Conditions d'utilisation"
+        : i18n.language.startsWith(
+              "ar",
+            )
+          ? "شروط الاستخدام"
+          : "Terms of Use"}
+    </Link>
+  </div>
+</nav>
         </div>
 
         <div className="footer-bottom">

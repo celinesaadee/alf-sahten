@@ -81,12 +81,18 @@ function SavedPage() {
             </div>
 
             <h2>
-              We couldn't load your saved recipes.
-            </h2>
+  {t("saved.loadErrorTitle", {
+    defaultValue:
+      "We couldn't load your saved recipes.",
+  })}
+</h2>
 
-            <p>
-              Please refresh and try again.
-            </p>
+<p>
+  {t("saved.loadErrorText", {
+    defaultValue:
+      "Please refresh and try again.",
+  })}
+</p>
           </div>
         ) : savedRecipes.length > 0 ? (
           <div className="saved-recipe-grid">
@@ -99,7 +105,7 @@ function SavedPage() {
                 const creatorName =
                   recipe.cook?.display_name ??
                   recipe.cook?.username ??
-                  "Cook";
+                  t("common.cook");
 
                 return (
                   <article
@@ -134,10 +140,10 @@ function SavedPage() {
                           "recipe.removeSaved",
                         )}
                         onClick={() =>
-                          removeSaved(
-                            recipe.id,
-                          )
-                        }
+  void removeSaved(
+    recipe.id,
+  )
+}
                       >
                         <Heart
                           size={20}
@@ -160,7 +166,7 @@ function SavedPage() {
                               size={14}
                             />
 
-                            {totalMinutes} min
+                            {totalMinutes} {t("publicCookProfile.minuteShort")}
                           </span>
                         )}
                       </div>

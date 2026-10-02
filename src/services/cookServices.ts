@@ -45,18 +45,67 @@ export function prepareCookService(input: CookServiceInput): CookServiceInput {
   if (!title || title.length > 100) throw new Error("Enter a service title of up to 100 characters.");
   if (description.length > 1000) throw new Error("Keep the description under 1,001 characters.");
   if (availability_note.length > 250) throw new Error("Keep the availability note under 251 characters.");
-  if (input.starting_price !== null) {
-    if (!Number.isFinite(input.starting_price) || input.starting_price < 0 || input.starting_price > 9999999999.99) {
-      throw new Error("Enter a valid, non-negative starting price.");
-    }
-    if (!currency || !/^[A-Z]{3}$/.test(currency)) throw new Error("Choose a currency for the starting price.");
-  } else if (currency) {
-    throw new Error("Enter a starting price or clear the currency.");
+  if (!Object.hasOwn(serviceTypes, input.service_type)) {
+  throw new Error("Choose a valid service type.");
+}
+
+if (
+  !["draft", "available", "paused", "archived"].includes(
+    input.status,
+  )
+) {
+  throw new Error("Choose a valid availability status.");
+}
+
+if (!title || title.length > 100) {
+  throw new Error(
+    "Enter a service title of up to 100 characters.",
+  );
+}
+
+if (description.length > 1000) {
+  throw new Error(
+    "Keep the description to 1,000 characters or fewer.",
+  );
+}
+
+if (availability_note.length > 250) {
+  throw new Error(
+    "Keep the availability note to 250 characters or fewer.",
+  );
+}
+
+if (input.starting_price !== null) {
+  if (
+    !Number.isFinite(input.starting_price) ||
+    input.starting_price < 0 ||
+    input.starting_price > 9999999999.99
+  ) {
+    throw new Error(
+      "Enter a valid, non-negative starting price.",
+    );
   }
+
+  if (!currency || !/^[A-Z]{3}$/.test(currency)) {
+    throw new Error(
+      "Choose a currency for the starting price.",
+    );
+  }
+} else if (currency) {
+  throw new Error(
+    "Enter a starting price or clear the currency.",
+  );
+}
   if (photo_url) {
     let valid = false;
     try { valid = new URL(photo_url).protocol === "https:"; } catch { /* Handled below. */ }
-    if (!valid || photo_url.length > 2048 || /\s/.test(photo_url)) throw new Error("Use a valid HTTPS photo URL.");
+    if (
+  !valid ||
+  photo_url.length > 2048 ||
+  /\s/.test(photo_url)
+) {
+  throw new Error("Use a valid HTTPS photo URL.");
+}
   }
   // Explicit fields prevent callers from changing ownership or system fields.
   return {

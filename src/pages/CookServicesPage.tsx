@@ -31,6 +31,48 @@ const emptyForm: CookServiceInput = {
   availability_note: "",
 };
 
+function getCookServiceValidationKey(
+  error: unknown,
+): string | null {
+  if (!(error instanceof Error)) {
+    return null;
+  }
+
+  const keys: Record<string, string> = {
+    "Choose a valid service type.":
+      "cookServices.validation.invalidServiceType",
+
+    "Choose a valid availability status.":
+      "cookServices.validation.invalidStatus",
+
+    "Enter a service title of up to 100 characters.":
+      "cookServices.validation.invalidTitle",
+
+    "Keep the description to 1,000 characters or fewer.":
+      "cookServices.validation.descriptionTooLong",
+
+    "Keep the availability note to 250 characters or fewer.":
+      "cookServices.validation.availabilityTooLong",
+
+    "Enter a valid, non-negative starting price.":
+      "cookServices.validation.invalidPrice",
+
+    "Choose a currency for the starting price.":
+      "cookServices.validation.currencyRequired",
+
+    "Enter a starting price or clear the currency.":
+      "cookServices.validation.priceRequired",
+
+    "Use a valid HTTPS photo URL.":
+      "cookServices.validation.invalidPhotoUrl",
+
+    "Sign in to manage your services.":
+      "cookServices.validation.signInRequired",
+  };
+
+  return keys[error.message] ?? null;
+}
+
 function getServicePhotoPath(
   publicUrl: string | null,
 ) {
@@ -204,13 +246,18 @@ const pendingPhotoPathRef =
 
       const data = await getMyCookServices();
       setServices(data);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : t("cookServices.messages.loadError"),
-      );
-    } finally {
+  } catch (err) {
+  console.error(
+    "Could not load cook services:",
+    err,
+  );
+
+  setError(
+    t(
+      "cookServices.messages.loadError",
+    ),
+  );
+} finally {
       setLoading(false);
     }
   }
@@ -317,11 +364,15 @@ async function handlePhotoUpload(
 
     if (userError) throw userError;
 
-    if (!user) {
-      throw new Error(
-        t("cookServices.messages.signInUpload"),
-      );
-    }
+if (!user) {
+  setError(
+    t(
+      "cookServices.messages.signInUpload",
+    ),
+  );
+
+  return;
+}
 
     /*
      * Keep the current temporary photo until the
@@ -390,15 +441,18 @@ async function handlePhotoUpload(
     setSuccess(
       t("cookServices.messages.photoUploaded"),
     );
-  } catch (err) {
-    setError(
-      err instanceof Error
-        ? err.message
-        : t(
-            "cookServices.messages.uploadError",
-          ),
-    );
-  } finally {
+} catch (err) {
+  console.error(
+    "Could not upload service photo:",
+    err,
+  );
+
+  setError(
+    t(
+      "cookServices.messages.uploadError",
+    ),
+  );
+} finally {
     setUploadingPhoto(false);
     event.target.value = "";
   }
@@ -475,13 +529,21 @@ const savedService = editingId
 
       setEditingId(null);
       setForm(emptyForm);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : t("cookServices.messages.saveError"),
-      );
-    } finally {
+   } catch (err) {
+  console.error(
+    "Could not save cook service:",
+    err,
+  );
+
+  const validationKey =
+    getCookServiceValidationKey(err);
+
+  setError(
+    validationKey
+      ? t(validationKey)
+      : t("cookServices.messages.saveError"),
+  );
+} finally {
       setSaving(false);
     }
   }
@@ -506,13 +568,18 @@ const savedService = editingId
       setSuccess(
         t("cookServices.messages.serviceArchived"),
       );
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : t("cookServices.messages.archiveError"),
-      );
-    }
+} catch (err) {
+  console.error(
+    "Could not archive cook service:",
+    err,
+  );
+
+  setError(
+    t(
+      "cookServices.messages.archiveError",
+    ),
+  );
+}
   }
 
   async function handleRestore(service: CookService) {
@@ -544,13 +611,18 @@ const savedService = editingId
       setSuccess(
         t("cookServices.messages.serviceRestored"),
       );
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : t("cookServices.messages.restoreError"),
-      );
-    }
+} catch (err) {
+  console.error(
+    "Could not restore cook service:",
+    err,
+  );
+
+  setError(
+    t(
+      "cookServices.messages.restoreError",
+    ),
+  );
+}
   }
 
   function getServiceTypeLabel(type: ServiceType) {

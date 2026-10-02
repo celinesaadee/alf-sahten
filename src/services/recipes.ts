@@ -3,8 +3,10 @@ import { supabase } from "../lib/supabase";
 export async function getPublishedRecipes() {
   const { data: recipes, error: recipesError } = await supabase
     .from("recipes")
-    .select("*")
-    .eq("status", "approved")
+.select(
+  "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+)
+.eq("status", "approved")
     .order("published_at", { ascending: false });
 
   if (recipesError) {
@@ -23,7 +25,7 @@ export async function getPublishedRecipes() {
   ];
 
   const { data: cooks, error: cooksError } = await supabase
-    .from("cook_profiles")
+    .from("public_cook_profiles")
     .select(
       "user_id, display_name, username, profile_image_url",
     )
@@ -35,14 +37,26 @@ export async function getPublishedRecipes() {
     throw cooksError;
   }
 
-  return recipes.map((recipe) => ({
-    ...recipe,
+  const approvedCookMap = new Map(
+    (cooks ?? []).map((cook) => [
+      cook.user_id,
+      cook,
+    ]),
+  );
 
-    cook:
-      cooks?.find(
-        (cook) => cook.user_id === recipe.creator_id,
-      ) ?? null,
-  }));
+  return recipes
+    .filter((recipe) =>
+      approvedCookMap.has(
+        recipe.creator_id,
+      ),
+    )
+    .map((recipe) => ({
+      ...recipe,
+      cook:
+        approvedCookMap.get(
+          recipe.creator_id,
+        ) ?? null,
+    }));
 }
 
 export async function getCookRecipes(userId: string) {
@@ -195,6 +209,7 @@ export async function updateRecipe(
     .update(updateData)
     .eq("id", recipeId)
     .eq("creator_id", user.id)
+    .in("status", ["draft", "changes_requested", "declined"])
     .select()
     .single();
 
@@ -441,11 +456,28 @@ export type RecipeModerationStatus =
   | "changes_requested";
 
 export async function getPendingRecipes() {
-  const { data: recipes, error: recipesError } = await supabase
-    .from("recipes")
-    .select("*")
-    .eq("status", "pending")
-    .order("created_at", { ascending: true });
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError) {
+    throw userError;
+  }
+
+  if (!user) {
+    throw new Error(
+      "You must be signed in to review recipes.",
+    );
+  }
+
+  const { data: recipes, error: recipesError } =
+    await supabase
+      .from("recipes")
+      .select("*")
+      .eq("status", "pending")
+      .neq("creator_id", user.id)
+      .order("created_at", { ascending: true });
 
   if (recipesError) {
     console.error(
@@ -494,6 +526,22 @@ export async function moderateRecipe(
   status: RecipeModerationStatus,
   adminNote: string,
 ) {
+
+  const {
+  data: { user },
+  error: userError,
+} = await supabase.auth.getUser();
+
+if (userError) {
+  throw userError;
+}
+
+if (!user) {
+  throw new Error(
+    "You must be signed in to moderate recipes.",
+  );
+}
+
   const updateData: {
     status: RecipeModerationStatus;
     admin_note: string | null;
@@ -512,11 +560,13 @@ export async function moderateRecipe(
   }
 
   const { data, error } = await supabase
-    .from("recipes")
-    .update(updateData)
-    .eq("id", recipeId)
-    .select()
-    .single();
+.from("recipes")
+.update(updateData)
+.eq("id", recipeId)
+.eq("status", "pending")
+.neq("creator_id", user.id)
+.select()
+.single();
 
   if (error) {
     console.error("Error moderating recipe:", error);
@@ -531,9 +581,11 @@ export async function getPublishedRecipeById(
 ) {
   const { data: recipe, error: recipeError } = await supabase
     .from("recipes")
-    .select("*")
-    .eq("id", recipeId)
-    .eq("status", "approved")
+.select(
+  "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+)
+.eq("id", recipeId)
+.eq("status", "approved")
     .maybeSingle();
 
   if (recipeError) {
@@ -541,6 +593,7 @@ export async function getPublishedRecipeById(
       "Error loading published recipe:",
       recipeError,
     );
+
     throw recipeError;
   }
 
@@ -549,11 +602,12 @@ export async function getPublishedRecipeById(
   }
 
   const { data: cook, error: cookError } = await supabase
-    .from("cook_profiles")
+    .from("public_cook_profiles")
     .select(
       "user_id, display_name, username, profile_image_url",
     )
     .eq("user_id", recipe.creator_id)
+    .eq("is_approved", true)
     .maybeSingle();
 
   if (cookError) {
@@ -561,11 +615,16 @@ export async function getPublishedRecipeById(
       "Error loading recipe cook:",
       cookError,
     );
+
     throw cookError;
+  }
+
+  if (!cook) {
+    return null;
   }
 
   return {
     ...recipe,
-    cook: cook ?? null,
+    cook,
   };
 }
