@@ -145,6 +145,8 @@ language: {
   "Desserts": "حلويات",
   "Soups": "شوربات",
   "Appetizers": "مقبلات",
+  "Side Dishes": "أطباق جانبية",
+Drinks: "مشروبات",
 },
 
     nav: {
