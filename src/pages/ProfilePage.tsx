@@ -183,22 +183,18 @@ const roleLabel =
   return (
     <main className="profile-page">
       <section className="profile-hero">
-        <div>
-          <p className="section-kicker">
-            {t("profile.kicker")}
-          </p>
+  <div>
+    <p className="section-kicker">
+      {t("profile.kicker")}
+    </p>
 
-          <h1>{t("profile.title")}</h1>
+    <h1>{t("profile.title")}</h1>
 
-          <p>{t("profile.subtitle")}</p>
-        </div>
+    <p>{t("profile.subtitle")}</p>
+  </div>
+</section>
 
-        <div className="profile-avatar">
-          <UserRound size={34} />
-        </div>
-      </section>
-
-      <section className="profile-content">
+<section className="profile-content">
   <section className="profile-dashboard-card">
     <div className="profile-dashboard-heading">
       <div className="profile-dashboard-icon">
@@ -207,8 +203,8 @@ const roleLabel =
 
       <div>
         <p className="section-kicker">
-  {t("profile.accountKicker")}
-</p>
+          {t("profile.accountKicker")}
+        </p>
 
         <h2>
           {name ||
@@ -217,17 +213,19 @@ const roleLabel =
 
         <p>{roleLabel}</p>
 
-{followerCount !== null && (
-  <div className="profile-follower-count">
-    <strong>{followerCount}</strong>
+        {followerCount !== null && (
+          <div className="profile-follower-count">
+            <strong>
+              {followerCount}
+            </strong>
 
-    <span>
-      {followerCount === 1
-  ? t("profile.follower")
-  : t("profile.followers")}
-    </span>
-  </div>
-)}
+            <span>
+              {followerCount === 1
+                ? t("profile.follower")
+                : t("profile.followers")}
+            </span>
+          </div>
+        )}
       </div>
     </div>
 
@@ -240,12 +238,12 @@ const roleLabel =
 
         <div>
           <strong>
-  {t("profile.settingsTitle")}
-</strong>
+            {t("profile.settingsTitle")}
+          </strong>
 
-<span>
-  {t("profile.settingsText")}
-</span>
+          <span>
+            {t("profile.settingsText")}
+          </span>
         </div>
 
         <ArrowRight size={17} />
@@ -263,8 +261,8 @@ const roleLabel =
           </strong>
 
           <span>
-  {t("profile.requestsText")}
-</span>
+            {t("profile.requestsText")}
+          </span>
         </div>
 
         <ArrowRight size={17} />
@@ -275,55 +273,44 @@ const roleLabel =
   <aside className="profile-side-card">
     <ChefHat size={27} />
 
-<p className="section-kicker">
-  {t("profile.cookSpace")}
-</p>
+    <p className="section-kicker">
+      {t("profile.cookSpace")}
+    </p>
 
-<h2>
-  {t("profile.kitchenTitle")}
-</h2>
-
-<p>
-  {t("profile.kitchenText")}
-</p>
-   {profile?.role === "admin" && (
-  <Link
-    to="/admin"
-    className="profile-cook-link"
-  >
-    <ShieldCheck size={17} />
-
-    <span>
-      {t("profile.adminDashboard", {
-        defaultValue: "Admin dashboard",
-      })}
-    </span>
-
-    <ArrowRight size={16} />
-  </Link>
-)}
-
-{isApprovedCook ||
-profile?.role === "admin" ? (
-      <>
-
-      {cookUsername && (
-  <Link
-    to={`/cooks/${cookUsername}`}
-    className="profile-cook-link"
-  >
-    <UserRound size={17} />
-
-    <span>
-      {t("profile.viewPublicProfile", {
+    <h2>
+      {t("profile.cookWorkspace", {
         defaultValue:
-          "View public profile",
+          "Cook workspace",
       })}
-    </span>
+    </h2>
 
-    <ArrowRight size={16} />
-  </Link>
-)}
+    <p>
+      {t("profile.kitchenText")}
+    </p>
+
+    {isApprovedCook ||
+    profile?.role === "admin" ? (
+      <>
+        {cookUsername && (
+          <Link
+            to={`/cooks/${cookUsername}`}
+            className="profile-cook-link"
+          >
+            <UserRound size={17} />
+
+            <span>
+              {t(
+                "profile.viewPublicProfile",
+                {
+                  defaultValue:
+                    "View public profile",
+                },
+              )}
+            </span>
+
+            <ArrowRight size={16} />
+          </Link>
+        )}
 
         <Link
           to="/cook/recipes"
@@ -332,7 +319,9 @@ profile?.role === "admin" ? (
           <ChefHat size={17} />
 
           <span>
-            {t("cookDashboard.myRecipes")}
+            {t(
+              "cookDashboard.myRecipes",
+            )}
           </span>
 
           <ArrowRight size={16} />
@@ -360,7 +349,9 @@ profile?.role === "admin" ? (
           <ChefHat size={17} />
 
           <span>
-            {t("cookDashboard.requests")}
+            {t(
+              "cookDashboard.requests",
+            )}
           </span>
 
           <ArrowRight size={16} />
@@ -381,14 +372,50 @@ profile?.role === "admin" ? (
       </Link>
     )}
 
-    <button
-      type="button"
-      className="profile-signout"
-      onClick={handleSignOut}
-    >
-      <LogOut size={17} />
-      {t("profile.signOut")}
-    </button>
+    {profile?.role === "admin" && (
+      <div className="profile-admin-tools">
+        <div className="profile-admin-tools-heading">
+          <ShieldCheck size={17} />
+
+          <strong>
+            {t("profile.adminTools", {
+              defaultValue:
+                "Admin tools",
+            })}
+          </strong>
+        </div>
+
+        <Link
+          to="/admin"
+          className="profile-cook-link"
+        >
+          <ShieldCheck size={17} />
+
+          <span>
+            {t(
+              "profile.adminDashboard",
+              {
+                defaultValue:
+                  "Admin dashboard",
+              },
+            )}
+          </span>
+
+          <ArrowRight size={16} />
+        </Link>
+      </div>
+    )}
+
+    <div className="profile-signout-area">
+      <button
+        type="button"
+        className="profile-signout"
+        onClick={handleSignOut}
+      >
+        <LogOut size={17} />
+        {t("profile.signOut")}
+      </button>
+    </div>
   </aside>
 </section>
     </main>

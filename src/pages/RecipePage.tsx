@@ -846,25 +846,28 @@ time:
             )}
           </div>
 
-          <div className="recipe-shopping-card">
-            <ShoppingBasket
-              size={21}
-            />
+          <Link
+  to="/kitchen"
+  className="recipe-shopping-card"
+>
+  <ShoppingBasket
+    size={21}
+  />
 
-            <div>
-              <strong>
-                {t(
-                  "recipe.missingSomething",
-                )}
-              </strong>
+  <div>
+    <strong>
+      {t(
+        "recipe.missingSomething",
+      )}
+    </strong>
 
-              <p>
-                {t(
-                  "recipe.shoppingText",
-                )}
-              </p>
-            </div>
-          </div>
+    <p>
+      {t(
+        "recipe.shoppingText",
+      )}
+    </p>
+  </div>
+</Link>
         </div>
 
         <div className="recipe-method-column">

@@ -555,10 +555,14 @@ if (!cleanDisplayName) {
         </h1>
 
         <p>
-          {t(
-            "creatorApplication.heroText",
-          )}
-        </p>
+  {approved
+    ? t(
+        "creatorApplication.approvedHeroText",
+      )
+    : t(
+        "creatorApplication.heroText",
+      )}
+</p>
       </section>
 
       <section className="creator-application-content">

@@ -4,45 +4,132 @@ stats: {
   completed: "Terminées",
   accepted: "Acceptées",
   pending: "En attente","total":"Total"},
-    home: {
-  noPublishedRecipes: "Aucune recette publiée pour le moment.",
-  recipeLoadError: "Impossible de charger les recettes. Veuillez réessayer.",
-  loadingRecipes: "Chargement des recettes…",
-      "eyebrow": "Cuisinez avec ce que vous avez déjà",
-      "title": "Qu’y a-t-il dans votre cuisine ?",
-      "subtitle": "Moins de gaspillage. Plus de saveurs. Des idées pour cuisiner au quotidien.",
-      "ingredientLabel": "Ingrédient",
-      "placeholder": "Ajoutez un ingrédient, par ex. tomates",
-      "add": "Ajouter",
-      "loading": "Chargement de votre cuisine…",
-      "remove": "Retirer {{ingredient}}",
-      "emptyKitchen": "Ajoutez des ingrédients pour trouver quoi cuisiner.",
-      "find": "Trouver des recettes",
-      "note": "De votre réfrigérateur à votre table.",
-      "heroAlt": "Pâtes crémeuses aux champignons",
-      "handNote": "Des ingrédients simples.\nDe bons petits plats.\nAlf sahten.",
-      "start": "À vos fourneaux",
-      "matches": "Avec ce que vous avez",
-      "inspiration": "De bonnes idées à cuisiner",
-      "more": "Voir plus de recettes",
-      "ready": "Vous avez tout",
-      "missing": "Ingrédients manquants : {{count}}",
-      "by": "Par {{creator}}",
-      "creatorKicker": "Des recettes et des histoires",
-      "creatorTitle": "Invitez votre cuisine à notre table",
-      "creatorText": "Une recette à partager ? Proposez votre candidature pour devenir créateur Alf Sahten et partager les plats et les histoires de votre cuisine.",
-      "creatorAction": "Devenir créateur",
-      "categoryKicker": "Un petit goût de chez nous",
-      "categoryTitle": "Explorez les saveurs libanaises",
-      "categoryText": "Du petit-déjeuner aux plats maison, trouvez une idée pour toutes les envies.",
-      "lebanese": "Saveurs libanaises",
-      "breakfast": "Petit-déjeuner",
-      "homeCooking": "Cuisine maison",
-      "desserts": "Desserts",
-      "explore": "Explorer les recettes",
-      "footerText": "Cuisinez avec ce que vous avez. Découvrez la cuisine du Liban.",
-      "footerNav": "Navigation de bas de page",
-      "footerMessage": "Cuisiner plus. Gaspiller moins. Partager la table."
+   home: {
+  noPublishedRecipes:
+    "Aucune recette publiée pour le moment.",
+
+  recipeLoadError:
+    "Impossible de charger les recettes. Veuillez réessayer.",
+
+  loadingRecipes:
+    "Chargement des recettes…",
+
+  eyebrow:
+    "Cuisinez avec ce que vous avez déjà",
+
+  title:
+    "Qu’y a-t-il dans votre cuisine ?",
+
+  subtitle:
+    "Moins de gaspillage. Plus de saveurs. Des idées pour cuisiner au quotidien.",
+
+  ingredientLabel:
+    "Ingrédient",
+
+  placeholder:
+    "Ajoutez un ingrédient, par ex. tomates",
+
+  add:
+    "Ajouter",
+
+  loading:
+    "Chargement de votre cuisine…",
+
+  remove:
+    "Retirer {{ingredient}}",
+
+  emptyKitchen:
+    "Ajoutez des ingrédients pour trouver quoi cuisiner.",
+
+  find:
+    "Trouver des recettes",
+
+  note:
+    "De votre réfrigérateur à votre table.",
+
+  heroAlt:
+    "Pâtes crémeuses aux champignons",
+
+  handNote:
+    "Des ingrédients simples.\nDe bons petits plats.\nAlf sahten.",
+
+  start:
+    "À vos fourneaux",
+
+  matches:
+    "Avec ce que vous avez",
+
+  inspiration:
+    "De bonnes idées à cuisiner",
+
+  more:
+    "Voir plus de recettes",
+
+  ready:
+    "Vous avez tout",
+
+  missing:
+    "Ingrédients manquants : {{count}}",
+
+  by:
+    "Par {{creator}}",
+
+  creatorKicker:
+    "Rencontrez les Cooks",
+
+  creatorTitle:
+    "La bonne cuisine commence par de vraies personnes.",
+
+  creatorText:
+    "Découvrez des recettes partagées par des Cooks avec leur propre style, leurs spécialités et leur histoire. Suivez ceux que vous aimez et découvrez davantage de leurs créations.",
+
+  creatorAction:
+    "Devenir Cook",
+
+  exploreRecipes:
+    "Découvrir les recettes",
+
+  cooksBadge:
+    "Recettes de vrais Cooks",
+
+  cooksImageAlt:
+    "Cook préparant un plat dans une cuisine",
+
+  categoryKicker:
+    "Un petit goût de chez nous",
+
+  categoryTitle:
+    "Explorez les saveurs libanaises",
+
+  categoryText:
+    "Du petit-déjeuner aux plats maison, trouvez une idée pour toutes les envies.",
+
+  lebanese:
+    "Saveurs libanaises",
+
+  breakfast:
+    "Petit-déjeuner",
+
+  homeCooking:
+    "Cuisine maison",
+
+  desserts:
+    "Desserts",
+
+  explore:
+    "Explorer les recettes",
+
+  footerText:
+    "Cuisinez avec ce que vous avez. Découvrez la cuisine du Liban.",
+
+  footerNav:
+    "Navigation de bas de page",
+
+  footerMessage:
+    "Cuisiner plus. Gaspiller moins. Partager la table.",
+
+    serves:
+  "Pour {{count}} personnes",
 },
 
     language: {
@@ -96,7 +183,7 @@ auth: {
   email: "E-mail",
   emailPlaceholder: "vous@exemple.com",
   password: "Mot de passe",
-  passwordPlaceholder: "Au moins 6 caractères",
+  passwordPlaceholder: "Au moins 8 caractères",
 
   showPassword: "Afficher le mot de passe",
   hidePassword: "Masquer le mot de passe",
@@ -194,7 +281,7 @@ creatorApplication: {
 
   approvedCook: "Cook approuvé",
   approvedText:
-    "Votre profil Cook peut être affiché publiquement.",
+    "Votre profil Cook est en ligne et visible par tous.",
 
   approvalPending:
     "Approbation en attente",
@@ -262,6 +349,9 @@ creatorApplication: {
 
   recipes: "Recettes",
   followers: "Abonnés",
+
+  approvedHeroText:
+  "Gérez la façon dont votre profil Cook apparaît aux utilisateurs d’Alf Sahten.",
 },
 
     common: {
@@ -284,7 +374,7 @@ discover: {
     "Recherchez des recettes, découvrez les classiques libanais et trouvez quoi cuisiner aujourd’hui.",
 
   searchPlaceholder:
-    "Rechercher un plat, un ingrédient ou un créateur...",
+    "Rechercher un plat, un ingrédient ou un Cook...",
 
   all: "Tout",
   lebanese: "Libanais",
@@ -443,6 +533,12 @@ followers: "Abonnés",
   kitchenTitle: "Votre cuisine",
   kitchenText:
     "Gérez vos recettes, vos services et vos demandes.",
+
+    cookWorkspace:
+  "Espace Cook",
+
+adminTools:
+  "Outils administrateur",
 },
 
 settings: {
@@ -762,7 +858,7 @@ recipe: {
 
       missingSomething: "Il vous manque quelque chose ?",
       shoppingText:
-        "Ajoutez les ingrédients manquants à votre liste de courses Alf Sahten.",
+  "Vérifiez ce que vous avez déjà dans Ma Cuisine avant de faire vos courses.",
 
       methodKicker: "Étape par étape",
       method: "Préparation",
@@ -1192,9 +1288,11 @@ messageTooLong:
     myRecipes: {
   eyebrow: "Tableau de bord",
   title: "Mes recettes",
-  subtitle:
-    "Créez des recettes, enregistrez vos brouillons et soumettez-les pour approbation.",
-  createRecipe: "Créer une recette",
+
+subtitle:
+  "Créez des recettes, enregistrez des brouillons et gérez vos recettes.",
+
+createRecipe: "Créer une recette",
 
   noRecipesTitle: "Aucune recette pour le moment",
   noRecipesText:

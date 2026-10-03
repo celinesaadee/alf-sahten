@@ -1,44 +1,131 @@
 const en = {
   translation: {
     home: {
-  noPublishedRecipes: "No recipes published yet.",
-  recipeLoadError: "We couldn't load recipes. Please try again.",
-  loadingRecipes: "Loading recipes…",
-      "eyebrow": "Cook with what you already have",
-      "title": "What’s in your kitchen?",
-      "subtitle": "Less waste. More flavour. Better ideas for everyday cooking.",
-      "ingredientLabel": "Ingredient",
-      "placeholder": "Add one ingredient, e.g. tomatoes",
-      "add": "Add",
-      "loading": "Loading your kitchen…",
-      "remove": "Remove {{ingredient}}",
-      "emptyKitchen": "Add ingredients to see what you can cook.",
-      "find": "Find recipes",
-      "note": "From your fridge to the table.",
-      "heroAlt": "Creamy mushroom pasta",
-      "handNote": "Simple ingredients.\nGood food.\nAlf sahten.",
-      "start": "Start cooking",
-      "matches": "Made with what you have",
-      "inspiration": "Something good to cook",
-      "more": "See more recipes",
-      "ready": "You have everything",
-      "missing": "Ingredients missing: {{count}}",
-      "by": "By {{creator}}",
-      "creatorKicker": "Recipes with a story",
-      "creatorTitle": "Bring your kitchen to our table",
-      "creatorText": "Have a recipe worth sharing? Apply to become an Alf Sahten creator and share the dishes and stories from your kitchen.",
-      "creatorAction": "Become a creator",
-      "categoryKicker": "A little taste of home",
-      "categoryTitle": "Explore Lebanese favourites",
-      "categoryText": "From breakfast to a home-cooked meal, find something for every appetite.",
-      "lebanese": "Lebanese favourites",
-      "breakfast": "Breakfast",
-      "homeCooking": "Home cooking",
-      "desserts": "Desserts",
-      "explore": "Explore recipes",
-      "footerText": "Cook with what you have. Discover what Lebanon cooks.",
-      "footerNav": "Footer navigation",
-      "footerMessage": "Cook more. Waste less. Share the table."
+  noPublishedRecipes:
+    "No recipes published yet.",
+
+  recipeLoadError:
+    "We couldn't load recipes. Please try again.",
+
+  loadingRecipes:
+    "Loading recipes…",
+
+  eyebrow:
+    "Cook with what you already have",
+
+  title:
+    "What’s in your kitchen?",
+
+  subtitle:
+    "Less waste. More flavour. Better ideas for everyday cooking.",
+
+  ingredientLabel:
+    "Ingredient",
+
+  placeholder:
+    "Add one ingredient, e.g. tomatoes",
+
+  add:
+    "Add",
+
+  loading:
+    "Loading your kitchen…",
+
+  remove:
+    "Remove {{ingredient}}",
+
+  emptyKitchen:
+    "Add ingredients to see what you can cook.",
+
+  find:
+    "Find recipes",
+
+  note:
+    "From your fridge to the table.",
+
+  heroAlt:
+    "Creamy mushroom pasta",
+
+  handNote:
+    "Simple ingredients.\nGood food.\nAlf sahten.",
+
+  start:
+    "Start cooking",
+
+  matches:
+    "Made with what you have",
+
+  inspiration:
+    "Something good to cook",
+
+  more:
+    "See more recipes",
+
+  ready:
+    "You have everything",
+
+  missing:
+    "Ingredients missing: {{count}}",
+
+  by:
+    "By {{creator}}",
+
+  creatorKicker:
+    "Meet the cooks",
+
+  creatorTitle:
+    "Good food starts with real people.",
+
+  creatorText:
+    "Discover recipes shared by cooks with their own style, specialties and stories. Follow the ones you love and find more of what they create.",
+
+  creatorAction:
+    "Become a Cook",
+
+  exploreRecipes:
+    "Explore recipes",
+
+    explore:
+  "Explore",
+
+  cooksBadge:
+    "Recipes by real cooks",
+
+  cooksImageAlt:
+    "Cook preparing food in a kitchen",
+
+  categoryKicker:
+    "A little taste of home",
+
+  categoryTitle:
+    "Explore Lebanese favourites",
+
+  categoryText:
+    "From breakfast to a home-cooked meal, find something for every appetite.",
+
+  lebanese:
+    "Lebanese favourites",
+
+  breakfast:
+    "Breakfast",
+
+  homeCooking:
+    "Home cooking",
+
+  desserts:
+    "Desserts",
+
+  footerText:
+    "Cook with what you have. Discover what Lebanon cooks.",
+
+  footerNav:
+    "Footer navigation",
+
+  footerMessage:
+    "Cook more. Waste less. Share the table.",
+
+    serves:
+  "Serves {{count}}",
 },
 
     language: {
@@ -92,7 +179,7 @@ auth: {
   email: "Email",
   emailPlaceholder: "you@example.com",
   password: "Password",
-  passwordPlaceholder: "At least 6 characters",
+ passwordPlaceholder: "At least 8 characters",
 
   showPassword: "Show password",
   hidePassword: "Hide password",
@@ -186,7 +273,7 @@ creatorApplication: {
 
   approvedCook: "Approved Cook",
   approvedText:
-    "Your Cook profile can be shown publicly.",
+  "Your Cook profile is live and visible to everyone.",
 
   approvalPending: "Approval pending",
   pendingText:
@@ -248,6 +335,9 @@ creatorApplication: {
 
   recipes: "Recipes",
   followers: "Followers",
+
+  approvedHeroText:
+  "Manage how your Cook profile appears to people on Alf Sahten.",
 },
 
     common: {
@@ -424,6 +514,12 @@ followers: "Followers",
   kitchenTitle: "Your kitchen",
   kitchenText:
     "Manage your recipes, services and requests.",
+
+  cookWorkspace:
+  "Cook workspace",
+
+adminTools:
+  "Admin tools",
 },
 
 settings: {
@@ -737,7 +833,7 @@ recipe: {
 
       missingSomething: "Missing something?",
       shoppingText:
-        "Add anything you still need to your Alf Sahten shopping list.",
+  "Check what you already have in My Kitchen before you shop.",
 
       methodKicker: "Step by step",
       method: "Method",
@@ -1162,7 +1258,7 @@ messageTooLong:
   eyebrow: "Cook dashboard",
   title: "My Recipes",
   subtitle:
-    "Create recipes, save drafts and submit them for approval.",
+  "Create recipes, save drafts and manage your recipes.",
   createRecipe: "Create recipe",
 
   noRecipesTitle: "No recipes yet",

@@ -61,16 +61,18 @@ function SavedPage() {
           {t("saved.subtitle")}
         </p>
 
-        <div className="saved-count">
-          <Bookmark size={18} />
+        {savedRecipes.length > 0 && (
+  <div className="saved-count">
+    <Bookmark size={18} />
 
-          <span>
-            {savedRecipes.length}{" "}
-            {savedRecipes.length === 1
-              ? t("common.recipe")
-              : t("common.recipes")}
-          </span>
-        </div>
+    <span>
+      {savedRecipes.length}{" "}
+      {savedRecipes.length === 1
+        ? t("common.recipe")
+        : t("common.recipes")}
+    </span>
+  </div>
+)}
       </section>
 
       <section className="saved-content">

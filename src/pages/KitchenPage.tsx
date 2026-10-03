@@ -489,28 +489,7 @@ function KitchenPage() {
                 },
               )}
             </div>
-          ) : (
-            <div className="empty-kitchen">
-              <ChefHat
-                size={30}
-                strokeWidth={1.5}
-              />
-
-              <div>
-                <strong>
-                  {t(
-                    "kitchen.emptyTitle",
-                  )}
-                </strong>
-
-                <span>
-                  {t(
-                    "kitchen.emptyText",
-                  )}
-                </span>
-              </div>
-            </div>
-          )}
+          ) : null}
 
           <div className="suggested-ingredients">
             <span className="suggestion-label">

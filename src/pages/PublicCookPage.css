@@ -711,3 +711,13 @@ html[dir="rtl"] .public-cook-recipe-content h3,
 html[dir="rtl"] .public-cook-service-content h3 {
   line-height: 1.45;
 }
+
+/* =========================
+   PUBLIC COOK MOBILE RECIPES
+========================= */
+
+@media (max-width: 680px) {
+  .public-cook-recipe-image {
+    aspect-ratio: 16 / 10;
+  }
+}

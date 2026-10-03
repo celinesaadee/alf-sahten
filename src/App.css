@@ -1678,6 +1678,148 @@ a {
   line-height: 1.6;
 }
 
+/* =========================
+   COOKS SECTION
+========================= */
+
+.home-page .home-cooks-section {
+  width: min(1280px, 90%);
+  margin: 72px auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 70px;
+  padding: 54px;
+  background: #f4efe3;
+  border-radius: 30px;
+}
+
+.home-page .home-cooks-visual {
+  min-width: 0;
+}
+
+.home-page .home-cooks-photo-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  min-height: 420px;
+}
+
+.home-page .home-cooks-photo {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.home-page .home-cooks-badge {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 12px 17px;
+  border-radius: 999px;
+
+  background: rgba(250, 247, 240, 0.94);
+  backdrop-filter: blur(10px);
+
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 700;
+
+  box-shadow:
+    0 10px 30px
+    rgba(36, 60, 50, 0.12);
+}
+
+.home-page .home-cooks-content {
+  max-width: 500px;
+}
+
+.home-page .home-cooks-content h2 {
+  margin: 10px 0 20px;
+}
+
+.home-page .home-cooks-intro {
+  margin: 0;
+  max-width: 480px;
+
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.home-page .home-cooks-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+
+  margin-top: 30px;
+}
+
+.home-page .home-cooks-secondary {
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-page .home-cooks-secondary:hover {
+  text-decoration: underline;
+}
+
+[dir="rtl"]
+.home-page
+.home-cooks-badge {
+  left: auto;
+  right: 22px;
+}
+
+@media (max-width: 800px) {
+  .home-page .home-cooks-section {
+    width: calc(100% - 36px);
+    margin: 42px auto;
+
+    grid-template-columns: 1fr;
+    gap: 28px;
+
+    padding: 18px 18px 28px;
+    border-radius: 22px;
+  }
+
+  .home-page .home-cooks-photo-wrap {
+    min-height: 260px;
+    border-radius: 18px;
+  }
+
+  .home-page .home-cooks-photo {
+    min-height: 260px;
+  }
+
+  .home-page .home-cooks-content {
+    padding: 4px 4px 0;
+  }
+
+  .home-page .home-cooks-content h2 {
+    font-size: 30px;
+  }
+
+  .home-page .home-cooks-intro {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .home-page .home-cooks-actions {
+    margin-top: 24px;
+    gap: 16px;
+  }
+}
+
 
 /* MOBILE APP NAVIGATION */
 
@@ -6193,4 +6335,214 @@ html[dir="rtl"] .settings-hero h1,
 html[dir="rtl"] .profile-hero h1,
 html[dir="rtl"] .creator-application-hero h1 {
   line-height: 1.35;
+}
+
+/* =========================
+   DISCOVER MOBILE POLISH
+========================= */
+
+@media (max-width: 900px) {
+  .discover-categories {
+    width: calc(100% + 22px);
+    margin-inline-end: -22px;
+    padding-inline-end: 22px;
+    padding-bottom: 6px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 9px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .discover-categories::-webkit-scrollbar {
+    display: none;
+  }
+
+  .discover-categories button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 900px) {
+  .discover-kitchen-banner {
+    margin-bottom: 0;
+  }
+
+  .discover-results {
+    padding-top: 34px;
+  }
+}
+
+@media (max-width: 900px) {
+  .discover-results-heading .section-kicker {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .discover-recipe-image {
+    height: 220px;
+  }
+
+  .discover-recipe-content {
+    padding: 16px 17px 17px;
+  }
+
+  .discover-recipe-content h3 {
+    margin: 8px 0 7px;
+    font-size: 21px;
+  }
+
+  .discover-recipe-content > p {
+    min-height: 0;
+    margin: 0 0 14px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .discover-card-footer {
+    padding-top: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .discover-hero {
+    padding-bottom: 24px;
+  }
+
+  .discover-kitchen-banner {
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .kitchen-results-heading > span {
+    margin-top: 6px;
+    color: #6f7168;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
+
+/* =========================
+   PROFILE WORKSPACE SECTIONS
+========================= */
+
+.profile-admin-tools {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.profile-admin-tools-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.profile-admin-tools-heading strong {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}
+
+.profile-signout-area {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* Keep Settings actions clear of the mobile bottom nav */
+
+@media (max-width: 800px) {
+  .settings-page {
+    padding-bottom: 120px;
+  }
+}
+
+@media (max-width: 760px) {
+  .my-service-requests-page {
+    padding-bottom: 120px;
+  }
+
+  .my-service-requests-filters {
+    width: calc(100% + 15px);
+    margin-inline-end: -15px;
+    padding-inline-end: 15px;
+  }
+}
+
+/* =========================
+   COOK SERVICES MOBILE POLISH
+========================= */
+
+@media (max-width: 760px) {
+  .cook-services-page {
+    padding-bottom: 125px;
+  }
+
+  .cook-service-card-actions {
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+}
+
+/* =========================
+   AUTH FORGOT PASSWORD LINK
+========================= */
+
+.auth-forgot-password {
+  width: fit-content;
+  align-self: flex-end;
+
+  margin-top: -2px;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: #355a43;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+  appearance: none;
+}
+
+.auth-forgot-password:hover {
+  text-decoration: underline;
+}
+
+.auth-forgot-password:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* RESET PASSWORD SPACING */
+
+.auth-form-wrap h2 + .auth-form {
+  margin-top: 28px;
+}
+
+/* =========================
+   RTL DIRECTIONAL ARROWS
+========================= */
+
+html[dir="rtl"] .profile-cook-link > svg:last-child,
+html[dir="rtl"] .saved-empty-state > a svg {
+  transform: rotate(180deg);
 }

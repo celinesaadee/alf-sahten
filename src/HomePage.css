@@ -396,6 +396,7 @@
 
     display: -webkit-box;
     -webkit-line-clamp: 2;
+line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -535,5 +536,178 @@
 
   .home-page .categories-section {
     padding-top: 28px;
+  }
+}
+
+/* SHOPPING LIST BANNER */
+
+.shopping-list-banner-section {
+  padding: 0 5%;
+  margin: 42px 0 58px;
+}
+
+.shopping-list-banner {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.shopping-list-banner-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 700px) {
+  .shopping-list-banner-section {
+    padding: 0 18px;
+    margin: 30px 0 42px;
+  }
+
+  .shopping-list-banner {
+    border-radius: 14px;
+  }
+}
+
+.home-recipe-details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 28px;
+  margin-top: 4px;
+}
+
+.home-recipe-category,
+.home-recipe-servings {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.home-recipe-category {
+  background: #eef0e4;
+  color: #354a2d;
+  font-weight: 600;
+}
+
+.home-recipe-servings {
+  background: #f5f1e8;
+  color: #777168;
+}
+
+.home-page .recipe-content h3 {
+  margin-bottom: 12px;
+}
+
+/* =========================
+   MOBILE RECIPE CAROUSEL
+========================= */
+
+@media (max-width: 700px) {
+  .home-page .recipe-grid {
+    display: flex;
+    gap: 14px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 10px;
+
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+  }
+
+  .home-page .recipe-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-page .recipe-card {
+    flex: 0 0 82%;
+    max-width: 340px;
+
+    scroll-snap-align: start;
+  }
+}
+
+/* Tighten Home sections on mobile */
+
+@media (max-width: 700px) {
+  .home-page .recipes-section {
+    padding-bottom: 30px;
+  }
+
+  .home-page .home-cooks-section {
+    margin-top: 24px;
+  }
+}
+
+/* =========================
+   MOBILE COOK SECTION CLEANUP
+========================= */
+
+@media (max-width: 700px) {
+  .home-page .home-cooks-section {
+    width: calc(100% - 20px);
+    margin: 24px auto 38px;
+    padding: 14px;
+    border-radius: 24px;
+  }
+
+  .home-page .home-cooks-visual {
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .home-page .home-cooks-visual::before,
+  .home-page .home-cooks-visual::after {
+    display: none;
+  }
+
+  .home-page .home-cooks-photo-wrap {
+    min-height: 230px;
+    height: 230px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .home-page .home-cooks-photo {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+  }
+
+  .home-page .home-cooks-content {
+    padding: 24px 8px 12px;
+  }
+
+  .home-page .home-cooks-badge {
+    left: 12px;
+    bottom: 12px;
+  }
+
+  [dir="rtl"] .home-page .home-cooks-badge {
+    left: auto;
+    right: 12px;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-page .home-cooks-section {
+    gap: 0;
+  }
+
+  .home-page .home-cooks-content {
+    padding: 26px 8px 12px;
   }
 }

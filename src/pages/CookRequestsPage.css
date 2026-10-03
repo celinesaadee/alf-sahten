@@ -480,3 +480,30 @@ html[dir="rtl"] .cook-request-message {
     grid-column: 1 / -1;
   }
 }
+
+@media (max-width: 760px) {
+  .cook-requests-page {
+    padding-bottom: 120px;
+  }
+
+  .cook-requests-filters {
+    width: calc(100% + 15px);
+    margin-inline-end: -15px;
+    padding-inline-end: 15px;
+
+    overflow-x: auto;
+    flex-wrap: nowrap;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cook-requests-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cook-requests-filters button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}

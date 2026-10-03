@@ -178,11 +178,13 @@ async function handleDeleteRecipe(recipe: Recipe) {
       </div>
     )}
 
-    <span
-      className={`recipe-status recipe-status-${recipe.status}`}
-    >
-      {getStatusLabel(recipe.status)}
-    </span>
+    {recipe.status !== "approved" && (
+  <span
+    className={`recipe-status recipe-status-${recipe.status}`}
+  >
+    {getStatusLabel(recipe.status)}
+  </span>
+)}
   </div>
 
   <div className="my-recipe-card-content">

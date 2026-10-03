@@ -439,3 +439,49 @@ html[dir="rtl"] .service-request-form textarea {
     border-radius: 22px;
   }
 }
+
+/* =========================
+   SERVICE REQUEST CTA
+========================= */
+
+.service-request-actions .primary-button {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 22px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: 1px solid #214f3d;
+  border-radius: 999px;
+
+  background: #214f3d;
+  color: #ffffff;
+
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 750;
+
+  cursor: pointer;
+  appearance: none;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.service-request-actions .primary-button:hover:not(:disabled) {
+  background: #183d2e;
+  border-color: #183d2e;
+}
+
+.service-request-actions .primary-button:disabled {
+  background: #8fa093;
+  border-color: #8fa093;
+  color: #ffffff;
+  opacity: 0.65;
+  cursor: not-allowed;
+}
