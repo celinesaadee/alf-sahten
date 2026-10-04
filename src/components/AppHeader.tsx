@@ -13,6 +13,8 @@ import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
+import NotificationBell from "./NotificationBell";
+
 function AppHeader() {
   const { t, i18n } = useTranslation();
   const { user, signOut } = useAuth();
@@ -89,6 +91,8 @@ function AppHeader() {
 >
   <UserRound size={20} strokeWidth={1.8} />
 </NavLink>
+
+        <NotificationBell />
 
         <div className="header-menu-wrap">
   <button

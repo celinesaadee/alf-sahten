@@ -310,7 +310,7 @@ function AuthPage() {
                       ? "current-password"
                       : "new-password"
                   }
-                  minLength={8}
+                  minLength={mode === "signup" ? 8 : 1}
                   required
                 />
 

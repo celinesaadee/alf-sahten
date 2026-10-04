@@ -146,7 +146,7 @@ stats: {
   "Soups": "Soupes",
   "Appetizers": "Entrées",
   "Side Dishes": "Accompagnements",
-Drinks: "Boissons",
+   Drinks: "Boissons",
 },
 
     nav: {

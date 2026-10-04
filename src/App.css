@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --cream: #f7f3ea;
   --cream-deep: #eee8dc;
   --green: #26361d;
@@ -6546,3 +6546,8 @@ html[dir="rtl"] .profile-cook-link > svg:last-child,
 html[dir="rtl"] .saved-empty-state > a svg {
   transform: rotate(180deg);
 }
+@media (max-width: 600px) {
+  .recipe-body { grid-template-columns: minmax(0, 1fr); }
+  .recipe-section-heading { flex-wrap: wrap; }
+}
+

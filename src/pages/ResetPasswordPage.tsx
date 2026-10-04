@@ -87,7 +87,7 @@ function ResetPasswordPage() {
 
     setMessage("");
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       setMessage(
         t("resetPassword.tooShort"),
       );
