@@ -1,5 +1,10 @@
 const en = {
   translation: {
+    unitConversion: {
+      label: "Measurements", original: "Original", metric: "Metric", us: "US units",
+      note: "Compatible weights and volumes only. Cups and spoons stay as written; volume conversions use US fluid ounces.",
+      units: { g: "g", kg: "kg", ml: "ml", l: "L", oz: "oz", lb: "lb", usFluidOunces: "US fl oz" },
+    },
     recipeLanguageDetection: {
       detected: "Language suggested from the caption. Check it before submitting.",
       uncertain: "Could not confidently detect the caption language. Choose the original recipe language.",

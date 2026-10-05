@@ -1,5 +1,10 @@
 const fr = {
   translation: {
+    unitConversion: {
+      label: "Mesures", original: "Originales", metric: "Métriques", us: "Unités américaines",
+      note: "Poids et volumes compatibles uniquement. Les tasses et cuillères restent inchangées ; les volumes utilisent l’once liquide américaine.",
+      units: { g: "g", kg: "kg", ml: "ml", l: "L", oz: "oz", lb: "lb", usFluidOunces: "fl oz US" },
+    },
     recipeLanguageDetection: {
       detected: "Langue suggérée d’après la légende. Vérifiez-la avant l’envoi.",
       uncertain: "La langue de la légende est incertaine. Choisissez la langue originale de la recette.",

@@ -1,0 +1,3 @@
+.recipe-unit-control { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0; }
+.recipe-unit-control select { max-width: 100%; padding: 8px 12px; border: 1px solid #d8ded7; border-radius: 8px; background: #fff; color: inherit; font: inherit; }
+.recipe-unit-control small { flex-basis: 100%; line-height: 1.5; opacity: .8; }

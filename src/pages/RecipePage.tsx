@@ -33,6 +33,8 @@ import {
 } from "../hooks/useSavedRecipes";
 
 import { supabase } from "../lib/supabase";
+import { convertMeasurement, type UnitSystem } from "../lib/unitConversion";
+import "./RecipeUnits.css";
 
 type PublicRecipe = {
   id: string;
@@ -541,6 +543,8 @@ setServings(
         recipe.servings
       : 1;
 
+  const [unitSystem, setUnitSystem] = useState<UnitSystem>("original");
+
   const adjustedIngredients =
     useMemo(() => {
       if (!recipe) {
@@ -548,19 +552,28 @@ setServings(
       }
 
       return recipe.ingredients.map(
-        (ingredient) => ({
+        (ingredient) => {
+          const numeric = parseQuantity(ingredient.quantity);
+          const converted = numeric === null ? null : convertMeasurement(
+            numeric * servingMultiplier, ingredient.unit, unitSystem,
+          );
+          return {
           ...ingredient,
 
           adjustedQuantity:
-            formatScaledQuantity(
+            converted ? formatQuantity(converted.quantity) : formatScaledQuantity(
               ingredient.quantity,
               servingMultiplier,
             ),
-        }),
+          adjustedUnit: converted ? t(`unitConversion.units.${converted.unit}`) : ingredient.unit,
+        };
+        },
       );
     }, [
       recipe,
       servingMultiplier,
+      unitSystem,
+      t,
     ]);
 
   function toggleIngredient(
@@ -918,6 +931,16 @@ setServings(
             </div>
           </div>
 
+          <div className="recipe-unit-control">
+            <label htmlFor="recipe-unit-system">{t("unitConversion.label")}</label>
+            <select id="recipe-unit-system" value={unitSystem}
+              onChange={event => setUnitSystem(event.target.value as UnitSystem)}>
+              <option value="original">{t("unitConversion.original")}</option>
+              <option value="metric">{t("unitConversion.metric")}</option>
+              <option value="us">{t("unitConversion.us")}</option>
+            </select>
+            <small>{t("unitConversion.note")}</small>
+          </div>
           <div className="recipe-ingredient-list">
             {adjustedIngredients.map(
               (
@@ -963,8 +986,8 @@ setServings(
                         ingredient.adjustedQuantity
                       }
 
-                      {ingredient.unit &&
-                        ` ${ingredient.unit}`}
+                      {ingredient.adjustedUnit &&
+                        ` ${ingredient.adjustedUnit}`}
                     </span>
 
                     <span className="recipe-ingredient-name">
