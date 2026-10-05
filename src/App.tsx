@@ -20,6 +20,7 @@ import CreatorApplicationPage from "./pages/CreatorApplicationPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import SettingsPage from "./pages/SettingsPage";
 import MyRecipesPage from "./pages/MyRecipesPage";
+import InstagramImportPage from "./pages/InstagramImportPage";
 import CreateRecipePage from "./pages/CreateRecipePage";
 import CookServicesPage from "./pages/CookServicesPage";
 import CookRequestsPage from "./pages/CookRequestsPage";
@@ -104,19 +105,26 @@ function App() {
               <ProtectedRoute access="cook" />
             }
           >
-            <Route
-              path="/cook/recipes"
-              element={
-                <MyRecipesPage />
-              }
-            />
+<Route
+  path="/cook/recipes"
+  element={
+    <MyRecipesPage />
+  }
+/>
 
-            <Route
-              path="/cook/recipes/new"
-              element={
-                <CreateRecipePage />
-              }
-            />
+<Route
+  path="/cook/recipes/import-instagram"
+  element={
+    <InstagramImportPage />
+  }
+/>
+
+<Route
+  path="/cook/recipes/new"
+  element={
+    <CreateRecipePage />
+  }
+/>
 
             <Route
               path="/cook/recipes/:id/edit"

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPublishedRecipes } from "../services/recipes";
+import { useTranslation } from "react-i18next";
 
 export type PublishedRecipe = {
   id: string;
@@ -14,13 +15,19 @@ export type PublishedRecipe = {
   cook_minutes: number | null;
   servings: number | null;
 
-  ingredients: Array<{
-    quantity?: string;
-    unit?: string;
-    ingredient?: string;
-  }>;
+ingredients: Array<{
+  quantity?: string;
+  unit?: string;
+  ingredient?: string;
+}>;
 
-  instructions: Array<{
+original_ingredients?: Array<{
+  quantity?: string;
+  unit?: string;
+  ingredient?: string;
+}>;
+
+instructions: Array<{
     step?: number;
     text?: string;
   }>;
@@ -40,6 +47,16 @@ export type PublishedRecipe = {
 };
 
 export function usePublishedRecipes() {
+  const { i18n } = useTranslation();
+
+const currentLanguage:
+  "en" | "fr" | "ar" =
+  i18n.resolvedLanguage?.startsWith("ar")
+    ? "ar"
+    : i18n.resolvedLanguage?.startsWith("fr")
+      ? "fr"
+      : "en";
+
   const [recipes, setRecipes] = useState<PublishedRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +67,10 @@ export function usePublishedRecipes() {
         setLoading(true);
         setError(null);
 
-        const data = await getPublishedRecipes();
+        const data =
+  await getPublishedRecipes(
+    currentLanguage,
+  );
 
         setRecipes(data as PublishedRecipe[]);
       } catch (err) {
@@ -63,7 +83,7 @@ export function usePublishedRecipes() {
     }
 
     loadRecipes();
-  }, []);
+  }, [currentLanguage]);
 
   return {
     recipes,

@@ -141,6 +141,7 @@ const en = {
   "Desserts": "Desserts",
   "Soups": "Soups",
   "Appetizers": "Appetizers",
+  Other: "Other",
 },
 
     nav: {
@@ -695,6 +696,24 @@ adminCookApplications: {
   approve: "Approve Cook",
 },
 
+instagramImport: {
+  backToRecipes: "Back to My Recipes",
+  eyebrow: "Instagram import",
+  title: "Import from Instagram",
+  intro:
+    "Choose one of your Instagram posts or reels to turn it into an Alf Sahten recipe.",
+  connectedAs: "Connected as @{{username}}",
+  loading: "Loading Instagram posts...",
+  notConnected:
+    "Your Instagram account is not connected.",
+  loadError:
+    "We couldn't load your Instagram posts.",
+  noPosts: "No Instagram posts found.",
+  importRecipe: "Import this recipe",
+  editImportedRecipe: "Edit imported recipe",
+  viewPublishedRecipe: "View published recipe",
+},
+
 
 recipeEditor: {
   mustSignInEdit:
@@ -815,6 +834,13 @@ recipeEditor: {
   publish: "Publish recipe",
   submitApproval:
     "Submit for approval",
+
+    prepTimeRequired:
+  "Preparation time must be at least 1 minute.",
+cookTimeRequired:
+  "Cooking time must be at least 1 minute.",
+servingsRequired:
+  "Servings must be at least 1.",
 },
 
 recipe: {
@@ -1259,7 +1285,11 @@ messageTooLong:
   title: "My Recipes",
   subtitle:
   "Create recipes, save drafts and manage your recipes.",
-  createRecipe: "Create recipe",
+createRecipe: "Create recipe",
+importInstagram: "Import from Instagram",
+connectingInstagram: "Connecting Instagram...",
+instagramConnectError:
+  "We couldn't connect Instagram. Please try again.",
 
   noRecipesTitle: "No recipes yet",
   noRecipesText:

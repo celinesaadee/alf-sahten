@@ -56,28 +56,110 @@ export async function getPublicCookProfile(
 
 export async function getPublishedCookRecipes(
   userId: string,
+  language?: "en" | "fr" | "ar",
 ) {
-  const { data, error } = await supabase
+  const {
+    data: recipes,
+    error: recipesError,
+  } = await supabase
     .from("recipes")
-.select(
-  "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
-)
-.eq("creator_id", userId)
-.eq("status", "approved")
+    .select(
+      "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+    )
+    .eq("creator_id", userId)
+    .eq("status", "approved")
     .order("published_at", {
       ascending: false,
     });
 
-  if (error) {
+  if (recipesError) {
     console.error(
       "Error loading cook recipes:",
-      error,
+      recipesError,
     );
 
-    throw error;
+    throw recipesError;
   }
 
-  return data ?? [];
+  if (!recipes || recipes.length === 0) {
+    return [];
+  }
+
+  if (!language) {
+    return recipes;
+  }
+
+  const recipeIdsNeedingTranslation =
+    recipes
+      .filter(
+        (recipe) =>
+          recipe.original_language !== language,
+      )
+      .map((recipe) => recipe.id);
+
+  if (
+    recipeIdsNeedingTranslation.length === 0
+  ) {
+    return recipes;
+  }
+
+  const {
+    data: translations,
+    error: translationsError,
+  } = await supabase
+    .from("recipe_translations")
+    .select(
+      "recipe_id, title, description, ingredients, instructions",
+    )
+    .eq("language", language)
+    .in(
+      "recipe_id",
+      recipeIdsNeedingTranslation,
+    );
+
+  if (translationsError) {
+    console.error(
+      "Error loading cook recipe translations:",
+      translationsError,
+    );
+
+    return recipes;
+  }
+
+  const translationMap = new Map(
+    (translations ?? []).map(
+      (translation) => [
+        translation.recipe_id,
+        translation,
+      ],
+    ),
+  );
+
+  return recipes.map((recipe) => {
+    if (
+      recipe.original_language === language
+    ) {
+      return recipe;
+    }
+
+    const translation =
+      translationMap.get(recipe.id);
+
+    if (!translation) {
+      return recipe;
+    }
+
+    return {
+      ...recipe,
+      title: translation.title,
+      description:
+        translation.description,
+      ingredients:
+        translation.ingredients,
+      instructions:
+        translation.instructions,
+    };
+  });
 }
 
 export async function isFollowingCook(

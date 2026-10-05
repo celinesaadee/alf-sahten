@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Link,
+  useLocation,
   useNavigate,
   useParams,
 } from "react-router-dom";
@@ -33,13 +34,111 @@ import "./CreateRecipePage.css";
 
 type RecipeLanguage = "en" | "fr" | "ar";
 
+function parseInstagramCaption(caption: string) {
+  const cleanCaption = caption.trim();
+
+  const ingredientsMatch = cleanCaption.match(
+    /ingredients?\s*:/i,
+  );
+
+  const instructionsMatch = cleanCaption.match(
+    /instructions?\s*:/i,
+  );
+
+  if (
+    !ingredientsMatch ||
+    !instructionsMatch ||
+    ingredientsMatch.index === undefined ||
+    instructionsMatch.index === undefined
+  ) {
+    return {
+      title: cleanCaption.split("\n")[0]?.trim() ?? "",
+      ingredients: [],
+      instructions: [],
+    };
+  }
+
+  const title = cleanCaption
+    .slice(0, ingredientsMatch.index)
+    .trim();
+
+  const ingredientsText = cleanCaption
+    .slice(
+      ingredientsMatch.index +
+        ingredientsMatch[0].length,
+      instructionsMatch.index,
+    )
+    .trim();
+
+  const instructionsText = cleanCaption
+    .slice(
+      instructionsMatch.index +
+        instructionsMatch[0].length,
+    )
+    .trim();
+
+  const ingredientParts = ingredientsText
+    .split(
+      /\n+|(?=\d+(?:[./]\d+)?\s+(?:cups?|tbsp|tablespoons?|tsp|teaspoons?|g|kg|ml|l|oz|lbs?|cloves?|eggs?)\b)/i,
+    )
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  const parsedIngredients =
+    ingredientParts.map((item) => {
+      const match = item.match(
+        /^(\d+(?:\s+\d+\/\d+|[./]\d+)?)\s*(cups?|tbsp|tablespoons?|tsp|teaspoons?|g|kg|ml|l|oz|lbs?|cloves?)?\s*(.*)$/i,
+      );
+
+      if (!match) {
+        return {
+          quantity: "",
+          unit: "",
+          ingredient: item,
+        };
+      }
+
+      return {
+        quantity: match[1] ?? "",
+        unit: match[2] ?? "",
+        ingredient: match[3]?.trim() ?? "",
+      };
+    });
+
+  const parsedInstructions = instructionsText
+    .split(/\n+|(?<=[.!?])\s+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return {
+    title,
+    ingredients: parsedIngredients,
+    instructions: parsedInstructions,
+  };
+}
+
 function CreateRecipePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const [adminNote, setAdminNote] = useState<string | null>(null);
   const { id: recipeId } = useParams();
 
   const isEditing = Boolean(recipeId);
+  const instagramImport = (
+  location.state as {
+    instagramImport?: {
+      id: string;
+      caption: string;
+      mediaType: string | null;
+      mediaProductType: string | null;
+      mediaUrl: string | null;
+      thumbnailUrl: string | null;
+      permalink: string | null;
+      timestamp: string | null;
+    };
+  } | null
+)?.instagramImport;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -95,6 +194,41 @@ const [imagePreview, setImagePreview] =
 
   const [error, setError] = useState<string | null>(null);
 const [isAdmin, setIsAdmin] = useState(false);
+
+useEffect(() => {
+  if (
+    isEditing ||
+    !instagramImport?.caption
+  ) {
+    return;
+  }
+
+  const parsed = parseInstagramCaption(
+    instagramImport.caption,
+  );
+
+if (parsed.title) {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  setTitle(parsed.title);
+}
+
+  if (parsed.ingredients.length > 0) {
+    setIngredients(parsed.ingredients);
+  }
+
+  if (parsed.instructions.length > 0) {
+    setInstructions(parsed.instructions);
+  }
+
+  const importedImage =
+    instagramImport.thumbnailUrl ||
+    instagramImport.mediaUrl;
+
+  if (importedImage) {
+    setImageUrl(importedImage);
+    setImagePreview(importedImage);
+  }
+}, [isEditing, instagramImport]);
 
 useEffect(() => {
   let cancelled = false;
@@ -165,11 +299,12 @@ useEffect(() => {
     (item) => item.name === category,
   );
 
-  if (categoryExists) {
-    setCategoryMode("existing");
-    setCustomCategory("");
-  } else {
-    setCategoryMode("other");
+if (categoryExists) {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  setCategoryMode("existing");
+  setCustomCategory("");
+} else {
+  setCategoryMode("other");
     setCustomCategory(category);
   }
 }, [isEditing, categories, category]);
@@ -276,12 +411,12 @@ useEffect(() => {
           : "",
       );
 
-      setServings(
-        recipe.servings !== null &&
-          recipe.servings !== undefined
-          ? String(recipe.servings)
-          : "",
-      );
+setServings(
+  recipe.servings !== null &&
+    recipe.servings !== undefined
+    ? String(recipe.servings)
+    : "",
+);
 
       setLanguage(
         (recipe.original_language ??
@@ -296,7 +431,11 @@ useEffect(() => {
       ) {
         setIngredients(
           recipe.ingredients.map(
-            (ingredient: any) => ({
+            (ingredient: {
+  quantity?: string | null;
+  unit?: string | null;
+  ingredient?: string | null;
+}) => ({
               quantity:
                 ingredient.quantity ??
                 "",
@@ -319,8 +458,10 @@ useEffect(() => {
       ) {
         setInstructions(
           recipe.instructions.map(
-            (instruction: any) =>
-              instruction.text ?? "",
+            (instruction: {
+  text?: string | null;
+}) =>
+  instruction.text ?? "",
           ),
         );
       }
@@ -509,10 +650,40 @@ async function saveRecipe(
         );
 
     if (status === "pending") {
-      if (
-        cleanedIngredients.length ===
-        0
-      ) {
+ if (
+  !prepMinutes.trim() ||
+  Number(prepMinutes) < 1
+) {
+setError(
+  t("recipeEditor.prepTimeRequired"),
+);
+  return;
+}
+
+if (
+  !cookMinutes.trim() ||
+  Number(cookMinutes) < 1
+) {
+setError(
+  t("recipeEditor.cookTimeRequired"),
+);
+  return;
+}
+
+if (
+  !servings.trim() ||
+  Number(servings) < 1
+) {
+ setError(
+  t("recipeEditor.servingsRequired"),
+);
+  return;
+}
+
+  if (
+    cleanedIngredients.length ===
+    0
+  ) {
         setError(
           isAdmin
             ? t(
@@ -544,50 +715,96 @@ async function saveRecipe(
       }
     }
 
-    let finalImageUrl = imageUrl;
+let finalImageUrl = imageUrl;
 
-    if (selectedImageFile) {
-      finalImageUrl =
-        await uploadRecipeImage(
-          selectedImageFile,
-        );
-    }
+const instagramSourceImage =
+  instagramImport?.thumbnailUrl ||
+  instagramImport?.mediaUrl;
 
-    const recipeInput = {
-      title: title.trim(),
+if (
+  instagramImport?.id &&
+  !selectedImageFile &&
+  instagramSourceImage &&
+  imageUrl === instagramSourceImage
+) {
+  const {
+    data: importedImageData,
+    error: importedImageError,
+  } = await supabase.functions.invoke(
+    "instagram-import-image",
+    {
+      body: {
+        mediaId: instagramImport.id,
+      },
+    },
+  );
 
-      description:
-        description.trim(),
+  if (importedImageError) {
+    throw importedImageError;
+  }
 
-      category:
-        categoryMode === "other"
-          ? customCategory.trim()
-          : category.trim(),
+  if (
+    !importedImageData ||
+    typeof importedImageData.imageUrl !==
+      "string"
+  ) {
+    throw new Error(
+      "Imported Instagram image URL missing",
+    );
+  }
 
-      image_url: finalImageUrl,
+  finalImageUrl =
+    importedImageData.imageUrl;
+}
 
-      prep_minutes: prepMinutes
-        ? Number(prepMinutes)
-        : null,
+if (selectedImageFile) {
+  finalImageUrl =
+    await uploadRecipeImage(
+      selectedImageFile,
+    );
+}
 
-      cook_minutes: cookMinutes
-        ? Number(cookMinutes)
-        : null,
+const recipeInput = {
+  title: title.trim(),
 
-      servings: servings
-        ? Number(servings)
-        : null,
+  description:
+    description.trim(),
 
-      ingredients:
-        cleanedIngredients,
+  category:
+    categoryMode === "other"
+      ? customCategory.trim()
+      : category.trim(),
 
-      instructions:
-        cleanedInstructions,
+  image_url: finalImageUrl,
 
-      original_language: language,
+  prep_minutes: prepMinutes
+    ? Number(prepMinutes)
+    : null,
 
-      status,
-    };
+  cook_minutes: cookMinutes
+    ? Number(cookMinutes)
+    : null,
+
+  servings: servings
+    ? Number(servings)
+    : null,
+
+  ingredients:
+    cleanedIngredients,
+
+  instructions:
+    cleanedInstructions,
+
+  original_language: language,
+
+  status,
+
+  instagram_media_id:
+    instagramImport?.id ?? null,
+
+  instagram_permalink:
+    instagramImport?.permalink ?? null,
+};
 
     if (recipeId) {
       await updateRecipe(
@@ -730,12 +947,6 @@ return (
 
           <p>{adminNote}</p>
         </aside>
-      )}
-
-      {error && (
-        <div className="create-recipe-error">
-          {error}
-        </div>
       )}
 
       <section className="recipe-form-section">
@@ -1023,14 +1234,14 @@ return (
           <label className="recipe-field">
             <span>
               {t(
-                "recipeEditor.prepTime",
-              )}
+  "recipeEditor.prepTime",
+)} *
             </span>
 
             <div className="recipe-number-field">
               <input
                 type="number"
-                min="0"
+                min="1"
                 value={prepMinutes}
                 onChange={(event) =>
                   setPrepMinutes(
@@ -1051,8 +1262,8 @@ return (
           <label className="recipe-field">
             <span>
               {t(
-                "recipeEditor.cookTime",
-              )}
+  "recipeEditor.cookTime",
+)} *
             </span>
 
             <div className="recipe-number-field">
@@ -1078,9 +1289,9 @@ return (
 
           <label className="recipe-field">
             <span>
-              {t(
-                "recipeEditor.servings",
-              )}
+            {t(
+  "recipeEditor.servings",
+)} *
             </span>
 
             <input
@@ -1300,9 +1511,15 @@ return (
             )}
           </button>
         </div>
-      </section>
+</section>
 
-      <div className="create-recipe-actions">
+{error && (
+  <div className="create-recipe-error">
+    {error}
+  </div>
+)}
+
+<div className="create-recipe-actions">
         <button
           type="button"
           className="recipe-draft-button"

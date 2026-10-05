@@ -158,7 +158,15 @@ function SavedPage() {
                       <div className="saved-recipe-meta">
                         {recipe.category && (
                           <span>
-                            {recipe.category}
+                            {recipe.category
+  ? t(
+      `categories.${recipe.category}`,
+      {
+        defaultValue:
+          recipe.category,
+      },
+    )
+  : ""}
                           </span>
                         )}
 

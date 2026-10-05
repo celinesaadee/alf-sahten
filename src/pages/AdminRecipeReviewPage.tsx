@@ -155,9 +155,11 @@ function AdminRecipeReviewPage() {
     }
   }
 
-  useEffect(() => {
-    void loadPendingRecipes();
-  }, []);
+useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  void loadPendingRecipes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   async function handleModeration(
     status: RecipeModerationStatus,

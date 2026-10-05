@@ -25,11 +25,14 @@ import { useTranslation } from "react-i18next";
 
 import {
   getPublishedRecipeById,
+  translatePublishedRecipe,
 } from "../services/recipes";
 
 import {
   useSavedRecipes,
 } from "../hooks/useSavedRecipes";
+
+import { supabase } from "../lib/supabase";
 
 type PublicRecipe = {
   id: string;
@@ -219,8 +222,16 @@ function formatScaledQuantity(
 }
 
 function RecipePage() {
-  const { t } =
-    useTranslation();
+const { t, i18n } =
+  useTranslation();
+
+const currentLanguage:
+  "en" | "fr" | "ar" =
+  i18n.resolvedLanguage?.startsWith("ar")
+    ? "ar"
+    : i18n.resolvedLanguage?.startsWith("fr")
+      ? "fr"
+      : "en";
 
   const { id } =
     useParams();
@@ -250,6 +261,95 @@ function RecipePage() {
   ] =
     useState(false);
 
+    const [
+  isAdmin,
+  setIsAdmin,
+] = useState(false);
+
+useEffect(() => {
+  let cancelled = false;
+
+  async function checkAdmin() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
+    const {
+      data: profile,
+      error,
+    } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (
+      !cancelled &&
+      !error &&
+      profile?.role === "admin"
+    ) {
+      setIsAdmin(true);
+    }
+  }
+
+  void checkAdmin();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
+
+const [
+  translating,
+  setTranslating,
+] = useState(false);
+
+const [
+  translationMessage,
+  setTranslationMessage,
+] = useState("");
+
+const [
+  translationRefreshKey,
+  setTranslationRefreshKey,
+] = useState(0);
+
+async function handleGenerateTranslations() {
+  if (!id || translating) {
+    return;
+  }
+
+  try {
+    setTranslating(true);
+    setTranslationMessage("");
+
+    await translatePublishedRecipe(id);
+
+    setTranslationMessage(
+      "Translations generated successfully.",
+    );
+
+    setTranslationRefreshKey(
+      (current) => current + 1,
+    );
+  } catch (error) {
+    console.error(
+      "Could not generate recipe translations:",
+      error,
+    );
+
+    setTranslationMessage(
+      "Could not generate translations.",
+    );
+  } finally {
+    setTranslating(false);
+  }
+}
+
   useEffect(() => {
     let cancelled = false;
 
@@ -263,10 +363,11 @@ function RecipePage() {
         setLoading(true);
         setLoadError(false);
 
-        const data =
-          await getPublishedRecipeById(
-            id,
-          );
+const data =
+  await getPublishedRecipeById(
+    id,
+    currentLanguage,
+  );
 
         if (cancelled) {
           return;
@@ -297,7 +398,11 @@ function RecipePage() {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+}, [
+  id,
+  currentLanguage,
+  translationRefreshKey,
+]);
 
   const recipe =
     useMemo<DisplayRecipe | null>(
@@ -422,9 +527,10 @@ time:
       return;
     }
 
-    setServings(
-      recipe.servings,
-    );
+// eslint-disable-next-line react-hooks/set-state-in-effect
+setServings(
+  recipe.servings,
+);
 
     setCheckedIngredients([]);
   }, [recipe]);
@@ -709,6 +815,29 @@ time:
                 "recipe.checkKitchen",
               )}
             </Link>
+
+            {isAdmin && (
+  <button
+    type="button"
+    className="recipe-kitchen-link"
+    onClick={
+      handleGenerateTranslations
+    }
+    disabled={translating}
+  >
+    {translating
+      ? "Generating translations..."
+      : "Generate translations"}
+  </button>
+)}
+
+{isAdmin &&
+  translationMessage && (
+    <p>
+      {translationMessage}
+    </p>
+  )}
+  
           </div>
         </div>
       </section>

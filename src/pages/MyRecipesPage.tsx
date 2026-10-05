@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChefHat, Plus, Trash2 } from "lucide-react";
+import {
+  ChefHat,
+  Download,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { supabase } from "../lib/supabase";
 import {
   deleteRecipe,
@@ -130,13 +135,23 @@ async function handleDeleteRecipe(recipe: Recipe) {
   </p>
 </div>
 
-<Link
-  to="/cook/recipes/new"
-  className="primary-button"
+<div className="my-recipes-header-actions">
+  <Link
+  to="/cook/recipes/import-instagram"
+  className="instagram-import-button"
 >
-  <Plus size={18} />
-  {t("myRecipes.createRecipe")}
+  <Download size={18} />
+  {t("myRecipes.importInstagram")}
 </Link>
+
+  <Link
+    to="/cook/recipes/new"
+    className="primary-button"
+  >
+    <Plus size={18} />
+    {t("myRecipes.createRecipe")}
+  </Link>
+</div>
       </section>
 
       {error && <p className="form-error">{error}</p>}

@@ -262,9 +262,11 @@ const pendingPhotoPathRef =
     }
   }
 
-  useEffect(() => {
-    void loadServices();
-  }, []);
+useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  void loadServices();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   function updateField<K extends keyof CookServiceInput>(
     key: K,

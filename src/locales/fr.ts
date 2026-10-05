@@ -147,6 +147,7 @@ stats: {
   "Appetizers": "Entrées",
   "Side Dishes": "Accompagnements",
    Drinks: "Boissons",
+   Other: "Autre",
 },
 
     nav: {
@@ -722,6 +723,23 @@ adminCookApplications: {
   approve: "Approuver le Cook",
 },
 
+instagramImport: {
+  backToRecipes: "Retour à Mes recettes",
+  eyebrow: "Import Instagram",
+  title: "Importer depuis Instagram",
+  intro:
+    "Choisissez l’une de vos publications ou reels Instagram pour la transformer en recette Alf Sahten.",
+  connectedAs: "Connecté en tant que @{{username}}",
+  loading: "Chargement des publications Instagram…",
+  notConnected:
+    "Votre compte Instagram n’est pas connecté.",
+  loadError:
+    "Impossible de charger vos publications Instagram.",
+  noPosts: "Aucune publication Instagram trouvée.",
+  importRecipe: "Importer cette recette",
+  editImportedRecipe: "Modifier la recette importée",
+  viewPublishedRecipe: "Voir la recette publiée",
+},
 
 recipeEditor: {
   mustSignInEdit:
@@ -842,6 +860,12 @@ recipeEditor: {
   publish: "Publier la recette",
   submitApproval:
     "Soumettre pour approbation",
+    prepTimeRequired:
+  "Le temps de préparation doit être d’au moins 1 minute.",
+cookTimeRequired:
+  "Le temps de cuisson doit être d’au moins 1 minute.",
+servingsRequired:
+  "Le nombre de portions doit être d’au moins 1.",
 },
 
 recipe: {
@@ -1295,7 +1319,10 @@ subtitle:
   "Créez des recettes, enregistrez des brouillons et gérez vos recettes.",
 
 createRecipe: "Créer une recette",
-
+importInstagram: "Importer depuis Instagram",
+connectingInstagram: "Connexion à Instagram…",
+instagramConnectError:
+  "Impossible de connecter Instagram. Veuillez réessayer.",
   noRecipesTitle: "Aucune recette pour le moment",
   noRecipesText:
     "Commencez par créer votre première recette.",

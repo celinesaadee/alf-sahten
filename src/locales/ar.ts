@@ -147,6 +147,7 @@ language: {
   "Appetizers": "مقبلات",
   "Side Dishes": "أطباق جانبية",
    Drinks: "مشروبات",
+   Other: "أخرى",
 },
 
     nav: {
@@ -713,6 +714,23 @@ adminCookApplications: {
   approve: "قبول الطاهي",
 },
 
+instagramImport: {
+  backToRecipes: "العودة إلى وصفاتي",
+  eyebrow: "استيراد من إنستغرام",
+  title: "استيراد من إنستغرام",
+  intro:
+    "اختاروا منشورًا أو ريل من إنستغرام لتحويله إلى وصفة على ألف صحتين.",
+  connectedAs: "متصل باسم @{{username}}",
+  loading: "جارٍ تحميل منشورات إنستغرام…",
+  notConnected:
+    "حساب إنستغرام غير متصل.",
+  loadError:
+    "ما قدرنا نحمّل منشورات إنستغرام.",
+  noPosts: "ما في منشورات إنستغرام.",
+  importRecipe: "استيراد هذه الوصفة",
+  editImportedRecipe: "تعديل الوصفة المستوردة",
+  viewPublishedRecipe: "عرض الوصفة المنشورة",
+},
 
 recipeEditor: {
   mustSignInEdit:
@@ -833,6 +851,12 @@ recipeEditor: {
   publish: "نشر الوصفة",
   submitApproval:
     "إرسال للمراجعة",
+    prepTimeRequired:
+  "يجب أن يكون وقت التحضير دقيقة واحدة على الأقل.",
+cookTimeRequired:
+  "يجب أن يكون وقت الطهي دقيقة واحدة على الأقل.",
+servingsRequired:
+  "يجب أن يكون عدد الحصص 1 على الأقل.",
 },
 
 recipe: {
@@ -1284,7 +1308,11 @@ messageTooLong:
   title: "وصفاتي",
   subtitle:
   "أنشئ وصفات واحفظ المسودات وأدر وصفاتك.",
-  createRecipe: "إنشاء وصفة",
+createRecipe: "إنشاء وصفة",
+importInstagram: "استيراد من إنستغرام",
+connectingInstagram: "جارٍ الاتصال بإنستغرام…",
+instagramConnectError:
+  "ما قدرنا نربط إنستغرام. حاولوا مرة أخرى.",
 
   noRecipesTitle: "لا توجد وصفات بعد",
   noRecipesText:

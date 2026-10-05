@@ -59,7 +59,16 @@ function PublicCookContent({ username, currentUserId }: {
   username: string | undefined;
   currentUserId: string | null;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } =
+  useTranslation();
+
+const currentLanguage:
+  "en" | "fr" | "ar" =
+  i18n.resolvedLanguage?.startsWith("ar")
+    ? "ar"
+    : i18n.resolvedLanguage?.startsWith("fr")
+      ? "fr"
+      : "en";
   const [cook, setCook] = useState<PublicCookProfile | null>(null);
   const [recipes, setRecipes] = useState<CookRecipe[]>([]);
   const [services, setServices] = useState<CookService[]>([]);
@@ -98,7 +107,10 @@ function PublicCookContent({ username, currentUserId }: {
         setCook(profile);
         setFollowerCount(profile.follower_count ?? 0);
         const [recipeResult, serviceResult, followResult] = await Promise.allSettled([
-          getPublishedCookRecipes(profile.user_id),
+          getPublishedCookRecipes(
+  profile.user_id,
+  currentLanguage,
+),
           getPublicCookServices(profile.user_id),
           currentUserId && currentUserId !== profile.user_id
             ? isFollowingCook(profile.user_id)
@@ -122,7 +134,12 @@ function PublicCookContent({ username, currentUserId }: {
       cancelled = true;
       requestVersion.current += 1;
     };
-  }, [username, currentUserId, attempt]);
+   }, [
+  username,
+  currentUserId,
+  attempt,
+  currentLanguage,
+]);
 
   async function handleFollowToggle() {
     if (!cook || !currentUserId || currentUserId === cook.user_id ||
@@ -630,7 +647,15 @@ function PublicCookContent({ username, currentUserId }: {
                         {recipe.category && (
                           <span>
                             {
-                              t(`categories.${recipe.category}`, { defaultValue: recipe.category })
+                              t(`categories.${recipe.category
+  ? t(
+      `categories.${recipe.category}`,
+      {
+        defaultValue:
+          recipe.category,
+      },
+    )
+  : ""}`, { defaultValue: recipe.category })
                             }
                           </span>
                         )}

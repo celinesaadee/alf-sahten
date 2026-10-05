@@ -36,6 +36,38 @@
   opacity: 0.7;
 }
 
+.my-recipes-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.instagram-import-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(36, 60, 50, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #243c32;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.instagram-import-button:hover:not(:disabled) {
+  background: rgba(36, 60, 50, 0.06);
+}
+
+.instagram-import-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
 .my-recipes-page .primary-button {
   display: inline-flex;
   align-items: center;
@@ -281,8 +313,14 @@
     margin-bottom: 24px;
   }
 
-  .my-recipes-header .primary-button {
-    width: 100%;
+.my-recipes-header-actions {
+  width: 100%;
+}
+
+.my-recipes-header .primary-button,
+.my-recipes-header .instagram-import-button {
+  width: 100%;
+}
   }
 
   .my-recipes-grid {
@@ -293,7 +331,7 @@
     min-height: 280px;
     padding: 36px 20px;
   }
-}
+
 
 .my-recipe-locked-note {
   display: inline-flex;

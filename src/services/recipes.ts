@@ -1,16 +1,27 @@
 import { supabase } from "../lib/supabase";
 
-export async function getPublishedRecipes() {
-  const { data: recipes, error: recipesError } = await supabase
+export async function getPublishedRecipes(
+  language?: "en" | "fr" | "ar",
+) {
+  const {
+    data: recipes,
+    error: recipesError,
+  } = await supabase
     .from("recipes")
-.select(
-  "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
-)
-.eq("status", "approved")
-    .order("published_at", { ascending: false });
+    .select(
+      "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+    )
+    .eq("status", "approved")
+    .order("published_at", {
+      ascending: false,
+    });
 
   if (recipesError) {
-    console.error("Error loading recipes:", recipesError);
+    console.error(
+      "Error loading recipes:",
+      recipesError,
+    );
+
     throw recipesError;
   }
 
@@ -18,13 +29,83 @@ export async function getPublishedRecipes() {
     return [];
   }
 
+  const translationMap = new Map<
+    string,
+    {
+      title: string;
+      description: string;
+      ingredients: unknown;
+      instructions: unknown;
+    }
+  >();
+
+  if (language) {
+    const recipeIdsNeedingTranslation =
+      recipes
+        .filter(
+          (recipe) =>
+            recipe.original_language !==
+            language,
+        )
+        .map((recipe) => recipe.id);
+
+    if (
+      recipeIdsNeedingTranslation.length >
+      0
+    ) {
+      const {
+        data: translations,
+        error: translationsError,
+      } = await supabase
+        .from("recipe_translations")
+        .select(
+          "recipe_id, title, description, ingredients, instructions",
+        )
+        .eq("language", language)
+        .in(
+          "recipe_id",
+          recipeIdsNeedingTranslation,
+        );
+
+      if (translationsError) {
+        console.error(
+          "Error loading recipe translations:",
+          translationsError,
+        );
+      } else {
+        (
+          translations ?? []
+        ).forEach((translation) => {
+          translationMap.set(
+            translation.recipe_id,
+            {
+              title: translation.title,
+              description:
+                translation.description,
+              ingredients:
+                translation.ingredients,
+              instructions:
+                translation.instructions,
+            },
+          );
+        });
+      }
+    }
+  }
+
   const creatorIds = [
     ...new Set(
-      recipes.map((recipe) => recipe.creator_id),
+      recipes.map(
+        (recipe) =>
+          recipe.creator_id,
+      ),
     ),
   ];
 
-  const { data: cooks, error: cooksError } = await supabase
+  const {
+    data: cooks,
+    error: cooksError,
+  } = await supabase
     .from("public_cook_profiles")
     .select(
       "user_id, display_name, username, profile_image_url",
@@ -33,7 +114,11 @@ export async function getPublishedRecipes() {
     .eq("is_approved", true);
 
   if (cooksError) {
-    console.error("Error loading recipe cooks:", cooksError);
+    console.error(
+      "Error loading recipe cooks:",
+      cooksError,
+    );
+
     throw cooksError;
   }
 
@@ -50,13 +135,27 @@ export async function getPublishedRecipes() {
         recipe.creator_id,
       ),
     )
-    .map((recipe) => ({
-      ...recipe,
-      cook:
-        approvedCookMap.get(
-          recipe.creator_id,
-        ) ?? null,
-    }));
+    .map((recipe) => {
+      const translation =
+        language &&
+        recipe.original_language !==
+          language
+          ? translationMap.get(recipe.id)
+          : undefined;
+
+return {
+  ...recipe,
+  ...(translation ?? {}),
+
+  original_ingredients:
+    recipe.ingredients,
+
+  cook:
+    approvedCookMap.get(
+      recipe.creator_id,
+    ) ?? null,
+};
+    });
 }
 
 export async function getCookRecipes(userId: string) {
@@ -112,6 +211,8 @@ export type CreateRecipeInput = {
   instructions: RecipeInstructionInput[];
   original_language: "en" | "fr" | "ar";
   status: "draft" | "pending";
+  instagram_media_id?: string | null;
+  instagram_permalink?: string | null;
 };
 
 export async function createRecipe(input: CreateRecipeInput) {
@@ -143,6 +244,10 @@ export async function createRecipe(input: CreateRecipeInput) {
       instructions: input.instructions,
       original_language: input.original_language,
       status: input.status,
+instagram_media_id:
+  input.instagram_media_id ?? null,
+instagram_permalink:
+  input.instagram_permalink ?? null,
     })
     .select()
     .single();
@@ -568,8 +673,55 @@ if (!user) {
 .select()
 .single();
 
+if (error) {
+  console.error("Error moderating recipe:", error);
+  throw error;
+}
+
+if (status === "approved") {
+  const {
+    error: translationError,
+  } = await supabase.functions.invoke(
+    "translate-recipe",
+    {
+      body: {
+        recipeId,
+      },
+    },
+  );
+
+  if (translationError) {
+    console.error(
+      "Recipe translation failed:",
+      translationError,
+    );
+  }
+}
+
+return data;
+}
+
+export async function translatePublishedRecipe(
+  recipeId: string,
+) {
+  const {
+    data,
+    error,
+  } = await supabase.functions.invoke(
+    "translate-recipe",
+    {
+      body: {
+        recipeId,
+      },
+    },
+  );
+
   if (error) {
-    console.error("Error moderating recipe:", error);
+    console.error(
+      "Recipe translation failed:",
+      error,
+    );
+
     throw error;
   }
 
@@ -578,14 +730,18 @@ if (!user) {
 
 export async function getPublishedRecipeById(
   recipeId: string,
+  language?: "en" | "fr" | "ar",
 ) {
-  const { data: recipe, error: recipeError } = await supabase
+  const {
+    data: recipe,
+    error: recipeError,
+  } = await supabase
     .from("recipes")
-.select(
-  "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
-)
-.eq("id", recipeId)
-.eq("status", "approved")
+    .select(
+      "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+    )
+    .eq("id", recipeId)
+    .eq("status", "approved")
     .maybeSingle();
 
   if (recipeError) {
@@ -601,12 +757,54 @@ export async function getPublishedRecipeById(
     return null;
   }
 
-  const { data: cook, error: cookError } = await supabase
+  let localizedRecipe = recipe;
+
+  if (
+    language &&
+    language !== recipe.original_language
+  ) {
+    const {
+      data: translation,
+      error: translationError,
+    } = await supabase
+      .from("recipe_translations")
+      .select(
+        "title, description, ingredients, instructions",
+      )
+      .eq("recipe_id", recipe.id)
+      .eq("language", language)
+      .maybeSingle();
+
+    if (translationError) {
+      console.error(
+        "Error loading recipe translation:",
+        translationError,
+      );
+    }
+
+    if (translation) {
+      localizedRecipe = {
+        ...recipe,
+        title: translation.title,
+        description: translation.description,
+        ingredients: translation.ingredients,
+        instructions: translation.instructions,
+      };
+    }
+  }
+
+  const {
+    data: cook,
+    error: cookError,
+  } = await supabase
     .from("public_cook_profiles")
     .select(
       "user_id, display_name, username, profile_image_url",
     )
-    .eq("user_id", recipe.creator_id)
+    .eq(
+      "user_id",
+      recipe.creator_id,
+    )
     .eq("is_approved", true)
     .maybeSingle();
 
@@ -624,7 +822,8 @@ export async function getPublishedRecipeById(
   }
 
   return {
-    ...recipe,
+    ...localizedRecipe,
     cook,
   };
 }
+ 

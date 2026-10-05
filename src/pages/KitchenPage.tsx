@@ -142,18 +142,24 @@ function KitchenPage() {
     useMemo(() => {
       return recipes
         .map((recipe) => {
-          const recipeIngredientNames =
-            (recipe.ingredients ?? [])
-              .map(
-                (ingredient) =>
-                  ingredient.ingredient?.trim(),
-              )
-              .filter(
-                (
-                  ingredient,
-                ): ingredient is string =>
-                  Boolean(ingredient),
-              );
+const recipeIngredientNames =
+  (
+    recipe.original_ingredients ??
+    recipe.ingredients ??
+    []
+  )
+    .map((ingredient) =>
+      getCanonicalIngredientName(
+        ingredient.ingredient ?? "",
+        i18n.language,
+      ),
+    )
+    .filter(
+      (
+        ingredient,
+      ): ingredient is string =>
+        Boolean(ingredient),
+    );
 
           const missingIngredients =
             recipeIngredientNames.filter(
@@ -214,11 +220,12 @@ function KitchenPage() {
             a.matchCount
           );
         });
-    }, [
-      recipes,
-      normalizedIngredients,
-      t,
-    ]);
+}, [
+  recipes,
+  normalizedIngredients,
+  t,
+  i18n.language,
+]);
 
   const readyRecipes =
     recipeMatches.filter(
