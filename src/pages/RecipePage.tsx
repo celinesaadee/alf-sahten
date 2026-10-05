@@ -37,6 +37,7 @@ import { convertMeasurement, type UnitSystem } from "../lib/unitConversion";
 import "./RecipeUnits.css";
 import RecipePersonalTools from "../components/RecipePersonalTools";
 import CookingMode from "../components/CookingMode";
+import IngredientHighlights from "../components/IngredientHighlights";
 
 type PublicRecipe = {
   id: string;
@@ -1047,7 +1048,7 @@ setServings(
           </div>
 
           <div className="recipe-steps">
-            <CookingMode key={`${recipe.id}:${currentLanguage}`} title={recipe.title} steps={recipe.instructions} />
+            <CookingMode key={`${recipe.id}:${currentLanguage}`} title={recipe.title} steps={recipe.instructions} ingredients={recipe.ingredients.map(item => item.name)} />
             {recipe.instructions.map(
               (
                 instruction,
@@ -1068,7 +1069,7 @@ setServings(
 
                   <p>
                     {
-                      instruction
+                      <IngredientHighlights text={instruction} ingredients={recipe.ingredients.map(item => item.name)} />
                     }
                   </p>
                 </div>

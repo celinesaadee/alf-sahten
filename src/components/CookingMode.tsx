@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { useTranslation } from "react-i18next";
 import "./CookingMode.css";
+import IngredientHighlights from "./IngredientHighlights";
 
-type Props = { title: string; steps: string[] };
-function CookingDialog({ title, steps, onExit, returnFocus }: Props & { onExit: () => void; returnFocus: RefObject<HTMLButtonElement | null> }) {
+type Props = { title: string; steps: string[]; ingredients: string[] };
+function CookingDialog({ title, steps, ingredients, onExit, returnFocus }: Props & { onExit: () => void; returnFocus: RefObject<HTMLButtonElement | null> }) {
   const { t } = useTranslation();
   const dialog = useRef<HTMLDialogElement>(null);
   const [step, setStep] = useState(0);
@@ -61,7 +62,7 @@ function CookingDialog({ title, steps, onExit, returnFocus }: Props & { onExit: 
       {t("cookingMode.step", { current: step + 1, total: steps.length })}
       <progress max={steps.length} value={step + 1} aria-label={t("cookingMode.progress")} />
     </div>
-    <p className="cooking-step-text" dir="auto" aria-live="polite">{steps[step]}</p>
+    <p className="cooking-step-text" dir="auto" aria-live="polite"><IngredientHighlights text={steps[step]} ingredients={ingredients} /></p>
     <nav aria-label={t("cookingMode.navigation")}>
       <button type="button" disabled={step === 0} onClick={() => setStep(value => Math.max(0, value - 1))}>{t("cookingMode.previous")}</button>
       <button type="button" onClick={() => last ? onExit() : setStep(value => Math.min(steps.length - 1, value + 1))}>
