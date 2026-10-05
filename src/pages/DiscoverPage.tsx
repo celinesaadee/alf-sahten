@@ -18,6 +18,8 @@ import {
 } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
+import { RECIPE_TAGS, isRecipeTag, normalizeRecipeTags } from "../lib/recipeTags";
+import "../components/RecipeTags.css";
 
 import {
   getRecipeCategories,
@@ -81,6 +83,8 @@ function DiscoverPage() {
 
   const requestedCategory =
     searchParams.get("category");
+  const requestedTag = searchParams.get("tag");
+  const activeTag = isRecipeTag(requestedTag) ? requestedTag : "";
 
   const activeCategory =
     requestedCategory &&
@@ -141,6 +145,7 @@ function DiscoverPage() {
             "";
 
           const matchesSearch =
+            normalizeRecipeTags(recipe.tags).some(tag => t(`recipeTags.${tag}`).toLowerCase().includes(normalizedSearch)) ||
             normalizedSearch.length ===
               0 ||
             recipe.title
@@ -186,6 +191,7 @@ function DiscoverPage() {
 
           return (
             matchesCategory &&
+            (!activeTag || normalizeRecipeTags(recipe.tags).includes(activeTag)) &&
             matchesSearch
           );
         },
@@ -194,6 +200,8 @@ function DiscoverPage() {
       recipes,
       searchQuery,
       activeCategory,
+      activeTag,
+      t,
     ]);
 
   return (
@@ -299,6 +307,16 @@ function DiscoverPage() {
         </div>
       </section>
 
+      <div className="discover-tag-filter">
+        <label htmlFor="discover-tag">{t("recipeTags.filter")}</label>
+        <select id="discover-tag" value={activeTag} onChange={event => {
+          const value = event.target.value;
+          setSearchParams(current => { const next = new URLSearchParams(current); if (value) next.set("tag", value); else next.delete("tag"); return next; });
+        }}>
+          <option value="">{t("recipeTags.all")}</option>
+          {RECIPE_TAGS.map(tag => <option key={tag} value={tag}>{t(`recipeTags.${tag}`)}</option>)}
+        </select>
+      </div>
       <section className="discover-kitchen-banner">
         <div className="discover-kitchen-icon">
           <ChefHat
@@ -523,6 +541,7 @@ function DiscoverPage() {
                     </div>
 
                     <div className="discover-recipe-content">
+                      <div className="recipe-tags">{normalizeRecipeTags(recipe.tags).map(tag => <span key={tag}>{t(`recipeTags.${tag}`)}</span>)}</div>
                       <div className="discover-card-topline">
                         <span>
   {recipe.category
@@ -647,7 +666,7 @@ function DiscoverPage() {
 
     <p>
       {t(
-        "discover.noRecipesText",
+        "recipeTags.noResultsText",
       )}
     </p>
 
@@ -656,9 +675,7 @@ function DiscoverPage() {
       onClick={() => {
         setSearchQuery("");
 
-        setActiveCategory(
-          "All",
-        );
+        setSearchParams(current => { const next = new URLSearchParams(current); next.delete("category"); next.delete("tag"); return next; });
       }}
     >
       {t(

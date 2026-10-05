@@ -38,8 +38,11 @@ import "./RecipeUnits.css";
 import RecipePersonalTools from "../components/RecipePersonalTools";
 import CookingMode from "../components/CookingMode";
 import IngredientHighlights from "../components/IngredientHighlights";
+import { normalizeRecipeTags } from "../lib/recipeTags";
+import "../components/RecipeTags.css";
 
 type PublicRecipe = {
+  tags: string[];
   id: string;
   creator_id: string;
 
@@ -720,6 +723,9 @@ setServings(
           <h1>
             {recipe.title}
           </h1>
+          <div className="recipe-tags" aria-label={t("recipeTags.title")}>
+            {normalizeRecipeTags(publicRecipe?.tags).map(tag => <Link key={tag} to={`/discover?tag=${tag}`}>{t(`recipeTags.${tag}`)}</Link>)}
+          </div>
 
           {recipe.description && (
             <p className="recipe-description">

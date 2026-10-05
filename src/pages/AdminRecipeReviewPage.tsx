@@ -15,6 +15,8 @@ import {
 
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { normalizeRecipeTags } from "../lib/recipeTags";
+import "../components/RecipeTags.css";
 import {
   getPendingRecipes,
   moderateRecipe,
@@ -24,6 +26,7 @@ import {
 import "./AdminRecipeReviewPage.css";
 
 type PendingRecipe = {
+  tags?: string[];
   id: string;
   creator_id: string;
 
@@ -433,6 +436,7 @@ useEffect(() => {
                   <h2>
                     {selectedRecipe.title}
                   </h2>
+                  <div className="recipe-tags">{normalizeRecipeTags(selectedRecipe.tags).map(tag => <span key={tag}>{t(`recipeTags.${tag}`)}</span>)}</div>
 
                   <div className="admin-recipe-cook">
                     {selectedRecipe.cook

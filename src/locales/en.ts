@@ -1,5 +1,6 @@
 const en = {
   translation: {
+    recipeTags: { title: "Recipe tags (optional)", filter: "Recipe tag", all: "All tags", vegetarian: "Vegetarian", "quick-meals": "Quick meals", "budget-friendly": "Budget-friendly", "one-pot": "One pot", noResultsText: "Try another search, category or tag." },
     ingredientQuantity: { open: "Show quantity for {{ingredient}}", current: "For the servings and measurements currently selected.", unspecified: "Quantity not specified", close: "Close" },
     cookingMode: {
       heading: "Cooking Mode", start: "Start Cooking Mode", exit: "Exit", previous: "Previous", next: "Next", finish: "Finish",

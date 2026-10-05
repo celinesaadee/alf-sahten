@@ -19,6 +19,8 @@ import { useTranslation } from "react-i18next";
 
 import { supabase } from "../lib/supabase";
 import { detectRecipeLanguage } from "../lib/recipeLanguage";
+import { RECIPE_TAGS, normalizeRecipeTags, type RecipeTag } from "../lib/recipeTags";
+import "../components/RecipeTags.css";
 
 import {
   createRecipe,
@@ -144,6 +146,7 @@ function CreateRecipePage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [tags, setTags] = useState<RecipeTag[]>([]);
 
   const [categories, setCategories] = useState<RecipeCategory[]>([]);
 const [categoryMode, setCategoryMode] = useState<"existing" | "other">(
@@ -379,6 +382,7 @@ if (categoryExists) {
       );
 
       setTitle(recipe.title ?? "");
+      setTags(normalizeRecipeTags(recipe.tags));
 
       setDescription(
         recipe.description ?? "",
@@ -778,6 +782,7 @@ if (selectedImageFile) {
 }
 
 const recipeInput = {
+  tags,
   title: title.trim(),
 
   description:
@@ -962,6 +967,14 @@ return (
         </aside>
       )}
 
+      <fieldset className="recipe-tag-editor">
+        <legend>{t("recipeTags.title")}</legend>
+        {RECIPE_TAGS.map(tag => <label key={tag}>
+          <input type="checkbox" checked={tags.includes(tag)} disabled={submitting || loadingRecipe}
+            onChange={event => { const checked = event.target.checked; setTags(current => checked ? [...current, tag] : current.filter(value => value !== tag)); }} />
+          {t(`recipeTags.${tag}`)}
+        </label>)}
+      </fieldset>
       <section className="recipe-form-section">
         <div className="recipe-form-section-heading">
           <span>01</span>

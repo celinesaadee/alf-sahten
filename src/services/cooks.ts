@@ -64,7 +64,7 @@ export async function getPublishedCookRecipes(
   } = await supabase
     .from("recipes")
     .select(
-      "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+      "id, creator_id, title, description, category, tags, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
     )
     .eq("creator_id", userId)
     .eq("status", "approved")

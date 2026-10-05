@@ -9,6 +9,7 @@ export type PublishedRecipe = {
   title: string;
   description: string | null;
   category: string | null;
+  tags: string[];
   image_url: string | null;
 
   prep_minutes: number | null;

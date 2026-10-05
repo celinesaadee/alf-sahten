@@ -9,7 +9,7 @@ export async function getPublishedRecipes(
   } = await supabase
     .from("recipes")
     .select(
-      "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+      "id, creator_id, title, description, category, tags, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
     )
     .eq("status", "approved")
     .order("published_at", {
@@ -206,6 +206,7 @@ export type CreateRecipeInput = {
   title: string;
   description: string;
   category: string;
+  tags?: string[];
   image_url: string | null;
   prep_minutes: number | null;
   cook_minutes: number | null;
@@ -239,6 +240,7 @@ export async function createRecipe(input: CreateRecipeInput) {
       title: input.title,
       description: input.description.trim(),
       category: input.category.trim() || "Other",
+      tags: input.tags ?? [],
       image_url: input.image_url,
       prep_minutes: input.prep_minutes ?? 0,
       cook_minutes: input.cook_minutes ?? 0,
@@ -266,6 +268,7 @@ export type UpdateRecipeInput = {
   title: string;
   description: string;
   category: string;
+  tags?: string[];
   image_url: string | null;
   prep_minutes: number | null;
   cook_minutes: number | null;
@@ -297,6 +300,7 @@ export async function updateRecipe(
     title: input.title,
     description: input.description.trim(),
     category: input.category.trim() || "Other",
+    ...(input.tags === undefined ? {} : { tags: input.tags }),
     image_url: input.image_url,
     prep_minutes: input.prep_minutes ?? 0,
     cook_minutes: input.cook_minutes ?? 0,
@@ -741,7 +745,7 @@ export async function getPublishedRecipeById(
   } = await supabase
     .from("recipes")
     .select(
-      "id, creator_id, title, description, category, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+      "id, creator_id, title, description, category, tags, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
     )
     .eq("id", recipeId)
     .eq("status", "approved")

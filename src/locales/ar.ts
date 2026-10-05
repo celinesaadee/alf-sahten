@@ -1,5 +1,6 @@
 const ar = {
   translation: {
+    recipeTags: { title: "وسوم الوصفة (اختيارية)", filter: "وسم الوصفة", all: "كل الوسوم", vegetarian: "نباتية", "quick-meals": "وجبات سريعة", "budget-friendly": "اقتصادية", "one-pot": "في قدر واحد", noResultsText: "جرّب بحثًا أو فئة أو وسمًا مختلفًا." },
     ingredientQuantity: { open: "عرض كمية {{ingredient}}", current: "بحسب الحصص والمقاييس المحددة حاليًا.", unspecified: "الكمية غير محددة", close: "إغلاق" },
     cookingMode: {
       heading: "وضع الطبخ", start: "بدء وضع الطبخ", exit: "خروج", previous: "السابق", next: "التالي", finish: "إنهاء",

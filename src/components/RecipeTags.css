@@ -1,0 +1,8 @@
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.recipe-tags a, .recipe-tags span { padding: 6px 10px; border-radius: 20px; background: #edf2e8; color: #183e28; font-size: .85rem; text-decoration: none; }
+.recipe-tag-editor { margin: 16px 0; border: 1px solid #d8ded7; border-radius: 12px; padding: 16px; }
+.recipe-tag-editor legend { padding: 0 6px; font-weight: 600; }
+.recipe-tag-editor label { display: inline-flex; align-items: center; gap: 8px; margin: 8px 18px 8px 0; }
+.recipe-tag-editor input { width: auto; }
+.discover-tag-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 18px 20px; }
+.discover-tag-filter select { max-width: 100%; padding: 10px 14px; border: 1px solid #d8ded7; border-radius: 10px; background: white; font: inherit; color: inherit; }

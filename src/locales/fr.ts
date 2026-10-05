@@ -1,5 +1,6 @@
 const fr = {
   translation: {
+    recipeTags: { title: "Étiquettes de recette (facultatives)", filter: "Étiquette", all: "Toutes les étiquettes", vegetarian: "Végétarien", "quick-meals": "Repas rapides", "budget-friendly": "Économique", "one-pot": "Une seule casserole", noResultsText: "Essayez une autre recherche, catégorie ou étiquette." },
     ingredientQuantity: { open: "Afficher la quantité de {{ingredient}}", current: "Pour les portions et mesures actuellement sélectionnées.", unspecified: "Quantité non précisée", close: "Fermer" },
     cookingMode: {
       heading: "Mode cuisine", start: "Démarrer le mode cuisine", exit: "Quitter", previous: "Précédent", next: "Suivant", finish: "Terminer",
