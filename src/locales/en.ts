@@ -1,5 +1,13 @@
 const en = {
   translation: {
+    cookingMode: {
+      heading: "Cooking Mode", start: "Start Cooking Mode", exit: "Exit", previous: "Previous", next: "Next", finish: "Finish",
+      step: "Step {{current}} of {{total}}", progress: "Cooking progress", navigation: "Step navigation",
+      keepAwake: "Keep screen awake", off: "Screen-awake support is off.", active: "Your screen will stay awake while this mode is open.",
+      released: "Screen-awake support is paused. It will retry when you return to this tab.",
+      failed: "Could not keep the screen awake. You can still use Cooking Mode.",
+      unsupported: "Keeping the screen awake is unavailable in this browser or connection.",
+    },
     personalRecipe: {
       heading: "Your cooking", notes: "Private notes", private: "Only you can see these notes. Up to 5,000 characters.",
       markCooked: "Mark as cooked", cooked: "Cooked ✓", cookedHint: "Tap again to undo.",

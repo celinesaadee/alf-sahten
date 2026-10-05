@@ -1,5 +1,13 @@
 const fr = {
   translation: {
+    cookingMode: {
+      heading: "Mode cuisine", start: "Démarrer le mode cuisine", exit: "Quitter", previous: "Précédent", next: "Suivant", finish: "Terminer",
+      step: "Étape {{current}} sur {{total}}", progress: "Progression", navigation: "Navigation entre les étapes",
+      keepAwake: "Garder l’écran allumé", off: "Le maintien de l’écran allumé est désactivé.", active: "L’écran restera allumé tant que ce mode est ouvert.",
+      released: "Maintien de l’écran en pause. Une nouvelle tentative aura lieu à votre retour dans cet onglet.",
+      failed: "Impossible de garder l’écran allumé. Le mode cuisine reste disponible.",
+      unsupported: "Le maintien de l’écran allumé n’est pas disponible avec ce navigateur ou cette connexion.",
+    },
     personalRecipe: {
       heading: "Votre cuisine", notes: "Notes privées", private: "Vous seul pouvez voir ces notes. Jusqu’à 5 000 caractères.",
       markCooked: "Marquer comme préparée", cooked: "Préparée ✓", cookedHint: "Appuyez à nouveau pour annuler.",

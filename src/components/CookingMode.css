@@ -1,0 +1,17 @@
+.cooking-mode-start { padding: 12px 18px; margin-bottom: 18px; border: 0; border-radius: 10px; background: #183e28; color: white; font: inherit; cursor: pointer; }
+.cooking-dialog { box-sizing: border-box; width: min(760px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: 28px; border: 0; border-radius: 20px; background: #fff8e7; color: #183e28; overflow: auto; }
+.cooking-dialog::backdrop { background: rgb(0 0 0 / .6); }
+.cooking-dialog header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.cooking-dialog header p { margin: 0 0 8px; }
+.cooking-dialog h2 { margin: 0; font-size: 1.5rem; overflow-wrap: anywhere; }
+.cooking-dialog button { border: 1px solid #b6c5b9; border-radius: 10px; padding: 12px 18px; font: inherit; background: white; color: inherit; cursor: pointer; }
+.cooking-dialog button:disabled { opacity: .45; cursor: default; }
+.cooking-progress { margin: 24px 0; }
+.cooking-progress progress { display: block; width: 100%; height: 8px; margin-top: 12px; accent-color: #183e28; }
+.cooking-step-text { font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.65; min-height: 140px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cooking-dialog nav { display: flex; justify-content: space-between; gap: 12px; margin: 24px 0; }
+.cooking-dialog nav button:last-child { background: #183e28; color: white; }
+.cooking-dialog footer { border-top: 1px solid #d8ded7; padding-top: 16px; }
+.cooking-dialog footer label { display: flex; align-items: center; gap: 10px; }
+.cooking-dialog footer p { font-size: .9rem; line-height: 1.5; }
+@media (max-width: 480px) { .cooking-dialog { padding: 20px; } .cooking-dialog header { flex-wrap: wrap; } .cooking-dialog header button { margin-inline-start: auto; } }

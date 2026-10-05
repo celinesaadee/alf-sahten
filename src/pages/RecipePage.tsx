@@ -36,6 +36,7 @@ import { supabase } from "../lib/supabase";
 import { convertMeasurement, type UnitSystem } from "../lib/unitConversion";
 import "./RecipeUnits.css";
 import RecipePersonalTools from "../components/RecipePersonalTools";
+import CookingMode from "../components/CookingMode";
 
 type PublicRecipe = {
   id: string;
@@ -1046,6 +1047,7 @@ setServings(
           </div>
 
           <div className="recipe-steps">
+            <CookingMode key={`${recipe.id}:${currentLanguage}`} title={recipe.title} steps={recipe.instructions} />
             {recipe.instructions.map(
               (
                 instruction,
