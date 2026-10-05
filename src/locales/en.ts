@@ -487,8 +487,74 @@ forRecipes: "recipes",
       emptyText:
         "Save recipes you love and they’ll stay here for the next time you’re wondering what to cook.",
 
-      discoverRecipes: "Discover recipes",
+          discoverRecipes: "Discover recipes",
       cookThis: "Cook this",
+    },
+
+    collections: {
+      kicker: "Saved your way",
+      title: "My collections",
+      subtitle:
+        "Organize recipes into private collections for the moments, people and meals you cook for.",
+
+      privateNote:
+        "Your collections are private to your account.",
+      privateKicker: "Private to you",
+
+      createKicker: "Start a collection",
+      createTitle: "What are you saving for?",
+      newCollection: "New collection",
+      namePlaceholder: "e.g. Sunday lunch",
+      create: "Create collection",
+      createAndAdd: "Create",
+      creating: "Creating...",
+
+      active: "Collections",
+      archived: "Archived",
+
+      saveToCollection: "Add to collection",
+      chooseCollection: "Choose a collection",
+      add: "Add",
+      added: "Added",
+      saving: "Saving...",
+      loading: "Loading collections...",
+
+      noCollections:
+        "You don't have any collections yet.",
+
+      emptyTitle: "Create your first collection",
+      emptyText:
+        "Group recipes by mood, occasion, person or anything else that makes sense to you.",
+
+      noArchivedTitle: "Nothing archived",
+      noArchivedText:
+        "Collections you archive will stay here until you restore them.",
+
+      collectionEmpty:
+        "No recipes in this collection yet.",
+      findRecipes: "Find recipes",
+
+      rename: "Rename collection",
+      archive: "Archive",
+      restore: "Restore",
+      removeRecipe: "Remove from collection",
+
+      loadError:
+        "Could not load your collections.",
+      recipeLoadError:
+        "Some recipes could not be loaded.",
+      createError:
+        "Could not create the collection. Make sure the name is not already in use.",
+      updateError:
+        "Could not update this collection.",
+      renameError:
+        "Could not rename the collection.",
+      archiveError:
+        "Could not archive the collection.",
+      restoreError:
+        "Could not restore the collection.",
+      removeRecipeError:
+        "Could not remove the recipe from this collection.",
     },
 
 profile: {

@@ -13,6 +13,7 @@ import HomePage from "./HomePage";
 import DiscoverPage from "./pages/DiscoverPage";
 import KitchenPage from "./pages/KitchenPage";
 import SavedPage from "./pages/SavedPage";
+import CollectionsPage from "./pages/CollectionsPage";
 import ProfilePage from "./pages/ProfilePage";
 import RecipePage from "./pages/RecipePage";
 import TranslationReviewPage from "./pages/TranslationReviewPage";
@@ -186,10 +187,15 @@ function App() {
             }
           />
 
-          <Route element={<ProtectedRoute />}>
+<Route element={<ProtectedRoute />}>
   <Route
     path="/settings"
     element={<SettingsPage />}
+  />
+
+  <Route
+    path="/collections"
+    element={<CollectionsPage />}
   />
 
   <Route

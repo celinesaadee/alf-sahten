@@ -504,12 +504,78 @@ forRecipes: "recettes",
       emptyText:
         "Enregistrez les recettes que vous aimez pour les retrouver lorsque vous ne savez pas quoi cuisiner.",
 
-      discoverRecipes: "Découvrir des recettes",
+            discoverRecipes: "Découvrir des recettes",
       cookThis: "Cuisiner",
       resultsFor: "Résultats pour",
 categoryRecipes: "recettes",
 saveRecipe: "Enregistrer la recette",
 removeSaved: "Retirer des recettes enregistrées",
+    },
+
+    collections: {
+      kicker: "Vos recettes, à votre façon",
+      title: "Mes collections",
+      subtitle:
+        "Organisez vos recettes dans des collections privées selon les moments, les personnes et les repas que vous préparez.",
+
+      privateNote:
+        "Vos collections sont privées et visibles uniquement depuis votre compte.",
+      privateKicker: "Privé pour vous",
+
+      createKicker: "Créer une collection",
+      createTitle: "Que souhaitez-vous garder de côté ?",
+      newCollection: "Nouvelle collection",
+      namePlaceholder: "ex. Déjeuner du dimanche",
+      create: "Créer la collection",
+      createAndAdd: "Créer",
+      creating: "Création...",
+
+      active: "Collections",
+      archived: "Archivées",
+
+      saveToCollection: "Ajouter à une collection",
+      chooseCollection: "Choisir une collection",
+      add: "Ajouter",
+      added: "Ajoutée",
+      saving: "Enregistrement...",
+      loading: "Chargement des collections...",
+
+      noCollections:
+        "Vous n’avez encore aucune collection.",
+
+      emptyTitle: "Créez votre première collection",
+      emptyText:
+        "Regroupez vos recettes par envie, occasion, personne ou selon ce qui vous convient.",
+
+      noArchivedTitle: "Aucune collection archivée",
+      noArchivedText:
+        "Les collections archivées resteront ici jusqu’à ce que vous les restauriez.",
+
+      collectionEmpty:
+        "Aucune recette dans cette collection pour le moment.",
+      findRecipes: "Trouver des recettes",
+
+      rename: "Renommer la collection",
+      archive: "Archiver",
+      restore: "Restaurer",
+      removeRecipe: "Retirer de la collection",
+
+      loadError:
+        "Impossible de charger vos collections.",
+      recipeLoadError:
+        "Certaines recettes n’ont pas pu être chargées.",
+      createError:
+        "Impossible de créer la collection. Vérifiez que ce nom n’est pas déjà utilisé.",
+      updateError:
+        "Impossible de mettre à jour cette collection.",
+      renameError:
+        "Impossible de renommer la collection.",
+      archiveError:
+        "Impossible d’archiver la collection.",
+      restoreError:
+        "Impossible de restaurer la collection.",
+      removeRecipeError:
+        "Impossible de retirer la recette de cette collection.",
     },
 
 profile: {

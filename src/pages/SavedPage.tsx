@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 
 import { useSavedRecipes } from "../hooks/useSavedRecipes";
 import { usePublishedRecipes } from "../hooks/usePublishedRecipes";
+import { CollectionPicker } from "../components/CollectionPicker";
 
 function SavedPage() {
   const { t } = useTranslation();
@@ -60,6 +61,25 @@ function SavedPage() {
         <p>
           {t("saved.subtitle")}
         </p>
+
+        <Link
+  to="/collections"
+  className="saved-collections-link"
+>
+  <Bookmark size={17} />
+
+  <span>
+    {t(
+      "collections.title",
+      {
+        defaultValue:
+          "My collections",
+      },
+    )}
+  </span>
+
+  <ArrowRight size={16} />
+</Link>
 
         {savedRecipes.length > 0 && (
   <div className="saved-count">
@@ -190,12 +210,16 @@ function SavedPage() {
                       </Link>
 
                       {recipe.description && (
-                        <p>
-                          {recipe.description}
-                        </p>
-                      )}
+  <p>
+    {recipe.description}
+  </p>
+)}
 
-                      <div className="saved-recipe-footer">
+<CollectionPicker
+  recipeId={recipe.id}
+/>
+
+<div className="saved-recipe-footer">
                         <span>
   {t(
     "discover.by",

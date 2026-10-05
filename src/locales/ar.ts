@@ -499,12 +499,78 @@ forRecipes: "وصفات",
       emptyText:
         "احفظ الوصفات التي تعجبك لتلاقيها بسهولة عندما تحتار شو تطبخ.",
 
-      discoverRecipes: "اكتشف وصفات",
+            discoverRecipes: "اكتشف وصفات",
       cookThis: "حضّر الوصفة",
       resultsFor: "نتائج البحث عن",
 categoryRecipes: "وصفات",
 saveRecipe: "حفظ الوصفة",
 removeSaved: "إزالة من الوصفات المحفوظة",
+    },
+
+    collections: {
+      kicker: "احفظها بطريقتك",
+      title: "مجموعاتي",
+      subtitle:
+        "رتّب وصفاتك ضمن مجموعات خاصة حسب المناسبة أو الأشخاص أو نوع الأكل الذي تحضّره.",
+
+      privateNote:
+        "مجموعاتك خاصة بحسابك ولا يمكن لغيرك رؤيتها.",
+      privateKicker: "خاصة فيك",
+
+      createKicker: "أنشئ مجموعة",
+      createTitle: "شو حابب تحفظ لهالمرة؟",
+      newCollection: "مجموعة جديدة",
+      namePlaceholder: "مثلاً غداء الأحد",
+      create: "إنشاء مجموعة",
+      createAndAdd: "إنشاء",
+      creating: "جاري الإنشاء...",
+
+      active: "المجموعات",
+      archived: "المؤرشفة",
+
+      saveToCollection: "إضافة إلى مجموعة",
+      chooseCollection: "اختر مجموعة",
+      add: "إضافة",
+      added: "تمت الإضافة",
+      saving: "جاري الحفظ...",
+      loading: "جاري تحميل المجموعات...",
+
+      noCollections:
+        "ما عندك أي مجموعات بعد.",
+
+      emptyTitle: "أنشئ أول مجموعة",
+      emptyText:
+        "جمّع وصفاتك حسب المزاج أو المناسبة أو الشخص أو بالطريقة اللي بتناسبك.",
+
+      noArchivedTitle: "ما في مجموعات مؤرشفة",
+      noArchivedText:
+        "المجموعات اللي بتأرشفها بتضل هون لحد ما ترجع تستعيدها.",
+
+      collectionEmpty:
+        "ما في وصفات بهالمجموعة بعد.",
+      findRecipes: "ابحث عن وصفات",
+
+      rename: "تغيير اسم المجموعة",
+      archive: "أرشفة",
+      restore: "استعادة",
+      removeRecipe: "إزالة من المجموعة",
+
+      loadError:
+        "تعذّر تحميل مجموعاتك.",
+      recipeLoadError:
+        "تعذّر تحميل بعض الوصفات.",
+      createError:
+        "تعذّر إنشاء المجموعة. تأكد أن الاسم غير مستخدم.",
+      updateError:
+        "تعذّر تحديث هذه المجموعة.",
+      renameError:
+        "تعذّر تغيير اسم المجموعة.",
+      archiveError:
+        "تعذّر أرشفة المجموعة.",
+      restoreError:
+        "تعذّر استعادة المجموعة.",
+      removeRecipeError:
+        "تعذّر إزالة الوصفة من هذه المجموعة.",
     },
 
 profile: {

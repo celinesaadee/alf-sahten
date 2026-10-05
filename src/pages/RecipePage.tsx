@@ -38,6 +38,7 @@ import "./RecipeUnits.css";
 import RecipePersonalTools from "../components/RecipePersonalTools";
 import CookingMode from "../components/CookingMode";
 import IngredientHighlights from "../components/IngredientHighlights";
+import { CollectionPicker } from "../components/CollectionPicker";
 import { normalizeRecipeTags } from "../lib/recipeTags";
 import "../components/RecipeTags.css";
 
@@ -823,10 +824,14 @@ setServings(
                 : t(
                     "recipe.saveRecipe",
                   )}
-            </button>
+                         </button>
 
-            <Link
-              to="/kitchen"
+              <CollectionPicker
+                recipeId={recipe.id}
+              />
+
+              <Link
+                to="/kitchen"
               className="recipe-kitchen-link"
             >
               <ShoppingBasket
