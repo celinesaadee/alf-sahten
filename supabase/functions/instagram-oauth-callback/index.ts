@@ -83,10 +83,10 @@ function appRedirect(
       "ALF_SAHTEN_APP_URL",
     ) || DEFAULT_APP_URL;
 
-  const url = new URL(
-    "/cook/recipes",
-    base,
-  );
+ const url = new URL(
+  "/cook/recipes/import-instagram",
+  base,
+);
 
   url.searchParams.set(
     "instagram",
