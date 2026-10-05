@@ -39,7 +39,9 @@ export async function loadTranslationReview(recipeId: string) {
 
 export async function saveTranslation(row: Translation, content: TranslationContent, approve: boolean) {
   const { data, error } = await supabase.from("recipe_translations")
-    .update({ ...content, review_status: approve ? "approved" : "pending" })
+    .update({ title: content.title, description: content.description,
+      ingredients: content.ingredients, instructions: content.instructions,
+      review_status: approve ? "approved" : "pending" })
     .eq("id", row.id).eq("updated_at", row.updated_at)
     .select("id, language, title, description, ingredients, instructions, review_status, updated_at").single();
   if (error) throw new Error("Could not save. Reload to check whether this translation changed, then try again.");
