@@ -1,5 +1,6 @@
 const en = {
   translation: {
+    ingredientQuantity: { open: "Show quantity for {{ingredient}}", current: "For the servings and measurements currently selected.", unspecified: "Quantity not specified", close: "Close" },
     cookingMode: {
       heading: "Cooking Mode", start: "Start Cooking Mode", exit: "Exit", previous: "Previous", next: "Next", finish: "Finish",
       step: "Step {{current}} of {{total}}", progress: "Cooking progress", navigation: "Step navigation",

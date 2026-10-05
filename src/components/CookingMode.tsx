@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { useTranslation } from "react-i18next";
 import "./CookingMode.css";
-import IngredientHighlights from "./IngredientHighlights";
+import IngredientHighlights, { type IngredientAmount } from "./IngredientHighlights";
 
-type Props = { title: string; steps: string[]; ingredients: string[] };
+type Props = { title: string; steps: string[]; ingredients: IngredientAmount[] };
 function CookingDialog({ title, steps, ingredients, onExit, returnFocus }: Props & { onExit: () => void; returnFocus: RefObject<HTMLButtonElement | null> }) {
   const { t } = useTranslation();
   const dialog = useRef<HTMLDialogElement>(null);

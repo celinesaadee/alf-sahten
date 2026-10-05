@@ -1048,7 +1048,7 @@ setServings(
           </div>
 
           <div className="recipe-steps">
-            <CookingMode key={`${recipe.id}:${currentLanguage}`} title={recipe.title} steps={recipe.instructions} ingredients={recipe.ingredients.map(item => item.name)} />
+            <CookingMode key={`${recipe.id}:${currentLanguage}`} title={recipe.title} steps={recipe.instructions} ingredients={adjustedIngredients.map(item => ({ name: item.name, quantity: item.adjustedQuantity, unit: item.adjustedUnit }))} />
             {recipe.instructions.map(
               (
                 instruction,
@@ -1069,7 +1069,7 @@ setServings(
 
                   <p>
                     {
-                      <IngredientHighlights text={instruction} ingredients={recipe.ingredients.map(item => item.name)} />
+                      <IngredientHighlights text={instruction} ingredients={adjustedIngredients.map(item => ({ name: item.name, quantity: item.adjustedQuantity, unit: item.adjustedUnit }))} />
                     }
                   </p>
                 </div>

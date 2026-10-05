@@ -1,1 +1,8 @@
 .ingredient-mention { background: #e1edd5; color: #183e28; padding: .05em .12em; border-radius: .2em; font-weight: 650; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.ingredient-mention-wrapper { display: inline; }
+button.ingredient-mention, .cooking-dialog button.ingredient-mention { display: inline; border: 0; margin: 0; padding: .05em .12em; background: #e1edd5; color: #183e28; font: inherit; font-weight: 650; text-decoration: underline; text-underline-offset: .15em; cursor: pointer; }
+button.ingredient-mention:focus-visible { outline: 2px solid #183e28; outline-offset: 3px; }
+.ingredient-quantity-popover { box-sizing: border-box; position: fixed; inset: 50% auto auto 50%; transform: translate(-50%, -50%); margin: 0; width: min(320px, calc(100vw - 32px)); padding: 24px; border: 1px solid #b6c5b9; border-radius: 16px; background: #fff8e7; color: #183e28; box-shadow: 0 8px 40px rgb(0 0 0 / .2); font-size: 1rem; line-height: 1.5; }
+.ingredient-quantity-popover strong, .ingredient-quantity-value, .ingredient-quantity-popover small { display: block; margin-bottom: 12px; }
+.ingredient-quantity-value { font-size: 1.5rem; font-weight: 650; }
+.ingredient-quantity-popover button { padding: 10px 14px; border: 1px solid #b6c5b9; border-radius: 8px; background: white; color: #183e28; font: inherit; cursor: pointer; }

@@ -1,5 +1,6 @@
 const ar = {
   translation: {
+    ingredientQuantity: { open: "عرض كمية {{ingredient}}", current: "بحسب الحصص والمقاييس المحددة حاليًا.", unspecified: "الكمية غير محددة", close: "إغلاق" },
     cookingMode: {
       heading: "وضع الطبخ", start: "بدء وضع الطبخ", exit: "خروج", previous: "السابق", next: "التالي", finish: "إنهاء",
       step: "الخطوة {{current}} من {{total}}", progress: "تقدم الطبخ", navigation: "التنقل بين الخطوات",
