@@ -1,5 +1,10 @@
 const fr = {
   translation: {
+    recipeLanguageDetection: {
+      detected: "Langue suggérée d’après la légende. Vérifiez-la avant l’envoi.",
+      uncertain: "La langue de la légende est incertaine. Choisissez la langue originale de la recette.",
+      confirm: "Je confirme la langue sélectionnée.",
+    },
     translationReview: { review: "Réviser les traductions" },
 stats: {
   completed: "Terminées",

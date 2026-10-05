@@ -1,5 +1,10 @@
 const ar = {
   translation: {
+    recipeLanguageDetection: {
+      detected: "تم اقتراح اللغة من النص. تحقق منها قبل الإرسال.",
+      uncertain: "تعذر تحديد لغة النص بثقة. اختر لغة الوصفة الأصلية.",
+      confirm: "أؤكد لغة الوصفة المحددة.",
+    },
     translationReview: { review: "مراجعة الترجمات" },
 stats: {
   completed: "مكتملة",

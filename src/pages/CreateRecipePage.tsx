@@ -18,6 +18,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { supabase } from "../lib/supabase";
+import { detectRecipeLanguage } from "../lib/recipeLanguage";
 
 import {
   createRecipe,
@@ -168,7 +169,15 @@ const [imagePreview, setImagePreview] =
   const [servings, setServings] = useState("");
 
   const [language, setLanguage] =
-    useState<RecipeLanguage>("en");
+    useState<RecipeLanguage>(() => !isEditing && instagramImport
+      ? detectRecipeLanguage(instagramImport.caption) ?? "en"
+      : "en");
+
+  const detectedImportLanguage = !isEditing && instagramImport
+    ? detectRecipeLanguage(instagramImport.caption) : null;
+  const [importLanguageConfirmed, setImportLanguageConfirmed] = useState(
+    isEditing || !instagramImport || detectedImportLanguage !== null,
+  );
 
   const [ingredients, setIngredients] = useState<
     RecipeIngredientInput[]
@@ -603,6 +612,10 @@ function removeSelectedImage() {
 async function saveRecipe(
   status: "draft" | "pending",
 ) {
+  if (!importLanguageConfirmed) {
+    setError(t("recipeLanguageDetection.uncertain"));
+    return;
+  }
   if (
     loadingRecipe ||
     editBlockedMessage ||
@@ -1173,7 +1186,7 @@ return (
             )}
           </div>
 
-          <label className="recipe-field">
+          <div className="recipe-field">
             <span>
               {t(
                 "recipeEditor.recipeLanguage",
@@ -1181,13 +1194,16 @@ return (
             </span>
 
             <select
+              aria-label={t("recipeEditor.recipeLanguage")}
+              required
               value={language}
-              onChange={(event) =>
+              onChange={(event) => {
+                setImportLanguageConfirmed(true);
                 setLanguage(
                   event.target
                     .value as RecipeLanguage,
-                )
-              }
+                );
+              }}
             >
               <option value="en">
                 {t(
@@ -1207,7 +1223,19 @@ return (
                 )}
               </option>
             </select>
-          </label>
+            {!isEditing && instagramImport && (
+              <small>{t(detectedImportLanguage
+                ? "recipeLanguageDetection.detected"
+                : "recipeLanguageDetection.uncertain")}</small>
+            )}
+            {!importLanguageConfirmed && (
+              <label>
+                <input type="checkbox" checked={importLanguageConfirmed}
+                  onChange={event => setImportLanguageConfirmed(event.target.checked)} required />
+                {t("recipeLanguageDetection.confirm")}
+              </label>
+            )}
+          </div>
         </div>
       </section>
 

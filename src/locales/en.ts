@@ -1,5 +1,10 @@
 const en = {
   translation: {
+    recipeLanguageDetection: {
+      detected: "Language suggested from the caption. Check it before submitting.",
+      uncertain: "Could not confidently detect the caption language. Choose the original recipe language.",
+      confirm: "I confirm the selected recipe language.",
+    },
     translationReview: { review: "Review translations" },
     home: {
   noPublishedRecipes:
