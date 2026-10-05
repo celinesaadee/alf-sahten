@@ -1,5 +1,12 @@
 const fr = {
   translation: {
+    personalRecipe: {
+      heading: "Votre cuisine", notes: "Notes privées", private: "Vous seul pouvez voir ces notes. Jusqu’à 5 000 caractères.",
+      markCooked: "Marquer comme préparée", cooked: "Préparée ✓", cookedHint: "Appuyez à nouveau pour annuler.",
+      save: "Enregistrer les notes", saved: "Enregistré.", saving: "Enregistrement…", loading: "Chargement de vos notes…",
+      loadError: "Impossible de charger vos notes.", saveError: "Échec de l’enregistrement. Vos modifications sont conservées ; réessayez.",
+      retry: "Réessayer", signIn: "Connectez-vous pour marquer la recette comme préparée et conserver des notes privées.",
+    },
     unitConversion: {
       label: "Mesures", original: "Originales", metric: "Métriques", us: "Unités américaines",
       note: "Poids et volumes compatibles uniquement. Les tasses et cuillères restent inchangées ; les volumes utilisent l’once liquide américaine.",

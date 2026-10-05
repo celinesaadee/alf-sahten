@@ -1,5 +1,12 @@
 const en = {
   translation: {
+    personalRecipe: {
+      heading: "Your cooking", notes: "Private notes", private: "Only you can see these notes. Up to 5,000 characters.",
+      markCooked: "Mark as cooked", cooked: "Cooked ✓", cookedHint: "Tap again to undo.",
+      save: "Save notes", saved: "Saved.", saving: "Saving…", loading: "Loading your notes…",
+      loadError: "Could not load your notes.", saveError: "Could not save. Your edits are still here; try again.",
+      retry: "Retry", signIn: "Sign in to mark as cooked and keep private notes.",
+    },
     unitConversion: {
       label: "Measurements", original: "Original", metric: "Metric", us: "US units",
       note: "Compatible weights and volumes only. Cups and spoons stay as written; volume conversions use US fluid ounces.",

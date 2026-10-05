@@ -35,6 +35,7 @@ import {
 import { supabase } from "../lib/supabase";
 import { convertMeasurement, type UnitSystem } from "../lib/unitConversion";
 import "./RecipeUnits.css";
+import RecipePersonalTools from "../components/RecipePersonalTools";
 
 type PublicRecipe = {
   id: string;
@@ -1072,6 +1073,8 @@ setServings(
               ),
             )}
           </div>
+
+          <RecipePersonalTools recipeId={recipe.id} />
 
           <div className="recipe-timing-card">
             <div>

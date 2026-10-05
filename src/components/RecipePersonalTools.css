@@ -1,0 +1,6 @@
+.recipe-personal-tools { margin-top: 24px; padding: 20px; border: 1px solid #d8ded7; border-radius: 16px; }
+.recipe-personal-tools label, .recipe-personal-tools small { display: block; margin: 12px 0; }
+.recipe-personal-tools textarea { box-sizing: border-box; width: 100%; padding: 12px; font: inherit; color: inherit; border: 1px solid #d8ded7; border-radius: 8px; resize: vertical; }
+.recipe-personal-tools button { padding: 10px 14px; font: inherit; border-radius: 8px; border: 1px solid #bdcbb9; background: #fff8e7; color: #183e28; cursor: pointer; }
+.recipe-personal-tools button[aria-pressed="true"] { background: #183e28; color: white; }
+.recipe-personal-tools button:disabled { opacity: .6; cursor: default; }
