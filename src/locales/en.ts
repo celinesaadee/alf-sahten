@@ -1288,6 +1288,7 @@ messageTooLong:
 createRecipe: "Create recipe",
 importInstagram: "Import from Instagram",
 connectingInstagram: "Connecting Instagram...",
+connectInstagram: "Connect Instagram",
 instagramConnectError:
   "We couldn't connect Instagram. Please try again.",
 

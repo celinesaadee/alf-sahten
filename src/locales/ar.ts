@@ -1311,6 +1311,7 @@ messageTooLong:
 createRecipe: "إنشاء وصفة",
 importInstagram: "استيراد من إنستغرام",
 connectingInstagram: "جارٍ الاتصال بإنستغرام…",
+connectInstagram: "ربط إنستغرام",
 instagramConnectError:
   "ما قدرنا نربط إنستغرام. حاولوا مرة أخرى.",
 

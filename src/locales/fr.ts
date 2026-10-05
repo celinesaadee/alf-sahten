@@ -1321,6 +1321,7 @@ subtitle:
 createRecipe: "Créer une recette",
 importInstagram: "Importer depuis Instagram",
 connectingInstagram: "Connexion à Instagram…",
+connectInstagram: "Connecter Instagram",
 instagramConnectError:
   "Impossible de connecter Instagram. Veuillez réessayer.",
   noRecipesTitle: "Aucune recette pour le moment",

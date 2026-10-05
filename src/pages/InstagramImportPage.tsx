@@ -33,9 +33,15 @@ function InstagramImportPage() {
     useState<InstagramMedia[]>([]);
   const [instagramUsername, setInstagramUsername] =
     useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] =
-    useState<string | null>(null);
+const [loading, setLoading] = useState(true);
+
+const [error, setError] =
+  useState<string | null>(null);
+
+const [
+  connectingInstagram,
+  setConnectingInstagram,
+] = useState(false);
 
 const [importedRecipes, setImportedRecipes] =
   useState<
@@ -141,6 +147,60 @@ setError(
     loadInstagramMedia();
   }, [t]);
 
+  async function handleConnectInstagram() {
+  try {
+    setConnectingInstagram(true);
+    setError(null);
+
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      throw sessionError;
+    }
+
+    if (!session) {
+      setError(
+        t("myRecipes.signInRequired"),
+      );
+      setConnectingInstagram(false);
+      return;
+    }
+
+    const {
+      data,
+      error: functionError,
+    } = await supabase.functions.invoke(
+      "instagram-oauth-start",
+    );
+
+    if (functionError) {
+      throw functionError;
+    }
+
+    if (
+      !data ||
+      typeof data.url !== "string"
+    ) {
+      throw new Error(
+        "Instagram authorization URL missing",
+      );
+    }
+
+    window.location.assign(data.url);
+  } catch (err) {
+    console.error(err);
+
+    setError(
+      t("myRecipes.instagramConnectError"),
+    );
+
+    setConnectingInstagram(false);
+  }
+}
+
   return (
     <main className="instagram-import-page">
       <CookDashboardNav />
@@ -176,11 +236,35 @@ setError(
           <p>{t("instagramImport.loading")}</p>
         )}
 
-        {error && (
-          <p className="form-error">
-            {error}
-          </p>
-        )}
+{error && (
+  <div>
+    <p className="form-error">
+      {error}
+    </p>
+
+    {error ===
+      t("instagramImport.notConnected") && (
+      <button
+        type="button"
+        className="instagram-import-button"
+        onClick={() =>
+          void handleConnectInstagram()
+        }
+        disabled={
+          connectingInstagram
+        }
+      >
+        {connectingInstagram
+          ? t(
+              "myRecipes.connectingInstagram",
+            )
+          : t(
+              "myRecipes.connectInstagram",
+            )}
+      </button>
+    )}
+  </div>
+)}
 
         {!loading &&
           !error &&
