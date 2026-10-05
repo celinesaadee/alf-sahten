@@ -15,6 +15,8 @@ import KitchenPage from "./pages/KitchenPage";
 import SavedPage from "./pages/SavedPage";
 import ProfilePage from "./pages/ProfilePage";
 import RecipePage from "./pages/RecipePage";
+import TranslationReviewPage from "./pages/TranslationReviewPage";
+import TranslationReviewQueue from "./pages/TranslationReviewQueue";
 import AuthPage from "./pages/AuthPage";
 import CreatorApplicationPage from "./pages/CreatorApplicationPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
@@ -111,6 +113,7 @@ function App() {
     <MyRecipesPage />
   }
 />
+<Route path="/cook/recipes/:id/translations" element={<TranslationReviewPage />} />
 
 <Route
   path="/cook/recipes/import-instagram"
@@ -166,6 +169,7 @@ function App() {
       <AdminRecipeReviewPage />
     }
   />
+  <Route path="/admin/translations" element={<TranslationReviewQueue />} />
 
   <Route
     path="/admin/cook-applications"

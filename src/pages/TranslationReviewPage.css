@@ -1,0 +1,12 @@
+.translation-review { max-width: 900px; margin: 0 auto; padding: 32px 20px 110px; }
+.translation-review button { padding: 10px 14px; border: 1px solid #b6c5b9; border-radius: 10px; background: #fff8e7; color: #183e28; cursor: pointer; }
+.translation-review button:disabled { opacity: .6; cursor: wait; }
+.translation-tabs, .translation-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+.translation-tabs button[aria-pressed="true"] { background: #183e28; color: white; }
+.translation-tabs small { display: block; margin-top: 5px; }
+.translation-review label { display: grid; gap: 7px; margin: 16px 0; min-width: 0; }
+.translation-review input, .translation-review textarea { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #b6c5b9; border-radius: 8px; font: inherit; }
+.translation-review textarea { min-height: 100px; resize: vertical; }
+.translation-review [readonly] { background: #f2f4ef; }
+.translation-ingredient { display: grid; grid-template-columns: 1fr 1fr 3fr; gap: 12px; }
+@media(max-width: 600px) { .translation-ingredient { grid-template-columns: 1fr 1fr; } .translation-ingredient label:last-child { grid-column: 1 / -1; } }

@@ -272,6 +272,12 @@ async function handleDeleteRecipe(recipe: Recipe) {
   )}
 
   {recipe.status === "approved" && (
+    <Link to={`/cook/recipes/${recipe.id}/translations`} className="my-recipe-edit-button">
+      {t("translationReview.review", "Review translations")}
+    </Link>
+  )}
+
+  {recipe.status === "approved" && (
     <span className="my-recipe-locked-note">
       {t("myRecipes.published")}
     </span>

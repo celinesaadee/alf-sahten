@@ -1,5 +1,6 @@
 const en = {
   translation: {
+    translationReview: { review: "Review translations" },
     home: {
   noPublishedRecipes:
     "No recipes published yet.",

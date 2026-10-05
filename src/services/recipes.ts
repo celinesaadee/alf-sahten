@@ -59,9 +59,10 @@ export async function getPublishedRecipes(
       } = await supabase
         .from("recipe_translations")
         .select(
-          "recipe_id, title, description, ingredients, instructions",
+          "recipe_id, title, description, ingredients, instructions, source_updated_at",
         )
         .eq("language", language)
+        .eq("review_status", "approved")
         .in(
           "recipe_id",
           recipeIdsNeedingTranslation,
@@ -76,6 +77,8 @@ export async function getPublishedRecipes(
         (
           translations ?? []
         ).forEach((translation) => {
+          const source = recipes.find(recipe => recipe.id === translation.recipe_id);
+          if (!source || Date.parse(source.updated_at) !== Date.parse(translation.source_updated_at)) return;
           translationMap.set(
             translation.recipe_id,
             {
@@ -773,6 +776,8 @@ export async function getPublishedRecipeById(
       )
       .eq("recipe_id", recipe.id)
       .eq("language", language)
+      .eq("review_status", "approved")
+      .eq("source_updated_at", recipe.updated_at)
       .maybeSingle();
 
     if (translationError) {
@@ -826,4 +831,3 @@ export async function getPublishedRecipeById(
     cook,
   };
 }
- 

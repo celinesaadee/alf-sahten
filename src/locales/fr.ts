@@ -1,5 +1,6 @@
 const fr = {
   translation: {
+    translationReview: { review: "Réviser les traductions" },
 stats: {
   completed: "Terminées",
   accepted: "Acceptées",

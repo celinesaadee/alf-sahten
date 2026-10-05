@@ -276,6 +276,7 @@ useEffect(() => {
           </div>
 
 <div className="admin-recipes-header-actions">
+  <Link to="/admin/translations" className="admin-recipes-secondary-button">{t("translationReview.review")}</Link>
   <Link
     to="/admin"
     className="admin-recipes-secondary-button"

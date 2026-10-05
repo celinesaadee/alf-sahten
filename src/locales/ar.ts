@@ -1,5 +1,6 @@
 const ar = {
   translation: {
+    translationReview: { review: "مراجعة الترجمات" },
 stats: {
   completed: "مكتملة",
   accepted: "مقبولة",

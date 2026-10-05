@@ -817,6 +817,11 @@ setServings(
             </Link>
 
             {isAdmin && (
+  <Link to={`/cook/recipes/${id}/translations`} className="recipe-kitchen-link">
+    {t("translationReview.review", "Review translations")}
+  </Link>
+)}
+            {isAdmin && (
   <button
     type="button"
     className="recipe-kitchen-link"

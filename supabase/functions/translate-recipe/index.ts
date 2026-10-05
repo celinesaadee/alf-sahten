@@ -774,6 +774,7 @@ Deno.serve(async (req: Request) => {
           {
             recipe_id:
               recipe.id,
+            review_status: "pending",
             language:
               targetLanguage,
             title:
