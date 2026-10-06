@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 
 import {
-  Link,
   useLocation,
   useNavigate,
 } from "react-router-dom";
@@ -177,13 +176,6 @@ function AuthPage() {
   return (
     <main className="auth-page">
       <section className="auth-brand-panel">
-        <Link
-          to="/"
-          className="auth-logo"
-        >
-          Alf Sahten
-        </Link>
-
         <div className="auth-brand-copy">
           <p className="section-kicker">
             {t("auth.brandKicker")}

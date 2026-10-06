@@ -1,5 +1,10 @@
+import { arNutritionCalculator } from "./nutritionCalculator";
+import { arCookProfileExtras } from "./cookProfileExtras";
+
 const ar = {
   translation: {
+    nutritionCalculator: arNutritionCalculator,
+    cookProfileExtras: arCookProfileExtras,
     recipeTags: { title: "وسوم الوصفة (اختيارية)", filter: "وسم الوصفة", all: "كل الوسوم", vegetarian: "نباتية", "quick-meals": "وجبات سريعة", "budget-friendly": "اقتصادية", "one-pot": "في قدر واحد", noResultsText: "جرّب بحثًا أو فئة أو وسمًا مختلفًا." },
     ingredientQuantity: { open: "عرض كمية {{ingredient}}", current: "بحسب الحصص والمقاييس المحددة حاليًا.", unspecified: "الكمية غير محددة", close: "إغلاق" },
     cookingMode: {
@@ -951,6 +956,16 @@ cookTimeRequired:
   "يجب أن يكون وقت الطهي دقيقة واحدة على الأقل.",
 servingsRequired:
   "يجب أن يكون عدد الحصص 1 على الأقل.",
+  nutritionTitle: "القيم الغذائية",
+nutritionText: "معلومات غذائية اختيارية لكل حصة.",
+calories: "السعرات الحرارية (كيلوكالوري)",
+protein: "البروتين (غ)",
+carbohydrates: "الكربوهيدرات (غ)",
+fat: "الدهون (غ)",
+fiber: "الألياف (غ)",
+sugar: "السكر (غ)",
+sodium: "الصوديوم (ملغ)",
+saveChanges: "حفظ التغييرات",
 },
 
 recipe: {
@@ -991,7 +1006,15 @@ removeSaved: "إزالة من الوصفات المحفوظة",
 minutesShort: "د",
 decreaseServings: "تقليل عدد الحصص",
 increaseServings: "زيادة عدد الحصص",
-      
+      nutritionKicker: "لكل حصة",
+nutritionTitle: "القيم الغذائية",
+calories: "السعرات الحرارية",
+protein: "البروتين",
+carbohydrates: "الكربوهيدرات",
+fat: "الدهون",
+fiber: "الألياف",
+sugar: "السكر",
+sodium: "الصوديوم",
     },
 
         cookServices: {

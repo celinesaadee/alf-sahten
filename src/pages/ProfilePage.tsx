@@ -16,6 +16,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
+import CookStatistics from "../components/CookStatistics";
+import FollowingCooks from "../components/FollowingCooks";
+import { PublicCookContent } from "./PublicCookPage";
 
 type Profile = {
   full_name: string | null;
@@ -29,6 +32,7 @@ function ProfilePage() {
 
   const [profile, setProfile] = useState<Profile | null>(null);
 const [name, setName] = useState("");
+const [cookPhoto, setCookPhoto] = useState<string | null>(null);
 const [followerCount, setFollowerCount] =
   useState<number | null>(null);
 
@@ -71,7 +75,7 @@ setName(data.full_name ?? "");
 const { data: cookData, error: cookError } =
   await supabase
     .from("cook_profiles")
-    .select("follower_count, is_approved, username")
+    .select("follower_count, is_approved, username, profile_image_url")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -85,6 +89,8 @@ if (cookError) {
 setIsApprovedCook(
   cookData?.is_approved === true,
 );
+
+setCookPhoto(cookData?.profile_image_url ?? null);
 
 setCookUsername(
   cookData?.username ?? null,
@@ -180,9 +186,11 @@ const roleLabel =
       ? t("profile.creator")
       : t("profile.regularUser");
 
+  const hasCookProfile = isApprovedCook && !!cookUsername;
   return (
     <main className="profile-page">
-      <section className="profile-hero">
+      {hasCookProfile && <PublicCookContent key={cookUsername} username={cookUsername ?? undefined} currentUserId={user.id} embedded />}
+      {!hasCookProfile && <section className="profile-hero">
   <div>
     <p className="section-kicker">
       {t("profile.kicker")}
@@ -192,13 +200,13 @@ const roleLabel =
 
     <p>{t("profile.subtitle")}</p>
   </div>
-</section>
+</section>}
 
-<section className="profile-content">
+<section className={`profile-content${hasCookProfile ? " profile-content-with-cook" : ""}`}>
   <section className="profile-dashboard-card">
-    <div className="profile-dashboard-heading">
+    {!hasCookProfile && <div className="profile-dashboard-heading">
       <div className="profile-dashboard-icon">
-        <UserRound size={24} />
+        {cookPhoto ? <img src={cookPhoto} alt="" /> : <UserRound size={28} />}
       </div>
 
       <div>
@@ -213,21 +221,11 @@ const roleLabel =
 
         <p>{roleLabel}</p>
 
-        {followerCount !== null && (
-          <div className="profile-follower-count">
-            <strong>
-              {followerCount}
-            </strong>
-
-            <span>
-              {followerCount === 1
-                ? t("profile.follower")
-                : t("profile.followers")}
-            </span>
-          </div>
-        )}
       </div>
-    </div>
+      {followerCount !== null && (
+        <CookStatistics key={user.id} cookId={user.id} followerCount={followerCount} />
+      )}
+    </div>}
 
     <div className="profile-dashboard-actions">
       <Link
@@ -291,6 +289,7 @@ const roleLabel =
     {isApprovedCook ||
     profile?.role === "admin" ? (
       <>
+        <Link to="/become-creator" className="profile-cook-link"><Settings size={17} /><span>{t("cookProfileExtras.editProfile")}</span><ArrowRight size={16} /></Link>
         {cookUsername && (
           <Link
             to={`/cooks/${cookUsername}`}
@@ -417,6 +416,7 @@ const roleLabel =
       </button>
     </div>
   </aside>
+  <FollowingCooks key={user.id} userId={user.id} />
 </section>
     </main>
   );

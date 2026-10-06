@@ -8,7 +8,7 @@ import {
   ArrowRight,
   ChefHat,
   Clock3,
-  Heart,
+  Bookmark,
   Search,
 } from "lucide-react";
 
@@ -529,7 +529,7 @@ function DiscoverPage() {
                           )
                         }
                       >
-                        <Heart
+                        <Bookmark
                           size={21}
                           fill={
                             isSaved

@@ -1,0 +1,74 @@
+.cook-statistics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.cook-statistics > div { min-width: 0; }
+.cook-statistics dd { margin: 0 0 5px; color: var(--green, #214f3d); font-family: inherit; font-size: 20px; font-weight: 600; }
+.cook-statistics dt { font-size: 12px; color: #66705f; }
+.cook-statistics-help { font-size: 12px; line-height: 1.6; color: #74776b; margin: 12px 0 0; }
+.cook-statistics-error { line-height: 1.6; font-size: 13px; }
+.cook-statistics-error button, .following-cooks button { font: inherit; color: var(--green, #214f3d); border: 1px solid #d7ddcf; background: transparent; border-radius: 20px; padding: 8px 14px; cursor: pointer; }
+.following-cooks { margin-top: 28px; padding: 22px; border: 1px solid var(--line, #d7ddcf); border-radius: 20px; background: #fffdf7; }
+.following-cooks-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.following-cooks-heading h2 { font-family: Georgia, serif; font-size: 23px; font-weight: 500; margin: 0; }
+.following-cooks-heading > span { padding: 4px 9px; background: #ebefdf; border-radius: 12px; font-size: 12px; }
+.following-cooks p { color: #66705f; font-size: 13px; line-height: 1.6; }
+.following-cook-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.following-cook-list li { display: flex; gap: 12px; align-items: center; padding-block: 12px; min-width: 0; }
+.following-cook-list li > div:last-child { min-width: 0; overflow-wrap: anywhere; }
+.following-cook-list strong, .following-cook-list a { display: block; }
+.following-cook-list a { margin-top: 4px; color: var(--green, #214f3d); font-size: 13px; }
+.following-cook-avatar { width: 48px; height: 48px; flex: 0 0 48px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: #ebefdf; }
+.following-cook-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.following-load-more { margin-top: 16px; }
+.profile-content > .following-cooks { grid-column: 1 / -1; }
+.profile-images-editor { min-width: 0; border: 1px solid #d7ddcf; border-radius: 16px; margin: 20px 0 28px; padding: 18px; }
+.profile-images-editor legend { padding-inline: 6px; font-weight: 600; }
+.profile-images-editor > p { font-size: 13px; line-height: 1.6; color: #66705f; margin-top: 0; }
+.profile-images-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.profile-image-card { min-width: 0; }
+.profile-image-preview { display: grid; place-items: center; height: 130px; margin-bottom: 14px; border-radius: 14px; overflow: hidden; background: #e9eddc; }
+.profile-image-preview img { width: 100%; height: 100%; object-fit: cover; }
+.profile-image-card-profile .profile-image-preview { width: 130px; border-radius: 50%; }
+.profile-image-upload { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #d7ddcf; padding: 9px 12px; border-radius: 18px; cursor: pointer; font-size: 13px; position: relative; overflow: hidden; }
+.profile-image-upload input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.profile-image-upload:focus-within { outline: 2px solid var(--green, #214f3d); outline-offset: 3px; }
+@media (max-width: 600px) {
+  .cook-statistics { gap: 10px; }
+  .profile-images-grid { grid-template-columns: minmax(0, 1fr); }
+  .following-cooks { padding: 17px; }
+}
+.profile-image-card h3, .profile-photo-cropper h3 { font-size: 14px; font-weight: 600; }
+.profile-image-card-cover .profile-image-preview { height: auto; aspect-ratio: 3; }
+.profile-photo-cropper { margin-top: 20px; padding-top: 16px; border-top: 1px solid #d7ddcf; }
+.profile-photo-cropper p { font-size: 13px; line-height: 1.6; }
+.profile-photo-crop { position: relative; overflow: hidden; width: 100%; background: #e9eddc; touch-action: none; cursor: grab; }
+.profile-photo-crop:active { cursor: grabbing; }
+.profile-photo-crop-profile { max-width: 280px; border-radius: 50%; }
+.profile-photo-crop img { position: absolute; max-width: none; pointer-events: none; user-select: none; }
+.profile-photo-slider { display: flex; align-items: center; gap: 12px; margin-block: 14px; font-size: 13px; }
+.profile-photo-slider span { min-width: 100px; }
+.profile-photo-slider input { min-width: 0; flex: 1; accent-color: #214f3d; }
+.creator-application-form .profile-images-editor .profile-image-action { width: auto; margin: 8px; padding: 8px 12px; color: #214f3d; background: transparent; border: 1px solid #d7ddcf; box-shadow: none; font-size: 13px; }
+
+.profile-dashboard-heading { display: grid; grid-template-columns: 84px minmax(0, 1fr); align-items: center; gap: 12px 22px; }
+.profile-dashboard-heading .profile-dashboard-icon { grid-row: 1 / 3; width: 84px; height: 84px; overflow: hidden; }
+.profile-dashboard-icon img { width: 100%; height: 100%; object-fit: cover; }
+.profile-dashboard-heading > div:nth-child(2) { min-width: 0; }
+.profile-dashboard-heading h2 { overflow-wrap: anywhere; }
+.profile-dashboard-heading .cook-statistics-panel { grid-column: 2; }
+.profile-dashboard-heading .cook-statistics { max-width: 360px; }
+.profile-dashboard-heading .cook-statistics dd { margin-bottom: 3px; }
+.profile-dashboard-heading .cook-statistics dt { color: #555d50; }
+.profile-dashboard-heading > div:nth-child(2) > p:last-child { margin: 5px 0 0; color: #777a70; font-size: 12px; }
+@media (max-width: 600px) {
+  .profile-dashboard-card { padding: 22px 18px; }
+  .profile-dashboard-heading { grid-template-columns: 64px minmax(0, 1fr); gap: 12px 14px; }
+  .profile-dashboard-heading .profile-dashboard-icon { width: 64px; height: 64px; }
+  .profile-dashboard-heading h2 { font-size: 24px; }
+  .profile-dashboard-heading .section-kicker { font-size: 9px; }
+  .profile-dashboard-heading .cook-statistics { gap: 8px; }
+  .profile-dashboard-heading .cook-statistics dd { font-size: 18px; }
+  .profile-dashboard-heading .cook-statistics dt { font-size: 11px; overflow-wrap: anywhere; }
+}
+
+.profile-content-with-cook { padding-top: 28px; }
+.profile-content-with-cook .profile-dashboard-actions { margin-top: 0; }
+.profile-page > .public-cook-page { min-height: 0; padding-bottom: 0; }

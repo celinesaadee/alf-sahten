@@ -17,6 +17,8 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
+import ProfileImagesEditor from "../components/ProfileImagesEditor";
+import { normalizeProfileUrl } from "../lib/cookProfile";
 
 type CookType =
   | "home_cook"
@@ -24,6 +26,8 @@ type CookType =
   | "professional_chef";
 
 type CookProfile = {
+  profile_image_url: string | null;
+  cover_image_url: string | null;
   display_name: string;
   username: string | null;
   bio: string;
@@ -70,6 +74,9 @@ function CreatorApplicationPage() {
 
   const [bio, setBio] =
     useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const [coverImage, setCoverImage] = useState("");
+  const [imagesBusy, setImagesBusy] = useState(false);
 
   const [location, setLocation] =
     useState("");
@@ -122,6 +129,8 @@ function CreatorApplicationPage() {
             `
               display_name,
               username,
+              profile_image_url,
+              cover_image_url,
               bio,
               location,
               cook_type,
@@ -175,6 +184,8 @@ function CreatorApplicationPage() {
         );
 
         setBio(profile.bio ?? "");
+        setProfileImage(profile.profile_image_url ?? "");
+        setCoverImage(profile.cover_image_url ?? "");
 
         setLocation(
           profile.location ?? "",
@@ -245,7 +256,7 @@ function CreatorApplicationPage() {
   ) {
     event.preventDefault();
 
-    if (!user) {
+    if (!user || saving || imagesBusy) {
       return;
     }
 
@@ -274,21 +285,31 @@ if (!cleanDisplayName) {
       return;
     }
 
+    const cleanInstagram = normalizeProfileUrl(instagram, "instagram");
+    const cleanWebsite = normalizeProfileUrl(website, "website");
+    const cleanProfileImage = normalizeProfileUrl(profileImage, "photo");
+    const cleanCoverImage = normalizeProfileUrl(coverImage, "photo");
+    if ([cleanInstagram, cleanWebsite, cleanProfileImage, cleanCoverImage].some(value => value === null)) {
+      setMessage(t("cookProfileExtras.invalidLink"));
+      return;
+    }
     setSaving(true);
 
     const cookPayload = {
       display_name: cleanDisplayName,
       username: cleanUsername,
       bio: bio.trim(),
+      profile_image_url: cleanProfileImage || null,
+      cover_image_url: cleanCoverImage || null,
       location:
         location.trim() || null,
       cook_type: cookType,
       specialties:
         buildSpecialties(),
       instagram_url:
-        instagram.trim() || null,
+        cleanInstagram || null,
       website_url:
-        website.trim() || null,
+        cleanWebsite || null,
       whatsapp_contact:
         whatsapp.trim() || null,
     };
@@ -305,6 +326,8 @@ if (!cleanDisplayName) {
           `
             display_name,
             username,
+            profile_image_url,
+            cover_image_url,
             bio,
             location,
             cook_type,
@@ -334,6 +357,8 @@ if (!cleanDisplayName) {
           `
             display_name,
             username,
+            profile_image_url,
+            cover_image_url,
             bio,
             location,
             cook_type,
@@ -395,8 +420,8 @@ if (!cleanDisplayName) {
           cleanDisplayName,
         bio: bio.trim(),
         social_link:
-          instagram.trim() ||
-          website.trim() ||
+          cleanInstagram ||
+          cleanWebsite ||
           null,
         reason: reason.trim(),
         status: "pending",
@@ -459,6 +484,8 @@ if (!cleanDisplayName) {
     }
 
     setUsername(cleanUsername);
+    setInstagram(cleanInstagram ?? "");
+    setWebsite(cleanWebsite ?? "");
 
    setMessage(
   cookProfile
@@ -644,6 +671,11 @@ if (!cleanDisplayName) {
             </div>
           )}
 
+          <ProfileImagesEditor
+            profileUrl={profileImage} coverUrl={coverImage}
+            disabled={saving} uploadsEnabled={approved} onBusyChange={setImagesBusy}
+            onChange={(field, url) => field === "profile" ? setProfileImage(url) : setCoverImage(url)}
+          />
           <div className="creator-form-field">
             <label>
               {t(
@@ -826,7 +858,7 @@ if (!cleanDisplayName) {
               <AtSign size={17} />
 
               <input
-                type="url"
+                type="text"
                 value={instagram}
                 onChange={(event) =>
                   setInstagram(
@@ -849,7 +881,7 @@ if (!cleanDisplayName) {
               <Globe2 size={17} />
 
               <input
-                type="url"
+                type="text"
                 value={website}
                 onChange={(event) =>
                   setWebsite(
@@ -911,7 +943,7 @@ if (!cleanDisplayName) {
 
           <button
             type="submit"
-            disabled={saving}
+            disabled={saving || imagesBusy}
           >
             <Save size={17} />
 

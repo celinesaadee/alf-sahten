@@ -249,10 +249,11 @@ async function handleDeleteRecipe(recipe: Recipe) {
 
     <div className="my-recipe-actions">
   {(
-    recipe.status === "draft" ||
-    recipe.status === "changes_requested" ||
-    recipe.status === "declined"
-  ) && (
+  recipe.status === "draft" ||
+  recipe.status === "changes_requested" ||
+  recipe.status === "declined" ||
+  recipe.status === "approved"
+) && (
     <Link
       to={`/cook/recipes/${recipe.id}/edit`}
       className="my-recipe-edit-button"

@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test:nutrition": "node --test tests/nutrition.test.cjs",
+    "test:cook-profile": "node --test tests/cook-profile.test.cjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1198,7 +1198,7 @@ const {
 
             >
 
-              Alf Sahten
+              <img src="/alf-sahten-logo.png" alt="Alf Sahten" className="footer-brand-logo" />
 
             </Link>
 

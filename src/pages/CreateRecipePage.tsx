@@ -19,6 +19,8 @@ import { useTranslation } from "react-i18next";
 
 import { supabase } from "../lib/supabase";
 import { detectRecipeLanguage } from "../lib/recipeLanguage";
+import NutritionCalculator from "../components/NutritionCalculator";
+import { nutrientKeys, nutritionBasis, type NutrientValues } from "../lib/nutrition";
 import { RECIPE_TAGS, normalizeRecipeTags, type RecipeTag } from "../lib/recipeTags";
 import "../components/RecipeTags.css";
 
@@ -170,7 +172,16 @@ const [imagePreview, setImagePreview] =
   const [prepMinutes, setPrepMinutes] = useState("");
   const [cookMinutes, setCookMinutes] = useState("");
   const [servings, setServings] = useState("");
-
+  const [nutritionEstimate, setNutritionEstimate] = useState<{ basis: string; excluded: number } | null>(null);
+const [nutrition, setNutrition] = useState({
+  calories: "",
+  protein: "",
+  carbohydrates: "",
+  fat: "",
+  fiber: "",
+  sugar: "",
+  sodium: "",
+});
   const [language, setLanguage] =
     useState<RecipeLanguage>(() => !isEditing && instagramImport
       ? detectRecipeLanguage(instagramImport.caption) ?? "en"
@@ -201,6 +212,16 @@ const [imagePreview, setImagePreview] =
 
   const [editBlockedMessage, setEditBlockedMessage] =
     useState<string | null>(null);
+
+    const [existingRecipeStatus, setExistingRecipeStatus] =
+  useState<
+    | "draft"
+    | "pending"
+    | "approved"
+    | "changes_requested"
+    | "declined"
+    | null
+  >(null);
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -352,30 +373,30 @@ if (categoryExists) {
           user.id,
         );
 
-      if (
-        ![
-          "draft",
-          "changes_requested",
-          "declined",
-        ].includes(recipe.status)
-      ) {
-        setEditBlockedMessage(
-          recipe.status === "pending"
-            ? t(
-                "recipeEditor.pendingBlocked",
-              )
-            : recipe.status ===
-                "approved"
-              ? t(
-                  "recipeEditor.approvedBlocked",
-                )
-              : t(
-                  "recipeEditor.unavailableBlocked",
-                ),
-        );
+        setExistingRecipeStatus(
+  recipe.status,
+);
 
-        return;
-      }
+      if (
+  ![
+    "draft",
+    "changes_requested",
+    "declined",
+    "approved",
+  ].includes(recipe.status)
+) {
+  setEditBlockedMessage(
+    recipe.status === "pending"
+      ? t(
+          "recipeEditor.pendingBlocked",
+        )
+      : t(
+          "recipeEditor.unavailableBlocked",
+        ),
+  );
+
+  return;
+}
 
       setAdminNote(
         recipe.admin_note ?? null,
@@ -430,6 +451,61 @@ setServings(
     ? String(recipe.servings)
     : "",
 );
+
+const recipeNutrition =
+  recipe.nutrition &&
+  typeof recipe.nutrition === "object" &&
+  !Array.isArray(recipe.nutrition)
+    ? recipe.nutrition
+    : {};
+
+setNutritionEstimate(recipeNutrition.source === "usda-estimate" && typeof recipeNutrition.basis === "string"
+  ? { basis: recipeNutrition.basis, excluded: Number(recipeNutrition.excludedIngredients) || 0 }
+  : null);
+
+setNutrition({
+  calories:
+    recipeNutrition.calories !== null &&
+    recipeNutrition.calories !== undefined
+      ? String(recipeNutrition.calories)
+      : "",
+
+  protein:
+    recipeNutrition.protein !== null &&
+    recipeNutrition.protein !== undefined
+      ? String(recipeNutrition.protein)
+      : "",
+
+  carbohydrates:
+    recipeNutrition.carbohydrates !== null &&
+    recipeNutrition.carbohydrates !== undefined
+      ? String(recipeNutrition.carbohydrates)
+      : "",
+
+  fat:
+    recipeNutrition.fat !== null &&
+    recipeNutrition.fat !== undefined
+      ? String(recipeNutrition.fat)
+      : "",
+
+  fiber:
+    recipeNutrition.fiber !== null &&
+    recipeNutrition.fiber !== undefined
+      ? String(recipeNutrition.fiber)
+      : "",
+
+  sugar:
+    recipeNutrition.sugar !== null &&
+    recipeNutrition.sugar !== undefined
+      ? String(recipeNutrition.sugar)
+      : "",
+
+  sodium:
+    recipeNutrition.sodium !== null &&
+    recipeNutrition.sodium !== undefined
+      ? String(recipeNutrition.sodium)
+      : "",
+});
 
       setLanguage(
         (recipe.original_language ??
@@ -567,6 +643,24 @@ function removeSelectedImage() {
     );
   }
 
+  function updateNutrition(
+  field: keyof typeof nutrition,
+  value: string,
+) {
+  setNutrition((current) => ({
+    ...current,
+    [field]: value,
+  }));
+}
+
+  const currentNutritionBasis = nutritionBasis(ingredients, servings);
+  const nutritionIsStale = nutritionEstimate !== null && nutritionEstimate.basis !== currentNutritionBasis;
+
+  function applyNutritionEstimate(values: NutrientValues, excluded: number) {
+    setNutrition(Object.fromEntries(nutrientKeys.map(key => [key, values[key] === undefined ? "" : String(values[key])])) as typeof nutrition);
+    setNutritionEstimate({ basis: currentNutritionBasis, excluded });
+  }
+
   function addIngredient() {
     setIngredients((current) => [
       ...current,
@@ -616,6 +710,10 @@ function removeSelectedImage() {
 async function saveRecipe(
   status: "draft" | "pending",
 ) {
+  if (nutritionIsStale) {
+    setError(t("nutritionCalculator.stale"));
+    return;
+  }
   if (!importLanguageConfirmed) {
     setError(t("recipeLanguageDetection.uncertain"));
     return;
@@ -629,10 +727,18 @@ async function saveRecipe(
   }
 
   try {
-    setSubmitting(true);
-    setError(null);
+  setSubmitting(true);
+  setError(null);
 
-    if (!title.trim()) {
+const finalStatus:
+  | "draft"
+  | "pending"
+  | "approved" =
+  existingRecipeStatus === "approved"
+    ? "approved"
+    : status;
+
+  if (!title.trim()) {
       setError(
         t(
           "recipeEditor.enterRecipeName",
@@ -666,7 +772,10 @@ async function saveRecipe(
           }),
         );
 
-    if (status === "pending") {
+    if (
+  finalStatus === "pending" ||
+  finalStatus === "approved"
+) {
  if (
   !prepMinutes.trim() ||
   Number(prepMinutes) < 1
@@ -781,6 +890,15 @@ if (selectedImageFile) {
     );
 }
 
+const cleanedNutrition = Object.fromEntries(
+  Object.entries(nutrition)
+    .filter(([, value]) => value.trim() !== "")
+    .map(([key, value]) => [
+      key,
+      Number(value),
+    ]),
+);
+
 const recipeInput = {
   tags,
   title: title.trim(),
@@ -807,6 +925,15 @@ const recipeInput = {
     ? Number(servings)
     : null,
 
+  nutrition: {
+    ...cleanedNutrition,
+    ...(nutritionEstimate ? {
+      source: "usda-estimate" as const,
+      basis: nutritionEstimate.basis,
+      excludedIngredients: nutritionEstimate.excluded,
+    } : {}),
+  },
+
   ingredients:
     cleanedIngredients,
 
@@ -815,7 +942,7 @@ const recipeInput = {
 
   original_language: language,
 
-  status,
+  status: finalStatus,
 
   instagram_media_id:
     instagramImport?.id ?? null,
@@ -840,10 +967,11 @@ const recipeInput = {
         );
       }
     } else {
-      await createRecipe(
-        recipeInput,
-      );
-    }
+  await createRecipe({
+    ...recipeInput,
+    status,
+  });
+}
 
     navigate("/cook/recipes");
   } catch (err) {
@@ -1347,13 +1475,238 @@ return (
               placeholder="4"
             />
           </label>
-        </div>
+                </div>
       </section>
 
       <section className="recipe-form-section">
         <div className="recipe-form-section-heading">
           <span>03</span>
 
+          <div>
+            <h2>
+              {t(
+                "recipeEditor.nutritionTitle",
+                {
+                  defaultValue:
+                    "Nutrition",
+                },
+              )}
+            </h2>
+
+            <p>
+              {t(
+                "recipeEditor.nutritionText",
+                {
+                  defaultValue:
+                    "Optional nutrition information per serving.",
+                },
+              )}
+            </p>
+          </div>
+        </div>
+
+        <NutritionCalculator
+          key={currentNutritionBasis}
+          ingredients={ingredients}
+          servings={servings}
+          disabled={submitting || loadingRecipe || Boolean(editBlockedMessage)}
+          onApply={applyNutritionEstimate}
+        />
+        {nutritionEstimate && <div className="nutrition-estimate-notice" role="status">
+          <p>{t(nutritionIsStale ? "nutritionCalculator.stale" : "nutritionCalculator.savedEstimate")}</p>
+          <button type="button" className="recipe-draft-button" disabled={submitting}
+            onClick={() => setNutritionEstimate(null)}>{t("nutritionCalculator.useManual")}</button>
+        </div>}
+        <div className="recipe-form-grid">
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.calories",
+                {
+                  defaultValue:
+                    "Calories",
+                },
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={nutrition.calories}
+              onChange={(event) =>
+                updateNutrition(
+                  "calories",
+                  event.target.value,
+                )
+              }
+              placeholder="350"
+            />
+          </label>
+
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.protein",
+                {
+                  defaultValue:
+                    "Protein (g)",
+                },
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={nutrition.protein}
+              onChange={(event) =>
+                updateNutrition(
+                  "protein",
+                  event.target.value,
+                )
+              }
+              placeholder="20"
+            />
+          </label>
+
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.carbohydrates",
+                {
+                  defaultValue:
+                    "Carbohydrates (g)",
+                },
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={
+                nutrition.carbohydrates
+              }
+              onChange={(event) =>
+                updateNutrition(
+                  "carbohydrates",
+                  event.target.value,
+                )
+              }
+              placeholder="45"
+            />
+          </label>
+
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.fat",
+                {
+                  defaultValue:
+                    "Fat (g)",
+                },
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={nutrition.fat}
+              onChange={(event) =>
+                updateNutrition(
+                  "fat",
+                  event.target.value,
+                )
+              }
+              placeholder="12"
+            />
+          </label>
+
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.fiber",
+                {
+                  defaultValue:
+                    "Fiber (g)",
+                },
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={nutrition.fiber}
+              onChange={(event) =>
+                updateNutrition(
+                  "fiber",
+                  event.target.value,
+                )
+              }
+              placeholder="5"
+            />
+          </label>
+
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.sugar",
+                {
+                  defaultValue:
+                    "Sugar (g)",
+                },
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={nutrition.sugar}
+              onChange={(event) =>
+                updateNutrition(
+                  "sugar",
+                  event.target.value,
+                )
+              }
+              placeholder="8"
+            />
+          </label>
+
+          <label className="recipe-field">
+            <span>
+              {t(
+                "recipeEditor.sodium",
+                {
+                  defaultValue:
+                    "Sodium (mg)",
+                },
+              )}
+            </span>
+
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={nutrition.sodium}
+              onChange={(event) =>
+                updateNutrition(
+                  "sodium",
+                  event.target.value,
+                )
+              }
+              placeholder="450"
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="recipe-form-section">
+        <div className="recipe-form-section-heading">
+          <span>05</span>
           <div>
             <h2>
               {t(
@@ -1561,48 +1914,75 @@ return (
 )}
 
 <div className="create-recipe-actions">
-        <button
-          type="button"
-          className="recipe-draft-button"
-          disabled={submitting}
-          onClick={() =>
-            saveRecipe("draft")
-          }
-        >
-          <Save size={18} />
+  {existingRecipeStatus === "approved" ? (
+    <button
+      type="button"
+      className="recipe-submit-button"
+      disabled={submitting}
+      onClick={() =>
+        saveRecipe("draft")
+      }
+    >
+      <Save size={18} />
 
-          {submitting
+      {submitting
+        ? t(
+            "recipeEditor.saving",
+          )
+        : t(
+            "recipeEditor.saveChanges",
+            {
+              defaultValue:
+                "Save changes",
+            },
+          )}
+    </button>
+  ) : (
+    <>
+      <button
+        type="button"
+        className="recipe-draft-button"
+        disabled={submitting}
+        onClick={() =>
+          saveRecipe("draft")
+        }
+      >
+        <Save size={18} />
+
+        {submitting
+          ? t(
+              "recipeEditor.saving",
+            )
+          : t(
+              "recipeEditor.saveDraft",
+            )}
+      </button>
+
+      <button
+        type="button"
+        className="recipe-submit-button"
+        disabled={submitting}
+        onClick={() =>
+          saveRecipe("pending")
+        }
+      >
+        <Send size={18} />
+
+        {submitting
+          ? t(
+              "recipeEditor.saving",
+            )
+          : isAdmin
             ? t(
-                "recipeEditor.saving",
+                "recipeEditor.publish",
               )
             : t(
-                "recipeEditor.saveDraft",
+                "recipeEditor.submitApproval",
               )}
-        </button>
-
-        <button
-          type="button"
-          className="recipe-submit-button"
-          disabled={submitting}
-          onClick={() =>
-            saveRecipe("pending")
-          }
-        >
-          <Send size={18} />
-
-          {submitting
-            ? t(
-                "recipeEditor.saving",
-              )
-            : isAdmin
-              ? t(
-                  "recipeEditor.publish",
-                )
-              : t(
-                  "recipeEditor.submitApproval",
-                )}
-        </button>
-      </div>
+      </button>
+    </>
+  )}
+</div>
     </div>
   </main>
 );

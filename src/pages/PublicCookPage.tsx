@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
-  AtSign,
+  Pencil,
   Check,
   ChefHat,
   Clock3,
   Globe,
   Heart,
   MapPin,
+  Search,
+  X,
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -27,6 +29,8 @@ import {
 } from "../services/cookServices";
 
 import { useAuth } from "../context/AuthContext";
+import CookStatistics from "../components/CookStatistics";
+import { cookSocialLinks } from "../lib/cookProfile";
 
 import "./PublicCookPage.css";
 
@@ -55,10 +59,12 @@ function PublicCookPage() {
   );
 }
 
-function PublicCookContent({ username, currentUserId }: {
+export function PublicCookContent({ username, currentUserId, embedded = false }: {
   username: string | undefined;
   currentUserId: string | null;
+  embedded?: boolean;
 }) {
+  const Container = embedded ? "section" : "main";
   const { t, i18n } =
   useTranslation();
 
@@ -82,6 +88,7 @@ const currentLanguage:
   const [followError, setFollowError] = useState("");
   const [followerCount, setFollowerCount] = useState(0);
   const [attempt, setAttempt] = useState(0);
+  const [recipeSearch, setRecipeSearch] = useState("");
   const followLock = useRef(false);
   const requestVersion = useRef(0);
 
@@ -177,11 +184,11 @@ const currentLanguage:
 
   if (loading) {
     return (
-      <main className="public-cook-page">
+      <Container className="public-cook-page">
         <div className="profile-loading">
           <ChefHat size={30} />
         </div>
-      </main>
+      </Container>
     );
   }
 
@@ -190,7 +197,7 @@ const currentLanguage:
     !cook
   ) {
     return (
-      <main className="public-cook-page">
+      <Container className="public-cook-page">
         <section className="public-cook-empty">
           <ChefHat
             size={42}
@@ -216,7 +223,7 @@ const currentLanguage:
 </Link>
 
         </section>
-      </main>
+      </Container>
     );
   }
 
@@ -224,9 +231,16 @@ const currentLanguage:
     cook.display_name ??
     cook.username ??
     t("common.cook");
+  const socialLinks = cookSocialLinks(cook.instagram_url, cook.website_url);
+  const query = recipeSearch.trim().toLocaleLowerCase(currentLanguage);
+  const visibleRecipes = recipes.filter(recipe =>
+    [recipe.title, recipe.description, recipe.category].some(value =>
+      value?.toLocaleLowerCase(currentLanguage).includes(query),
+    ),
+  );
 
   return (
-    <main className="public-cook-page">
+    <Container className="public-cook-page public-cook-modern">
       <section className="public-cook-hero">
         {cook.cover_image_url && (
           <div className="public-cook-cover">
@@ -306,17 +320,11 @@ const currentLanguage:
             </div>
 
             <div className="public-cook-follow-row">
-              <div className="public-cook-follow-count">
-                <strong>
-                  {followerCount}
-                </strong>
+              <CookStatistics key={cook.user_id + ":" + String(following)} cookId={cook.user_id} followerCount={followerCount} />
 
-                <span>
-  {followerCount === 1
-    ? t("publicCookProfile.follower")
-    : t("publicCookProfile.followers")}
-</span>
-              </div>
+              {currentUserId === cook.user_id && <Link className="public-cook-follow-button" to="/become-creator">
+                <Pencil size={17} aria-hidden="true" />{t("cookProfileExtras.editProfile")}
+              </Link>}
 
               {currentUserId !== cook.user_id && (
                 !currentUserId ? (
@@ -347,39 +355,24 @@ const currentLanguage:
               </p>
             )}
 
-            <div className="public-cook-links">
-  {cook.instagram_url && (
-    <a
-      href={
-        cook.instagram_url
-      }
-      target="_blank"
-      rel="noreferrer"
-    >
-      <AtSign
-        size={17}
-      />
-
-      {t("publicCookProfile.instagram")}
-    </a>
-  )}
-
-  {cook.website_url && (
-    <a
-      href={
-        cook.website_url
-      }
-      target="_blank"
-      rel="noreferrer"
-    >
-      <Globe
-        size={17}
-      />
-
-      {t("publicCookProfile.website")}
-    </a>
-  )}
-</div>
+            {(socialLinks.instagram || socialLinks.website) && <div className="public-cook-links" aria-label={t("cookProfileExtras.socialLinks")}>
+              {socialLinks.instagram && <a href={socialLinks.instagram.href} target="_blank" rel="noopener noreferrer"
+                aria-label={`${t("publicCookProfile.instagram")}: ${socialLinks.instagram.label}`}
+                title={socialLinks.instagram.label}>
+                <span className="public-cook-link-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                  </svg>
+                </span>
+              </a>}
+              {socialLinks.website && <a href={socialLinks.website.href} target="_blank" rel="noopener noreferrer"
+                aria-label={`${t("publicCookProfile.website")}: ${socialLinks.website.label}`}
+                title={socialLinks.website.label}>
+                <span className="public-cook-link-icon"><Globe size={24} aria-hidden="true" /></span>
+              </a>}
+            </div>}
           </div>
         </div>
       </section>
@@ -408,13 +401,13 @@ const currentLanguage:
           </section>
         )}
 
-      {servicesError && (
+      {!embedded && servicesError && (
         <section className="public-cook-services public-cook-load-error" role="alert">
           <p>{t("publicCookProfile.servicesError")}</p>
           <button type="button" className="public-cook-retry" onClick={retry}>{t("publicCookProfile.retry")}</button>
         </section>
       )}
-      {services.length > 0 && (
+      {!embedded && services.length > 0 && (
         <section className="public-cook-services">
           <div className="public-cook-services-heading">
             <div>
@@ -567,7 +560,21 @@ const currentLanguage:
         </section>
       )}
 
-      <section className="public-cook-recipes">
+      {!embedded && <section className="public-cook-recipes">
+        {!recipesError && recipes.length > 0 && (
+          <div className="public-cook-search" role="search">
+            <Search size={21} aria-hidden="true" />
+            <input
+              type="search"
+              aria-label={t("cookProfileExtras.searchRecipes")}
+              placeholder={t("cookProfileExtras.searchRecipes")}
+              value={recipeSearch}
+              onChange={event => setRecipeSearch(event.target.value)}
+            />
+            {recipeSearch && <button type="button" onClick={() => setRecipeSearch("")}
+              aria-label={t("cookProfileExtras.clearSearch")}><X size={18} aria-hidden="true" /></button>}
+          </div>
+        )}
   <div className="public-cook-recipes-heading">
     <div>
       <p className="section-kicker">
@@ -575,19 +582,17 @@ const currentLanguage:
       </p>
 
       <h2>
-        {t("publicCookProfile.recipesBy", {
-          name: displayName,
-        })}
+        {t("publicCookProfile.recipes")}
       </h2>
     </div>
 
     {!recipesError && <span>
-      {recipes.length === 1
+      {visibleRecipes.length === 1
         ? t("publicCookProfile.recipeCount", {
-            count: recipes.length,
+            count: visibleRecipes.length,
           })
         : t("publicCookProfile.recipeCountPlural", {
-            count: recipes.length,
+            count: visibleRecipes.length,
           })}
     </span>}
   </div>
@@ -597,9 +602,9 @@ const currentLanguage:
             <p>{t("publicCookProfile.recipesError")}</p>
             <button type="button" className="public-cook-retry" onClick={retry}>{t("publicCookProfile.retry")}</button>
           </div>
-        ) : recipes.length > 0 ? (
+        ) : visibleRecipes.length > 0 ? (
           <div className="public-cook-recipe-grid">
-            {recipes.map(
+            {visibleRecipes.map(
               (recipe) => {
                 const totalMinutes =
                   (recipe.prep_minutes ??
@@ -643,19 +648,15 @@ const currentLanguage:
                     </Link>
 
                     <div className="public-cook-recipe-content">
+                      <div className="public-cook-recipe-author">
+                        {cook.profile_image_url ? <img src={cook.profile_image_url} alt="" loading="lazy" /> : <ChefHat size={18} aria-hidden="true" />}
+                        <span>{cook.username ?? displayName}</span>
+                      </div>
                       <div className="public-cook-recipe-meta">
                         {recipe.category && (
                           <span>
                             {
-                              t(`categories.${recipe.category
-  ? t(
-      `categories.${recipe.category}`,
-      {
-        defaultValue:
-          recipe.category,
-      },
-    )
-  : ""}`, { defaultValue: recipe.category })
+                              t(`categories.${recipe.category}`, { defaultValue: recipe.category })
                             }
                           </span>
                         )}
@@ -710,6 +711,13 @@ const currentLanguage:
               },
             )}
           </div>
+        ) : recipes.length > 0 ? (
+          <div className="public-cook-search-empty" role="status">
+            <p>{t("cookProfileExtras.noSearchResults")}</p>
+            <button type="button" className="public-cook-retry" onClick={() => setRecipeSearch("")}>
+              {t("cookProfileExtras.clearSearch")}
+            </button>
+          </div>
         ) : (
           <div className="public-cook-no-recipes">
   <ChefHat
@@ -726,8 +734,8 @@ const currentLanguage:
   </p>
 </div>
         )}
-      </section>
-    </main>
+      </section>}
+    </Container>
   );
 }
 

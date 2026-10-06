@@ -1,0 +1,45 @@
+.nutrition-calculator {
+  margin-bottom: 24px;
+  padding: 18px;
+  border: 1px solid var(--line, #d9ded6);
+  border-radius: 16px;
+  background: var(--cream-deep, #f4f1e7);
+}
+.nutrition-calculator p { margin: 0 0 12px; line-height: 1.6; }
+.nutrition-calculator button {
+  min-height: 42px;
+  padding: 9px 16px;
+  border: 1px solid var(--green, #214f3d);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--green, #214f3d);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nutrition-calculator .nutrition-calculate-button {
+  margin-bottom: 14px;
+  background: var(--green, #214f3d);
+  color: #fff;
+}
+.nutrition-calculator button:disabled { opacity: .55; cursor: default; }
+.nutrition-match-list { display: grid; gap: 12px; margin-bottom: 16px; }
+.nutrition-match { padding: 16px; border: 1px solid var(--line, #d9ded6); border-radius: 12px; background: #fff9; min-width: 0; }
+.nutrition-match > strong { display: block; overflow-wrap: anywhere; }
+.nutrition-exclude { display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 13px; }
+.nutrition-search-row { display: flex; align-items: end; gap: 10px; margin-bottom: 14px; }
+.nutrition-search-row .recipe-field { flex: 1; min-width: 0; }
+.nutrition-match-fields { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px; }
+.nutrition-match-fields .recipe-field:last-child:nth-child(3) { grid-column: 1 / -1; }
+.nutrition-match select { width: 100%; min-width: 0; }
+.nutrition-preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.nutrition-preview div { padding: 10px; border-radius: 10px; background: #fff9; }
+.nutrition-preview dt { font-size: 12px; }
+.nutrition-preview dd { margin: 6px 0 0; font-weight: 700; }
+.nutrition-attribution { font-size: 12px; }
+.nutrition-estimate-notice { padding: 12px; margin-bottom: 16px; background: #f4f1e7; border-radius: 12px; line-height: 1.6; }
+@media (max-width: 600px) {
+  .nutrition-calculator { padding: 12px; }
+  .nutrition-match-fields { grid-template-columns: minmax(0, 1fr); }
+  .nutrition-match-fields .recipe-field:last-child:nth-child(3) { grid-column: auto; }
+}

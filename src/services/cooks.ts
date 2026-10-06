@@ -286,3 +286,15 @@ export async function getCurrentUserId() {
 
   return user?.id ?? null;
 }
+
+// Save only the selected photo; other profile edits stay in the form until saved.
+export async function saveCookPhoto(field: "profile" | "cover", url: string) {
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError) throw authError;
+  if (!user) throw new Error("Sign in to save your photo");
+  const column = field === "profile" ? "profile_image_url" : "cover_image_url";
+  const { data, error } = await supabase.from("cook_profiles")
+    .update({ [column]: url }).eq("user_id", user.id).select(column).single();
+  if (error) throw error;
+  if (!data) throw new Error("Photo was not saved");
+}

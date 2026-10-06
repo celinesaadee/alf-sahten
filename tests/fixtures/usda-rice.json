@@ -1,0 +1,69 @@
+{
+  "fdcId": 168878,
+  "description": "Rice, white, long-grain, regular, enriched, cooked",
+  "foodNutrients": [
+    {
+      "nutrient": {
+        "id": 1008,
+        "unitName": "kcal"
+      },
+      "amount": 130
+    },
+    {
+      "nutrient": {
+        "id": 1003,
+        "unitName": "g"
+      },
+      "amount": 2.69
+    },
+    {
+      "nutrient": {
+        "id": 1004,
+        "unitName": "g"
+      },
+      "amount": 0.28
+    },
+    {
+      "nutrient": {
+        "id": 1005,
+        "unitName": "g"
+      },
+      "amount": 28.17
+    },
+    {
+      "nutrient": {
+        "id": 1079,
+        "unitName": "g"
+      },
+      "amount": 0.4
+    },
+    {
+      "nutrient": {
+        "id": 2000,
+        "unitName": "g"
+      },
+      "amount": 0.05
+    },
+    {
+      "nutrient": {
+        "id": 1093,
+        "unitName": "mg"
+      },
+      "amount": 1
+    }
+  ],
+  "foodPortions": [
+    {
+      "id": 83928,
+      "gramWeight": 158,
+      "sequenceNumber": 1,
+      "amount": 1,
+      "modifier": "cup",
+      "measureUnit": {
+        "id": 9999,
+        "name": "undetermined",
+        "abbreviation": "undetermined"
+      }
+    }
+  ]
+}

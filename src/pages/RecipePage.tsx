@@ -11,6 +11,7 @@ import {
   ChefHat,
   Clock3,
   Minus,
+  Pencil,
   Plus,
   ShoppingBasket,
   Users,
@@ -33,6 +34,8 @@ import {
 } from "../hooks/useSavedRecipes";
 
 import { supabase } from "../lib/supabase";
+import { useAuth } from "../context/AuthContext";
+import { nutrientKeys } from "../lib/nutrition";
 import { convertMeasurement, type UnitSystem } from "../lib/unitConversion";
 import "./RecipeUnits.css";
 import RecipePersonalTools from "../components/RecipePersonalTools";
@@ -55,6 +58,17 @@ type PublicRecipe = {
   prep_minutes: number | null;
   cook_minutes: number | null;
   servings: number | null;
+  nutrition: {
+  source?: "usda-estimate";
+  excludedIngredients?: number;
+  calories?: number;
+  protein?: number;
+  carbohydrates?: number;
+  fat?: number;
+  fiber?: number;
+  sugar?: number;
+  sodium?: number;
+} | null;
 
   ingredients: Array<{
     quantity?: string;
@@ -101,6 +115,17 @@ type DisplayRecipe = {
   time: string;
 
   servings: number;
+  nutrition: {
+  source?: "usda-estimate";
+  excludedIngredients?: number;
+  calories?: number;
+  protein?: number;
+  carbohydrates?: number;
+  fat?: number;
+  fiber?: number;
+  sugar?: number;
+  sodium?: number;
+};
 
   ingredients: DisplayIngredient[];
   instructions: string[];
@@ -231,6 +256,7 @@ function formatScaledQuantity(
 }
 
 function RecipePage() {
+  const { user } = useAuth();
 const { t, i18n } =
   useTranslation();
 
@@ -483,6 +509,9 @@ time:
             publicRecipe.servings ??
             1,
 
+            nutrition:
+  publicRecipe.nutrition ?? {},
+
           ingredients:
             (
               publicRecipe.ingredients ??
@@ -660,6 +689,9 @@ setServings(
   const recipeIsSaved =
     isSaved(recipe.id);
 
+  const hasNutrition = nutrientKeys.some(key =>
+    typeof recipe.nutrition[key] === "number" && Number.isFinite(recipe.nutrition[key]));
+
   return (
     <main className="recipe-page">
       <div className="recipe-back-row">
@@ -793,6 +825,12 @@ setServings(
           </div>
 
           <div className="recipe-main-actions">
+            {user && publicRecipe?.creator_id === user.id && (
+              <Link to={`/cook/recipes/${publicRecipe.id}/edit`} className="recipe-kitchen-link">
+                <Pencil size={18} />
+                {t("myRecipes.editRecipe")}
+              </Link>
+            )}
             <button
               type="button"
               className={`recipe-save-main ${
@@ -1090,7 +1128,194 @@ setServings(
 
           <RecipePersonalTools recipeId={recipe.id} />
 
-          <div className="recipe-timing-card">
+{hasNutrition && (
+  <section className="recipe-nutrition-card">
+    <div className="recipe-nutrition-heading">
+      <div>
+        <p className="section-kicker">
+          {t(
+            recipe.nutrition.source === "usda-estimate"
+              ? (recipe.nutrition.excludedIngredients ? "nutritionCalculator.estimatedIncomplete" : "nutritionCalculator.estimated")
+              : "recipe.nutritionKicker",
+            {
+              defaultValue:
+                "Per serving",
+            },
+          )}
+        </p>
+
+        <h2>
+          {t(
+            "recipe.nutritionTitle",
+            {
+              defaultValue:
+                "Nutrition",
+            },
+          )}
+        </h2>
+      </div>
+    </div>
+
+      {recipe.nutrition.calories !==
+        undefined && (
+        <div className="recipe-nutrition-hero">
+          <div className="recipe-nutrition-circle">
+            <strong>
+              {
+                recipe.nutrition
+                  .calories
+              }
+            </strong>
+
+            <span>
+              {t(
+                "recipe.calories",
+                {
+                  defaultValue:
+                    "Calories",
+                },
+              )}
+            </span>
+
+            <small>kcal</small>
+          </div>
+        </div>
+      )}
+
+    <div className="recipe-nutrition-stats">
+      {recipe.nutrition.protein !==
+        undefined && (
+        <div className="recipe-nutrition-pill">
+          <strong>
+            {recipe.nutrition.protein}
+          </strong>
+
+          <span>
+            {t(
+              "recipe.protein",
+              {
+                defaultValue:
+                  "Protein",
+              },
+            )}
+          </span>
+
+          <small>g</small>
+        </div>
+      )}
+
+      {recipe.nutrition.carbohydrates !==
+        undefined && (
+        <div className="recipe-nutrition-pill">
+          <strong>
+            {
+              recipe.nutrition
+                .carbohydrates
+            }
+          </strong>
+
+          <span>
+            {t(
+              "recipe.carbohydrates",
+              {
+                defaultValue:
+                  "Carbohydrates",
+              },
+            )}
+          </span>
+
+          <small>g</small>
+        </div>
+      )}
+
+      {recipe.nutrition.fat !==
+        undefined && (
+        <div className="recipe-nutrition-pill">
+          <strong>
+            {recipe.nutrition.fat}
+          </strong>
+
+          <span>
+            {t(
+              "recipe.fat",
+              {
+                defaultValue:
+                  "Fat",
+              },
+            )}
+          </span>
+
+          <small>g</small>
+        </div>
+      )}
+
+      {recipe.nutrition.fiber !==
+        undefined && (
+        <div className="recipe-nutrition-pill">
+          <strong>
+            {recipe.nutrition.fiber}
+          </strong>
+
+          <span>
+            {t(
+              "recipe.fiber",
+              {
+                defaultValue:
+                  "Fiber",
+              },
+            )}
+          </span>
+
+          <small>g</small>
+        </div>
+      )}
+
+      {recipe.nutrition.sugar !==
+        undefined && (
+        <div className="recipe-nutrition-pill">
+          <strong>
+            {recipe.nutrition.sugar}
+          </strong>
+
+          <span>
+            {t(
+              "recipe.sugar",
+              {
+                defaultValue:
+                  "Sugar",
+              },
+            )}
+          </span>
+
+          <small>g</small>
+        </div>
+      )}
+
+      {recipe.nutrition.sodium !==
+        undefined && (
+        <div className="recipe-nutrition-pill">
+          <strong>
+            {recipe.nutrition.sodium}
+          </strong>
+
+          <span>
+            {t(
+              "recipe.sodium",
+              {
+                defaultValue:
+                  "Sodium",
+              },
+            )}
+          </span>
+
+          <small>mg</small>
+        </div>
+      )}
+    </div>
+  </section>
+)}
+
+<div className="recipe-timing-card">
             <div>
               <span>
                 {t(

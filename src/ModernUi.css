@@ -1,0 +1,163 @@
+/* Original green accents with the warm cream page backgrounds. */
+:root {
+  --cream: #f7f3ea;
+  --cream-deep: #eee8dc;
+  --white: #fffdf8;
+  --green: #244b39;
+  --green-light: #32654d;
+  --text: #202a24;
+  --muted: #66736b;
+  --line: #e0e5de;
+  --surface-soft: #edf3ee;
+  --control-radius: 16px;
+}
+.app-header { background: #f7f8f6; border-color: var(--line); }
+.app-shell { background: var(--cream); }
+.app-shell .app-header-brand { color: var(--green); }
+.app-shell .auth-page { background: var(--cream); }
+.app-shell .auth-brand-panel { background: #eee8dc; color: var(--text); }
+.app-shell .auth-brand-copy h1 { color: var(--green); }
+.app-shell .auth-brand-copy .section-kicker,
+.app-shell .auth-brand-copy > p:last-child,
+.app-shell .auth-brand-note { color: var(--muted); }
+.app-shell .app-header-brand { display: flex; align-items: center; }
+.app-brand-logo { display: block; width: auto; height: 58px; object-fit: contain; }
+.footer-brand-logo { display: block; width: 180px; height: auto; }
+.app-shell .footer-logo { background: var(--white); padding: 12px 16px; border-radius: 12px; }
+.auth-brand-logo { display: block; width: 180px; max-width: 100%; height: auto; }
+/* Image-led recipe grids, matching the compact three-column reference. */
+.app-shell :is(.recipe-grid, .discover-recipe-grid, .public-cook-recipe-grid, .saved-recipe-grid, .kitchen-recipe-grid) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  gap: 28px 16px;
+  overflow: visible;
+  padding-bottom: 0;
+}
+.app-shell :is(.recipe-card, .discover-recipe-card, .public-cook-recipe-card, .saved-recipe-card, .kitchen-recipe-card) {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.app-shell :is(.recipe-image, .discover-recipe-image, .public-cook-recipe-image, .saved-recipe-image, .kitchen-recipe-image) {
+  height: auto;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.app-shell :is(.recipe-image, .discover-recipe-image, .public-cook-recipe-image, .saved-recipe-image, .kitchen-recipe-image) img { width: 100%; height: 100%; object-fit: cover; }
+.app-shell :is(.recipe-content, .discover-recipe-content, .saved-recipe-content, .kitchen-recipe-content) { padding: 12px 2px 0; }
+.app-shell .public-cook-modern .public-cook-recipe-content { padding: 12px 2px 0; }
+.app-shell :is(.recipe-content, .discover-recipe-content, .public-cook-recipe-content, .saved-recipe-content, .kitchen-recipe-content) h3 {
+  margin: 6px 0;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.app-shell .discover-recipe-content { display: flex; flex-direction: column; }
+.app-shell .saved-recipe-content h2 { margin: 6px 0; font-family: "DM Sans", Arial, sans-serif; font-size: 18px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.app-shell :is(.discover-card-footer, .recipe-meta, .saved-recipe-meta) { overflow-wrap: anywhere; }
+.app-shell .discover-card-footer { order: -1; border: 0; margin: 0 0 5px; padding: 0; font-size: 12px; }
+.app-shell .discover-card-footer > a { display: none; }
+.app-shell .discover-recipe-content > p { display: none; }
+.app-shell .discover-card-topline { order: 2; font-size: 11px; flex-wrap: wrap; gap: 5px; }
+.app-shell .discover-recipe-content .recipe-tags { order: 3; margin: 6px 0 0; }
+.app-shell .discover-save-button { width: 36px; height: 36px; inset-inline-end: 8px; top: 8px; border-radius: 50%; background: #fff; }
+@media (max-width: 680px) {
+  .app-shell :is(.recipe-grid, .discover-recipe-grid, .public-cook-recipe-grid, .saved-recipe-grid, .kitchen-recipe-grid) { gap: 24px 10px; }
+  .app-shell :is(.recipe-image, .discover-recipe-image, .public-cook-recipe-image, .saved-recipe-image, .kitchen-recipe-image) { border-radius: 14px; }
+  .app-shell :is(.recipe-content, .discover-recipe-content, .public-cook-recipe-content, .saved-recipe-content, .kitchen-recipe-content) h3 { font-size: 14px; }
+  .app-shell :is(.recipe-meta, .public-cook-recipe-author, .discover-card-footer) { font-size: 11px; }
+  .app-shell .recipe-meta { flex-wrap: wrap; gap: 4px; }
+  .app-shell .saved-recipe-content h2 { font-size: 14px; }
+}
+@media (max-width: 800px) {
+  .app-brand-logo { height: 44px; }
+}
+.app-shell :is(button, input, select, textarea) { font-family: "DM Sans", Arial, sans-serif; }
+.app-shell :is(button, a):focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+.app-shell button:disabled { cursor: default; }
+
+.app-shell :is(.eyebrow, .discover-hero .section-kicker) { color: var(--muted); }
+.app-shell :is(.hero-subtitle, .discover-hero-copy > p:not(.section-kicker)) { color: var(--muted); }
+.app-shell :is(.discover-search-card, .ingredient-card) { background: var(--white); border-color: var(--line); box-shadow: 0 6px 24px rgba(48, 42, 38, .04); }
+.app-shell .discover-search-card svg { color: var(--muted); }
+.app-shell .discover-search-card input::placeholder { color: var(--muted); }
+.app-shell .discover-categories button { background: var(--white); border-color: var(--line); color: var(--text); }
+.app-shell .discover-categories button:hover { background: var(--surface-soft); }
+.app-shell .discover-categories button.active { background: var(--green); color: #fff; border-color: var(--green); }
+.app-shell .discover-tag-filter select { border-color: var(--line); color: var(--text); }
+.app-shell .discover-kitchen-banner { background: var(--green); color: #fff; border: 1px solid var(--green); }
+.app-shell .discover-kitchen-icon { background: #fff; color: var(--green); }
+.app-shell .discover-kitchen-banner span { color: #d6e4d7; }
+.app-shell .discover-kitchen-banner p { color: #e0e9e1; }
+.app-shell .discover-kitchen-banner > a { background: #fff; color: var(--green); }
+.app-shell :is(.recipe-tags a, .recipe-tags span, .home-recipe-category) { background: var(--surface-soft); color: #32654d; }
+.app-shell .discover-save-button.saved { background: var(--surface-soft); color: var(--green); }
+.app-shell .public-cook-page.public-cook-modern { background: var(--cream); --cook-accent: #244b39; --cook-muted: #66736b; }
+.app-shell .public-cook-page.public-cook-modern .public-cook-follow-button { background: var(--green); box-shadow: 0 6px 16px rgba(36, 75, 57, .12); }
+.app-shell .public-cook-page.public-cook-modern .public-cook-follow-button.following { background: var(--surface-soft); color: var(--green); }
+.app-shell .public-cook-page.public-cook-modern .public-cook-specialties > div > span { background: var(--surface-soft); color: #32654d; }
+.app-shell :is(.profile-page, .public-cook-page, .recipe-page, .creator-application-page) { background: var(--cream); color: var(--text); }
+.app-shell :is(.profile-dashboard-card, .following-cooks, .public-cook-links a, .profile-images-editor, .recipe-body) { background: var(--white); }
+.app-shell :is(.profile-dashboard-card, .following-cooks) { border-color: var(--line); border-radius: 24px; box-shadow: 0 4px 24px rgba(36, 75, 57, .035); }
+.app-shell .profile-dashboard-action { border: 0; background: #f5f7f3; border-radius: 16px; min-height: 64px; padding: 16px; }
+.app-shell .profile-dashboard-action strong { font-size: 16px; }
+.app-shell .profile-dashboard-action span { font-size: 13px; line-height: 1.5; }
+.app-shell .profile-side-card { background: var(--green); border-radius: 24px; }
+.app-shell .profile-cook-link { min-height: 52px; font-size: 15px; }
+.app-shell .public-cook-avatar { border-color: var(--cream); background: var(--surface-soft); }
+.app-shell .public-cook-intro h1 { color: var(--green); line-height: 1.12; }
+.app-shell :is(.public-cook-bio, .public-cook-details > span) { color: var(--muted); }
+.app-shell .public-cook-links a { border-color: var(--line); min-height: 52px; }
+.app-shell .public-cook-link-icon { background: var(--surface-soft); }
+.app-shell .public-cook-specialties > div > span { background: var(--surface-soft); color: var(--green); font-size: 13px; padding: 8px 14px; }
+.app-shell .public-cook-follow-button { background: var(--green); min-height: 48px; font-size: 15px; border-radius: var(--control-radius); }
+.app-shell .public-cook-follow-button.following { background: var(--surface-soft); color: var(--green); }
+.app-shell .cook-statistics dd { color: var(--green); font-size: 22px; }
+.app-shell .cook-statistics dt { font-size: 13px; }
+.app-shell .recipe-hero-content h1 { line-height: 1.05; letter-spacing: -.035em; }
+.app-shell .recipe-description { font-family: "DM Sans", Arial, sans-serif; color: var(--muted); line-height: 1.65; }
+.app-shell .recipe-main-actions { flex-wrap: wrap; gap: 12px; }
+.app-shell :is(.recipe-save-main, .recipe-kitchen-link, .recipe-main-actions .collection-picker-trigger) { height: auto; min-height: 50px; padding: 13px 18px; border-radius: var(--control-radius); font-size: 15px; line-height: 1.35; font-weight: 600; }
+.app-shell .recipe-save-main { background: var(--green); }
+.app-shell .recipe-save-main:hover { background: var(--green-light); }
+.app-shell :is(.recipe-kitchen-link, .recipe-main-actions .collection-picker-trigger) { background: var(--surface-soft); border: 1px solid transparent; color: var(--green); }
+.app-shell :is(.recipe-kitchen-link, .recipe-main-actions .collection-picker-trigger):hover { background: #e3ece5; }
+.app-shell .recipe-main-actions svg { flex-shrink: 0; width: 19px; height: 19px; }
+.app-shell .recipe-quick-info { border-color: var(--line); padding-block: 18px; }
+.app-shell .recipe-quick-info small { font-size: 11px; text-transform: none; letter-spacing: 0; color: var(--muted); }
+.app-shell .recipe-quick-info strong { font-family: "DM Sans", Arial, sans-serif; font-weight: 600; font-size: 16px; }
+.app-shell :is(.recipe-page, .profile-page, .public-cook-page) .section-kicker { font-size: 11px; letter-spacing: .09em; color: var(--muted); }
+.app-shell .recipe-back-row a { min-height: 44px; font-size: 14px; }
+@media (max-width: 800px) {
+  .app-shell .mobile-bottom-nav { height: 74px; padding: 6px; border-color: var(--line); border-radius: 26px; background: rgba(255,255,255,.96); box-shadow: 0 6px 28px rgba(48,42,38,.08); bottom: max(10px, env(safe-area-inset-bottom)); }
+  .app-shell .mobile-nav-item { height: 60px; border-radius: 20px; gap: 5px; font-size: 11px; color: var(--muted); }
+  .app-shell .mobile-nav-item svg { width: 22px; height: 22px; }
+  .app-shell .mobile-nav-item.active { background: var(--surface-soft); color: var(--green); font-weight: 700; }
+}
+@media (max-width: 600px) {
+  .app-shell .recipe-hero-content h1 { font-size: clamp(36px, 10vw, 48px); }
+  .app-shell .recipe-main-actions { gap: 10px; }
+  .app-shell :is(.recipe-save-main, .recipe-kitchen-link, .recipe-main-actions .collection-picker-trigger) { width: 100%; padding: 12px 10px; font-size: 14px; min-height: 50px; }
+  .app-shell .recipe-quick-info > div { gap: 6px; }
+  .app-shell .recipe-quick-info strong { font-size: 14px; }
+  .app-shell .recipe-section-heading h2 { font-size: 34px; }
+  .app-shell .public-cook-bio { font-size: 16px; }
+  .app-shell .public-cook-details > span { font-size: 14px; }
+  .app-shell .public-cook-username { font-size: 14px; }
+  .app-shell .public-cook-profile { padding-bottom: 28px; }
+  .app-shell .profile-content-with-cook { padding-top: 22px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .app-shell :is(.recipe-save-main, .recipe-kitchen-link, .public-cook-follow-button, .profile-dashboard-action) { transition: background .16s ease, transform .16s ease; }
+  .app-shell :is(.recipe-save-main, .recipe-kitchen-link, .public-cook-follow-button):active { transform: scale(.98); }
+}

@@ -1,5 +1,10 @@
+import { frNutritionCalculator } from "./nutritionCalculator";
+import { frCookProfileExtras } from "./cookProfileExtras";
+
 const fr = {
   translation: {
+    nutritionCalculator: frNutritionCalculator,
+    cookProfileExtras: frCookProfileExtras,
     recipeTags: { title: "Étiquettes de recette (facultatives)", filter: "Étiquette", all: "Toutes les étiquettes", vegetarian: "Végétarien", "quick-meals": "Repas rapides", "budget-friendly": "Économique", "one-pot": "Une seule casserole", noResultsText: "Essayez une autre recherche, catégorie ou étiquette." },
     ingredientQuantity: { open: "Afficher la quantité de {{ingredient}}", current: "Pour les portions et mesures actuellement sélectionnées.", unspecified: "Quantité non précisée", close: "Fermer" },
     cookingMode: {
@@ -961,6 +966,16 @@ cookTimeRequired:
 servingsRequired:
   "Le nombre de portions doit être d’au moins 1.",
 },
+nutritionTitle: "Nutrition",
+nutritionText: "Informations nutritionnelles facultatives par portion.",
+calories: "Calories (kcal)",
+protein: "Protéines (g)",
+carbohydrates: "Glucides (g)",
+fat: "Lipides (g)",
+fiber: "Fibres (g)",
+sugar: "Sucres (g)",
+sodium: "Sodium (mg)",
+saveChanges: "Enregistrer les modifications",
 
 recipe: {
   loading: "Chargement de la recette…",
@@ -1000,6 +1015,15 @@ removeSaved: "Retirer des recettes enregistrées",
 minutesShort: "min",
 decreaseServings: "Réduire le nombre de portions",
 increaseServings: "Augmenter le nombre de portions",
+nutritionKicker: "Par portion",
+nutritionTitle: "Nutrition",
+calories: "Calories",
+protein: "Protéines",
+carbohydrates: "Glucides",
+fat: "Lipides",
+fiber: "Fibres",
+sugar: "Sucres",
+sodium: "Sodium",
     },
 
         cookServices: {

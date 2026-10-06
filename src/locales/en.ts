@@ -1,5 +1,10 @@
+import { enNutritionCalculator } from "./nutritionCalculator";
+import { enCookProfileExtras } from "./cookProfileExtras";
+
 const en = {
   translation: {
+    nutritionCalculator: enNutritionCalculator,
+    cookProfileExtras: enCookProfileExtras,
     recipeTags: { title: "Recipe tags (optional)", filter: "Recipe tag", all: "All tags", vegetarian: "Vegetarian", "quick-meals": "Quick meals", "budget-friendly": "Budget-friendly", "one-pot": "One pot", noResultsText: "Try another search, category or tag." },
     ingredientQuantity: { open: "Show quantity for {{ingredient}}", current: "For the servings and measurements currently selected.", unspecified: "Quantity not specified", close: "Close" },
     cookingMode: {
@@ -935,6 +940,17 @@ cookTimeRequired:
   "Cooking time must be at least 1 minute.",
 servingsRequired:
   "Servings must be at least 1.",
+
+  nutritionTitle: "Nutrition",
+nutritionText: "Optional nutrition information per serving.",
+calories: "Calories (kcal)",
+protein: "Protein (g)",
+carbohydrates: "Carbohydrates (g)",
+fat: "Fat (g)",
+fiber: "Fiber (g)",
+sugar: "Sugar (g)",
+sodium: "Sodium (mg)",
+saveChanges: "Save changes",
 },
 
 recipe: {
@@ -976,6 +992,15 @@ removeSaved: "Remove from saved recipes",
 minutesShort: "min",
 decreaseServings: "Decrease servings",
 increaseServings: "Increase servings",
+nutritionKicker: "Per serving",
+nutritionTitle: "Nutrition",
+calories: "Calories",
+protein: "Protein",
+carbohydrates: "Carbohydrates",
+fat: "Fat",
+fiber: "Fiber",
+sugar: "Sugar",
+sodium: "Sodium",
     },
 
         cookServices: {

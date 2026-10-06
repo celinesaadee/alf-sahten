@@ -25,7 +25,7 @@ function AppHeader() {
   return (
     <header className="app-header">
       <Link to="/" className="app-header-brand">
-        Alf Sahten
+        <img src="/alf-sahten-logo.png" alt="Alf Sahten" className="app-brand-logo" />
       </Link>
 
       <nav className="app-header-links">

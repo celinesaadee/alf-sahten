@@ -9,7 +9,7 @@ export async function getPublishedRecipes(
   } = await supabase
     .from("recipes")
     .select(
-      "id, creator_id, title, description, category, tags, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+     "id, creator_id, title, description, category, tags, image_url, prep_minutes, cook_minutes, servings, nutrition, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
     )
     .eq("status", "approved")
     .order("published_at", {
@@ -197,6 +197,19 @@ export type RecipeIngredientInput = {
   ingredient: string;
 };
 
+export type RecipeNutritionInput = {
+  source?: "usda-estimate";
+  basis?: string;
+  excludedIngredients?: number;
+  calories?: number;
+  protein?: number;
+  carbohydrates?: number;
+  fat?: number;
+  fiber?: number;
+  sugar?: number;
+  sodium?: number;
+};
+
 export type RecipeInstructionInput = {
   step: number;
   text: string;
@@ -211,6 +224,7 @@ export type CreateRecipeInput = {
   prep_minutes: number | null;
   cook_minutes: number | null;
   servings: number | null;
+    nutrition?: RecipeNutritionInput;
   ingredients: RecipeIngredientInput[];
   instructions: RecipeInstructionInput[];
   original_language: "en" | "fr" | "ar";
@@ -245,6 +259,7 @@ export async function createRecipe(input: CreateRecipeInput) {
       prep_minutes: input.prep_minutes ?? 0,
       cook_minutes: input.cook_minutes ?? 0,
       servings: input.servings ?? 1,
+          nutrition: input.nutrition ?? {},
       ingredients: input.ingredients,
       instructions: input.instructions,
       original_language: input.original_language,
@@ -273,10 +288,11 @@ export type UpdateRecipeInput = {
   prep_minutes: number | null;
   cook_minutes: number | null;
   servings: number | null;
+    nutrition?: RecipeNutritionInput;
   ingredients: RecipeIngredientInput[];
   instructions: RecipeInstructionInput[];
   original_language: "en" | "fr" | "ar";
-  status: "draft" | "pending";
+  status: "draft" | "pending" | "approved";
 };
 
 export async function updateRecipe(
@@ -305,7 +321,8 @@ export async function updateRecipe(
     prep_minutes: input.prep_minutes ?? 0,
     cook_minutes: input.cook_minutes ?? 0,
     servings: input.servings ?? 1,
-    ingredients: input.ingredients,
+nutrition: input.nutrition ?? {},
+ingredients: input.ingredients,
     instructions: input.instructions,
     original_language: input.original_language,
     status: input.status,
@@ -321,7 +338,12 @@ export async function updateRecipe(
     .update(updateData)
     .eq("id", recipeId)
     .eq("creator_id", user.id)
-    .in("status", ["draft", "changes_requested", "declined"])
+    .in("status", [
+  "draft",
+  "changes_requested",
+  "declined",
+  "approved",
+])
     .select()
     .single();
 
@@ -745,7 +767,7 @@ export async function getPublishedRecipeById(
   } = await supabase
     .from("recipes")
     .select(
-      "id, creator_id, title, description, category, tags, image_url, prep_minutes, cook_minutes, servings, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
+      "id, creator_id, title, description, category, tags, image_url, prep_minutes, cook_minutes, servings, nutrition, ingredients, instructions, original_language, status, published_at, created_at, updated_at",
     )
     .eq("id", recipeId)
     .eq("status", "approved")

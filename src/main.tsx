@@ -4,6 +4,7 @@ import "./index.css";
 import "./components/Collections.css";
 import "./i18n";
 import App from "./App.tsx";
+import "./ModernUi.css";
 import { AuthProvider } from "./context/AuthContext";
 
 createRoot(

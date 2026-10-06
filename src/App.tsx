@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import MobileBottomNav from "./components/MobileBottomNav";
 import AppHeader from "./components/AppHeader";
 import ScrollToTop from "./components/ScrollToTop";
+import WelcomeFlow from "./components/WelcomeFlow";
 
 import HomePage from "./HomePage";
 import DiscoverPage from "./pages/DiscoverPage";
@@ -40,7 +41,7 @@ function App() {
   return (
     <BrowserRouter>
     <ScrollToTop />
-      <div className="app-shell">
+      <WelcomeFlow><div className="app-shell">
         <AppHeader />
 
         <Routes>
@@ -213,7 +214,7 @@ function App() {
         </Routes>
 
         <MobileBottomNav />
-      </div>
+      </div></WelcomeFlow>
     </BrowserRouter>
     
   );
